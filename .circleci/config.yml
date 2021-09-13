@@ -21,7 +21,7 @@ jobs:
       - run:
           name: test
           command: npm test
-  build-node14-mongo44:
+  build-node14-mongo4:
     docker:
       - image: circleci/node:14-browsers
       - image: mongo:4.4
