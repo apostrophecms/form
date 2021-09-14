@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "npm run eslint",
     "eslint": "eslint .",
-    "test": "npm run lint"
+    "test": "npm run lint && npx mocha"
   },
   "repository": {
     "type": "git",
