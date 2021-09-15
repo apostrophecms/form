@@ -3,7 +3,6 @@ const path = require('path');
 
 module.exports = {
   options: {
-    alias: 'forms'
   },
   bundle: {
     directory: 'modules',
