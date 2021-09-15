@@ -1,14 +1,73 @@
 const fs = require('fs');
 const path = require('path');
+const fields = require('./lib/fields');
 
 module.exports = {
+  extend: '@apostrophecms/piece-type',
   options: {
     alias: 'forms',
-    quickCreate: true
+    label: 'Form',
+    quickCreate: true,
+    seo: false,
+    openGraph: false
   },
   bundle: {
     directory: 'modules',
     modules: getBundleModuleNames()
+  },
+  fields (self) {
+    const add = fields.initial(self.options);
+
+    // TODO: Uncomment when implementing email submissions.
+    // ⚠️ Requires dynamic choices.
+    // if (self.options.emailSubmissions !== false) {
+    //   add = {
+    //     ...add,
+    //     ...fields.email
+    //   };
+    // }
+
+    const group = {
+      basics: {
+        label: 'Form',
+        fields: [ 'contents', 'submitLabel' ]
+      },
+      afterSubmit: {
+        label: 'After-Submission',
+        fields: [
+          'thankYouHeading',
+          'thankYouBody',
+          'sendConfirmationEmail',
+          'emailConfirmationField'
+        ].concat(self.options.emailSubmissions !== false ? [
+          'emails',
+          'email'
+        ] : [])
+      },
+      advanced: {
+        label: 'Advanced',
+        fields: [
+          'enableQueryParams',
+          'queryParamList'
+        ]
+      }
+    };
+
+    return {
+      add,
+      group
+    };
+  },
+  helpers (self) {
+    return {
+      prependIfPrefix(str) {
+        if (self.options.classPrefix) {
+          return `${self.options.classPrefix}str`;
+        }
+
+        return '';
+      }
+    };
   }
 };
 

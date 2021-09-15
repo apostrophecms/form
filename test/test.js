@@ -1,5 +1,4 @@
 const assert = require('assert');
-const path = require('path');
 const testUtil = require('apostrophe/test-lib/test');
 // const axios = require('axios');
 // const fileUtils = require('./lib/file-utils');
@@ -9,37 +8,36 @@ describe('Forms module', function () {
 
   this.timeout(25000);
 
-  after(function (done) {
-    testUtil.destroy(apos, done);
+  after(async function () {
+    testUtil.destroy(apos);
   });
 
   // Existence
   const formWidgets = {
-    '@apostrophecms/form-widget-type': {},
-    '@apostrophecms/form-text-field-widget-type': {},
-    '@apostrophecms/form-textarea-field-widget-type': {},
-    '@apostrophecms/form-select-field-widget-type': {},
-    '@apostrophecms/form-radio-field-widget-type': {},
-    '@apostrophecms/form-checkboxes-field-widget-type': {},
-    '@apostrophecms/form-file-field-widget-type': {},
-    '@apostrophecms/form-boolean-field-widget-type': {},
-    '@apostrophecms/form-conditional-widget-type': {}
+    '@apostrophecms/form-widget': {},
+    // '@apostrophecms/form-text-field-widget': {},
+    // '@apostrophecms/form-textarea-field-widget': {},
+    // '@apostrophecms/form-select-field-widget': {},
+    // '@apostrophecms/form-radio-field-widget': {},
+    '@apostrophecms/form-checkboxes-field-widget': {},
+    // '@apostrophecms/form-file-field-widget': {},
+    '@apostrophecms/form-boolean-field-widget': {}
+    // '@apostrophecms/form-conditional-widget': {}
   };
 
   let forms;
-  let textWidgets;
-  let textareaWidgets;
-  let selectWidgets;
-  let radioWidgets;
+  // let textWidgets;
+  // let textareaWidgets;
+  // let selectWidgets;
+  // let radioWidgets;
   let checkboxesWidgets;
-  let fileWidgets;
+  // let fileWidgets;
   let booleanWidgets;
-  let conditionalWidgets;
+  // let conditionalWidgets;
 
   it('should be a property of the apos object', async function () {
     apos = await testUtil.create({
-      testModule: true,
-      modulesSubdir: path.join(__dirname, '../modules'),
+      testModule: 'apostrophe',
       modules: {
         '@apostrophecms/express': {
           options: {
@@ -59,26 +57,26 @@ describe('Forms module', function () {
 
     const aposForm = '@apostrophecms/form';
     forms = apos.modules[`${aposForm}`];
-    const widgets = apos.modules[`${aposForm}-widget-type`];
-    textWidgets = apos.modules[`${aposForm}-text-field-widget-type`];
-    textareaWidgets = apos.modules[`${aposForm}-textarea-field-widget-type`];
-    selectWidgets = apos.modules[`${aposForm}-select-field-widget-type`];
-    radioWidgets = apos.modules[`${aposForm}-radio-field-widget-type`];
-    checkboxesWidgets = apos.modules[`${aposForm}-checkboxes-field-widget-type`];
-    fileWidgets = apos.modules[`${aposForm}-file-field-widget-type`];
-    booleanWidgets = apos.modules[`${aposForm}-boolean-field-widget-type`];
-    conditionalWidgets = apos.modules[`${aposForm}-conditional-widget-type`];
+    const widgets = apos.modules[`${aposForm}-widget`];
+    // textWidgets = apos.modules[`${aposForm}-text-field-widget`];
+    // textareaWidgets = apos.modules[`${aposForm}-textarea-field-widget`];
+    // selectWidgets = apos.modules[`${aposForm}-select-field-widget`];
+    // radioWidgets = apos.modules[`${aposForm}-radio-field-widget`];
+    checkboxesWidgets = apos.modules[`${aposForm}-checkboxes-field-widget`];
+    // fileWidgets = apos.modules[`${aposForm}-file-field-widget`];
+    booleanWidgets = apos.modules[`${aposForm}-boolean-field-widget`];
+    // conditionalWidgets = apos.modules[`${aposForm}-conditional-widget`];
 
     assert(forms.__meta.name === `${aposForm}`);
-    assert(widgets.__meta.name === `${aposForm}-widget-type`);
-    assert(textWidgets.__meta.name === `${aposForm}-text-field-widget-type`);
-    assert(textareaWidgets.__meta.name === `${aposForm}-textarea-field-widget-type`);
-    assert(selectWidgets.__meta.name === `${aposForm}-select-field-widget-type`);
-    assert(radioWidgets.__meta.name === `${aposForm}-radio-field-widget-type`);
-    assert(checkboxesWidgets.__meta.name === `${aposForm}-checkboxes-field-widget-type`);
-    assert(fileWidgets.__meta.name === `${aposForm}-file-field-widget-type`);
-    assert(booleanWidgets.__meta.name === `${aposForm}-boolean-field-widget-type`);
-    assert(conditionalWidgets.__meta.name === `${aposForm}-conditional-widget-type`);
+    assert(widgets.__meta.name === `${aposForm}-widget`);
+    // assert(textWidgets.__meta.name === `${aposForm}-text-field-widget`);
+    // assert(textareaWidgets.__meta.name === `${aposForm}-textarea-field-widget`);
+    // assert(selectWidgets.__meta.name === `${aposForm}-select-field-widget`);
+    // assert(radioWidgets.__meta.name === `${aposForm}-radio-field-widget`);
+    assert(checkboxesWidgets.__meta.name === `${aposForm}-checkboxes-field-widget`);
+    // assert(fileWidgets.__meta.name === `${aposForm}-file-field-widget`);
+    assert(booleanWidgets.__meta.name === `${aposForm}-boolean-field-widget`);
+    // assert(conditionalWidgets.__meta.name === `${aposForm}-conditional-widget`);
   });
 
   // // Submissions collection exists.

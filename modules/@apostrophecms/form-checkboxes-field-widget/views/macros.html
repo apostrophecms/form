@@ -1,0 +1,35 @@
+{% macro checkboxStyle() %}
+  <legend class="{{ prependIfPrefix('__legend') }}">
+    {{ widget.fieldLabel}}
+  </legend>
+  {{ utils.optional(widget.required) }}
+  {% for choice in widget.choices %}
+    {% set choiceId = id + apos.util.slugify(choice.value) %}
+    <div class="{{ prependIfPrefix('__check-wrapper') }}">
+      {{ utils.checkInput(widget, choice, choiceId, prependIfPrefix) }}
+      <label class="{{ prependIfPrefix('__label') }}" for="{{ choiceId }}">
+        {{ choice.label }}
+      </label>
+    </div>
+  {% endfor %}
+{% endmacro %}
+
+{% macro dropdownStyle() %}
+  <button data-apos-form-toggle
+    class="apos-forms-checkboxes-toggle {{ prependIfPrefix('__toggle') }}"
+  >
+    {{ widget.fieldLabel}}
+    {{ utils.optional(widget.required) }}
+  </button>
+  <div class="apos-forms-checkboxes-dropdown-choices">
+    {% for choice in widget.choices %}
+      {% set choiceId = id + apos.util.slugify(choice.value) %}
+      <div class="{{ prependIfPrefix('__check-wrapper') }}">
+        {{ utils.checkInput(widget, choice, choiceId, prependIfPrefix) }}
+        <label class="{{ prependIfPrefix('__label') }}" for="{{ choiceId }}">
+          {{ choice.label }}
+        </label>
+      </div>
+    {% endfor %}
+  </div>
+{% endmacro %}
