@@ -79,14 +79,13 @@ describe('Forms module', function () {
     assert(conditionalWidgets.__meta.name === `${aposForm}-conditional-widget`);
   });
 
-  // // Submissions collection exists.
-  // it('should have a default collection for submissions', function (done) {
-  //   apos.db.collection('aposFormSubmissions', function (err, collection) {
-  //     assert(!err);
-  //     assert(collection);
-  //     done();
-  //   });
-  // });
+  // Submissions collection exists.
+  it('should have a default collection for submissions', async function () {
+    apos.db.collection('aposFormSubmissions', function (err, collection) {
+      assert(!err);
+      assert(collection);
+    });
+  });
 
   // // Create a form
   // const form1 = {

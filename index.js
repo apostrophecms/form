@@ -57,6 +57,24 @@ module.exports = {
       group
     };
   },
+  init (self) {
+    self.ensureCollection();
+  },
+  methods (self) {
+    return {
+      async ensureCollection () {
+        self.db = self.apos.db.collection('aposFormSubmissions');
+        await self.db.ensureIndex({
+          formId: 1,
+          createdAt: 1
+        });
+        await self.db.ensureIndex({
+          formId: 1,
+          createdAt: -1
+        });
+      }
+    };
+  },
   helpers (self) {
     return {
       prependIfPrefix(str) {
