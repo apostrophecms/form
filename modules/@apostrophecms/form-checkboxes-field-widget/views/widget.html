@@ -1,7 +1,7 @@
-{% set prependIfPrefix = apos.modules['@apostrophecms/form'].prependIfPrefix %}
 {# ids must be unique doc-wide #}
 {% set id = apos.util.generateId() %}
 {% set widget = data.widget %}
+{% set prependIfPrefix = apos.modules['@apostrophecms/form'].prependIfPrefix %}
 {% set style = data.widget.style or "checkboxes" %}
 {% import "fragments/utility.html" as utils with context %}
 {% import "macros.html" as macros with context %}

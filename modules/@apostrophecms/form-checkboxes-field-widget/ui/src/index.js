@@ -1,5 +1,5 @@
 export default () => {
-  apos.util.widgetPlayers.collapser = {
+  apos.util.widgetPlayers.formsCheckboxes = {
     selector: '[data-apos-forms-checkboxes]',
     player: function (el) {
       const formsWidget = apos.util.closest(el, '[data-apos-forms-form]');

@@ -15,25 +15,25 @@ describe('Forms module', function () {
   // Existence
   const formWidgets = {
     '@apostrophecms/form-widget': {},
-    // '@apostrophecms/form-text-field-widget': {},
-    // '@apostrophecms/form-textarea-field-widget': {},
-    // '@apostrophecms/form-select-field-widget': {},
-    // '@apostrophecms/form-radio-field-widget': {},
+    '@apostrophecms/form-text-field-widget': {},
+    '@apostrophecms/form-textarea-field-widget': {},
+    '@apostrophecms/form-select-field-widget': {},
+    '@apostrophecms/form-radio-field-widget': {},
     '@apostrophecms/form-checkboxes-field-widget': {},
-    // '@apostrophecms/form-file-field-widget': {},
-    '@apostrophecms/form-boolean-field-widget': {}
-    // '@apostrophecms/form-conditional-widget': {}
+    '@apostrophecms/form-file-field-widget': {},
+    '@apostrophecms/form-boolean-field-widget': {},
+    '@apostrophecms/form-conditional-widget': {}
   };
 
   let forms;
-  // let textWidgets;
-  // let textareaWidgets;
-  // let selectWidgets;
-  // let radioWidgets;
+  let textWidgets;
+  let textareaWidgets;
+  let selectWidgets;
+  let radioWidgets;
   let checkboxesWidgets;
-  // let fileWidgets;
+  let fileWidgets;
   let booleanWidgets;
-  // let conditionalWidgets;
+  let conditionalWidgets;
 
   it('should be a property of the apos object', async function () {
     apos = await testUtil.create({
@@ -58,25 +58,25 @@ describe('Forms module', function () {
     const aposForm = '@apostrophecms/form';
     forms = apos.modules[`${aposForm}`];
     const widgets = apos.modules[`${aposForm}-widget`];
-    // textWidgets = apos.modules[`${aposForm}-text-field-widget`];
-    // textareaWidgets = apos.modules[`${aposForm}-textarea-field-widget`];
-    // selectWidgets = apos.modules[`${aposForm}-select-field-widget`];
-    // radioWidgets = apos.modules[`${aposForm}-radio-field-widget`];
+    textWidgets = apos.modules[`${aposForm}-text-field-widget`];
+    textareaWidgets = apos.modules[`${aposForm}-textarea-field-widget`];
+    selectWidgets = apos.modules[`${aposForm}-select-field-widget`];
+    radioWidgets = apos.modules[`${aposForm}-radio-field-widget`];
     checkboxesWidgets = apos.modules[`${aposForm}-checkboxes-field-widget`];
-    // fileWidgets = apos.modules[`${aposForm}-file-field-widget`];
+    fileWidgets = apos.modules[`${aposForm}-file-field-widget`];
     booleanWidgets = apos.modules[`${aposForm}-boolean-field-widget`];
-    // conditionalWidgets = apos.modules[`${aposForm}-conditional-widget`];
+    conditionalWidgets = apos.modules[`${aposForm}-conditional-widget`];
 
     assert(forms.__meta.name === `${aposForm}`);
     assert(widgets.__meta.name === `${aposForm}-widget`);
-    // assert(textWidgets.__meta.name === `${aposForm}-text-field-widget`);
-    // assert(textareaWidgets.__meta.name === `${aposForm}-textarea-field-widget`);
-    // assert(selectWidgets.__meta.name === `${aposForm}-select-field-widget`);
-    // assert(radioWidgets.__meta.name === `${aposForm}-radio-field-widget`);
+    assert(textWidgets.__meta.name === `${aposForm}-text-field-widget`);
+    assert(textareaWidgets.__meta.name === `${aposForm}-textarea-field-widget`);
+    assert(selectWidgets.__meta.name === `${aposForm}-select-field-widget`);
+    assert(radioWidgets.__meta.name === `${aposForm}-radio-field-widget`);
     assert(checkboxesWidgets.__meta.name === `${aposForm}-checkboxes-field-widget`);
-    // assert(fileWidgets.__meta.name === `${aposForm}-file-field-widget`);
+    assert(fileWidgets.__meta.name === `${aposForm}-file-field-widget`);
     assert(booleanWidgets.__meta.name === `${aposForm}-boolean-field-widget`);
-    // assert(conditionalWidgets.__meta.name === `${aposForm}-conditional-widget`);
+    assert(conditionalWidgets.__meta.name === `${aposForm}-conditional-widget`);
   });
 
   // // Submissions collection exists.

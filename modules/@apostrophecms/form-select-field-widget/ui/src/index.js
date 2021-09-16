@@ -1,6 +1,6 @@
 export default () => {
-  apos.util.widgetPlayers.formsBoolean = {
-    selector: '[data-apos-forms-boolean]',
+  apos.util.widgetPlayers.formsCheckboxes = {
+    selector: '[data-apos-forms-select]',
     player: function (el) {
       const formsWidget = apos.util.closest(el, '[data-apos-forms-form]');
       if (!formsWidget) {
@@ -8,15 +8,10 @@ export default () => {
         return;
       }
 
-      const input = el.querySelector('input[type="checkbox"]');
+      const input = el.querySelector('select');
       const inputName = input.getAttribute('name');
 
       formsWidget.addEventListener('apos-forms-validate', function(event) {
-
-        if (!input || !input.checked) {
-          return;
-        }
-
         event.input[inputName] = input.value;
       });
 
@@ -24,13 +19,10 @@ export default () => {
 
       if (conditionalGroups.length > 0) {
         const check = apos.aposForms.checkConditional;
+        check(conditionalGroups, input);
 
-        if (input.checked) {
+        input.addEventListener('change', function () {
           check(conditionalGroups, input);
-        }
-
-        input.addEventListener('change', function (e) {
-          check(conditionalGroups, e.target);
         });
       }
     }
