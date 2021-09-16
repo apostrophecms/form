@@ -87,118 +87,117 @@ describe('Forms module', function () {
     });
   });
 
-  // // Create a form
-  // const form1 = {
-  //   _id: 'form1',
-  //   published: true,
-  //   type: 'apostrophe-forms',
-  //   title: 'First test form',
-  //   slug: 'test-form-one',
-  //   contents: {
-  //     type: 'area',
-  //     items: [
-  //       {
-  //         _id: 'dogNameId',
-  //         fieldLabel: 'Dog name',
-  //         fieldName: 'DogName',
-  //         required: true,
-  //         type: 'apostrophe-forms-text-field'
-  //       },
-  //       {
-  //         _id: 'dogTraitsId',
-  //         fieldLabel: 'Check all that apply',
-  //         fieldName: 'DogTraits',
-  //         required: true,
-  //         type: 'apostrophe-forms-checkboxes-field',
-  //         choices: [
-  //           {
-  //             label: 'Runs fast',
-  //             value: 'Runs fast'
-  //           },
-  //           {
-  //             label: 'It\'s a dog',
-  //             value: 'It\'s a dog'
-  //           },
-  //           {
-  //             label: 'Likes treats',
-  //             value: 'Likes treats'
-  //           }
-  //         ]
-  //       },
-  //       {
-  //         _id: 'dogBreedId',
-  //         fieldLabel: 'Dog breed',
-  //         fieldName: 'DogBreed',
-  //         required: false,
-  //         type: 'apostrophe-forms-radio-field',
-  //         choices: [
-  //           {
-  //             label: 'Irish Wolfhound',
-  //             value: 'Irish Wolfhound'
-  //           },
-  //           {
-  //             label: 'Cesky Terrier',
-  //             value: 'Cesky Terrier'
-  //           },
-  //           {
-  //             label: 'Dachshund',
-  //             value: 'Dachshund'
-  //           },
-  //           {
-  //             label: 'Pumi',
-  //             value: 'Pumi'
-  //           }
-  //         ]
-  //       },
-  //       {
-  //         _id: 'dogPhotoId',
-  //         fieldLabel: 'Photo of your dog',
-  //         fieldName: 'DogPhoto',
-  //         required: false,
-  //         type: 'apostrophe-forms-file-field'
-  //       },
-  //       {
-  //         _id: 'agreeId',
-  //         fieldLabel: 'Opt-in to participate',
-  //         fieldName: 'agree',
-  //         required: true,
-  //         checked: false,
-  //         type: 'apostrophe-forms-boolean-field'
-  //       }
-  //     ]
-  //   },
-  //   enableQueryParams: true,
-  //   queryParamList: [
-  //     {
-  //       id: 'source',
-  //       key: 'source'
-  //     },
-  //     {
-  //       id: 'memberId',
-  //       key: 'member-id',
-  //       lengthLimit: 6
-  //     }
-  //   ]
-  // };
+  // Create a form
+  const form1 = {
+    _id: 'form1:en:published',
+    archived: false,
+    type: '@apostrophecms/form',
+    title: 'First test form',
+    slug: 'test-form-one',
+    contents: {
+      _id: 'form1ContentsArea890',
+      metaType: 'area',
+      items: [
+        {
+          _id: 'dogNameId',
+          fieldLabel: 'Dog name',
+          fieldName: 'DogName',
+          required: true,
+          type: '@apostrophecms/form-text-field'
+        },
+        {
+          _id: 'dogTraitsId',
+          fieldLabel: 'Check all that apply',
+          fieldName: 'DogTraits',
+          required: true,
+          type: '@apostrophecms/form-checkboxes-field',
+          choices: [
+            {
+              label: 'Runs fast',
+              value: 'Runs fast'
+            },
+            {
+              label: 'It\'s a dog',
+              value: 'It\'s a dog'
+            },
+            {
+              label: 'Likes treats',
+              value: 'Likes treats'
+            }
+          ]
+        },
+        {
+          _id: 'dogBreedId',
+          fieldLabel: 'Dog breed',
+          fieldName: 'DogBreed',
+          required: false,
+          type: '@apostrophecms/form-radio-field',
+          choices: [
+            {
+              label: 'Irish Wolfhound',
+              value: 'Irish Wolfhound'
+            },
+            {
+              label: 'Cesky Terrier',
+              value: 'Cesky Terrier'
+            },
+            {
+              label: 'Dachshund',
+              value: 'Dachshund'
+            },
+            {
+              label: 'Pumi',
+              value: 'Pumi'
+            }
+          ]
+        },
+        {
+          _id: 'dogPhotoId',
+          fieldLabel: 'Photo of your dog',
+          fieldName: 'DogPhoto',
+          required: false,
+          type: '@apostrophecms/form-file-field'
+        },
+        {
+          _id: 'agreeId',
+          fieldLabel: 'Opt-in to participate',
+          fieldName: 'agree',
+          required: true,
+          checked: false,
+          type: '@apostrophecms/form-boolean-field'
+        }
+      ]
+    },
+    enableQueryParams: true,
+    queryParamList: [
+      {
+        id: 'source',
+        key: 'source'
+      },
+      {
+        id: 'memberId',
+        key: 'member-id',
+        lengthLimit: 6
+      }
+    ]
+  };
 
-  // let savedForm1;
+  let savedForm1;
 
-  // it('should create a form', function () {
-  //   const req = apos.tasks.getReq();
+  it('should create a form', async function () {
+    const req = apos.task.getReq();
 
-  //   return apos.docs.db.insert(form1)
-  //     .then(function () {
-  //       return apos.docs.getManager('apostrophe-forms').find(req, {}).toObject();
-  //     })
-  //     .then(function (form) {
-  //       savedForm1 = form;
-  //       assert(form);
-  //       assert(form.title === 'First test form');
-  //     })
-  //     .catch(function (err) {
-  //       assert(!err);
-  //     });
-  // });
+    await apos.doc.db.insertOne(form1);
+
+    const form = await apos.doc.getManager('@apostrophecms/form').find(req, {}).toObject();
+
+    savedForm1 = form;
+    assert(form);
+    assert(form.title === 'First test form');
+  });
+
+  // TEMP to quiet eslint
+  console.log('🤫', !!savedForm1);
 
   // it('should have the same widgets in conditional widget areas', function () {
   //   const formWidgets = forms.schema.find(field => {
@@ -300,15 +299,15 @@ describe('Forms module', function () {
   //           secret: 'test-the-forms-more'
   //         }
   //       },
-  //       'apostrophe-forms': {
+  //       '@apostrophecms/form': {
   //         saveSubmissions: false
   //       },
   //       ...formWidgets
   //     },
   //     afterInit: function (callback) {
-  //       const forms = apos.modules['apostrophe-forms'];
+  //       const forms = apos.modules['@apostrophecms/form'];
 
-  //       assert(forms.__meta.name === 'apostrophe-forms');
+  //       assert(forms.__meta.name === '@apostrophecms/form');
 
   //       return callback(null);
   //     },
@@ -324,7 +323,7 @@ describe('Forms module', function () {
 
   //   await apos2.docs.db.insert(form2)
   //     .then(function () {
-  //       return apos2.docs.getManager('apostrophe-forms').find(req, {}).toObject();
+  //       return apos2.docs.getManager('@apostrophecms/form').find(req, {}).toObject();
   //     })
   //     .then(function (form) {
   //       savedForm2 = form;
@@ -430,7 +429,7 @@ describe('Forms module', function () {
   //           secret: 'test-the-forms-again'
   //         }
   //       },
-  //       'apostrophe-forms': {
+  //       '@apostrophecms/form': {
   //         emailSubmissions: true,
   //         testing: true,
   //         // reCAPTCHA test keys https://developers.google.com/recaptcha/docs/faq#id-like-to-run-automated-tests-with-recaptcha-what-should-i-do
@@ -440,9 +439,9 @@ describe('Forms module', function () {
   //       ...formWidgets
   //     },
   //     afterInit: function (callback) {
-  //       const forms = apos.modules['apostrophe-forms'];
+  //       const forms = apos.modules['@apostrophecms/form'];
 
-  //       assert(forms.__meta.name === 'apostrophe-forms');
+  //       assert(forms.__meta.name === '@apostrophecms/form');
 
   //       return callback(null);
   //     },
@@ -458,7 +457,7 @@ describe('Forms module', function () {
 
   //   await apos3.docs.db.insert(form3)
   //     .then(function () {
-  //       return apos3.docs.getManager('apostrophe-forms').find(req, {})
+  //       return apos3.docs.getManager('@apostrophecms/form').find(req, {})
   //         .toObject();
   //     })
   //     .then(function (form) {
@@ -518,14 +517,14 @@ describe('Forms module', function () {
   // it('should populate email notification lists based on conditions', async function () {
   //   const req = apos3.tasks.getReq();
 
-  //   const emailSetOne = await apos3.modules['apostrophe-forms'].sendEmailSubmissions(req, savedForm3, submission5);
+  //   const emailSetOne = await apos3.modules['@apostrophecms/form'].sendEmailSubmissions(req, savedForm3, submission5);
 
   //   assert(emailSetOne.length === 2);
   //   assert(emailSetOne.indexOf('emailOne@example.net') > -1);
   //   assert(emailSetOne.indexOf('emailTwo@example.net') === -1);
   //   assert(emailSetOne.indexOf('emailThree@example.net') > -1);
 
-  //   const emailSetTwo = await apos3.modules['apostrophe-forms'].sendEmailSubmissions(req, savedForm3, submission6);
+  //   const emailSetTwo = await apos3.modules['@apostrophecms/form'].sendEmailSubmissions(req, savedForm3, submission6);
 
   //   assert(emailSetTwo.length === 3);
   //   assert(emailSetTwo.indexOf('emailOne@example.net') > -1);
