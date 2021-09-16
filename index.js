@@ -5,7 +5,6 @@ const fields = require('./lib/fields');
 module.exports = {
   extend: '@apostrophecms/piece-type',
   options: {
-    alias: 'forms',
     label: 'Form',
     quickCreate: true,
     seo: false,
