@@ -38,6 +38,7 @@ describe('Forms module', function () {
   it('should be a property of the apos object', async function () {
     apos = await testUtil.create({
       testModule: 'apostrophe',
+      baseUrl: 'http://localhost:4242',
       modules: {
         '@apostrophecms/express': {
           options: {
@@ -47,6 +48,9 @@ describe('Forms module', function () {
             },
             session: {
               secret: 'test-the-forms'
+            },
+            apiKeys: {
+              skeleton_key: { role: 'admin' }
             }
           }
         },
@@ -220,48 +224,54 @@ describe('Forms module', function () {
     }
   });
 
-  // // Submitting gets 200 response
-  // const submission1 = {
-  //   DogName: 'Jasper',
-  //   DogTraits: [
-  //     'Runs fast',
-  //     'Likes treats'
-  //   ],
-  //   DogBreed: 'Irish Wolfhound',
-  //   DogToy: 'Frisbee',
-  //   LifeStory: 'Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Donec ullamcorper nulla non metus auctor fringilla.',
-  //   agree: true,
-  //   queryParams: {
-  //     'member-id': '123456789',
-  //     source: 'newspaper',
-  //     malicious: 'evil'
-  //   }
-  // };
+  // Submitting gets 200 response
+  const submission1 = {
+    DogName: 'Jasper',
+    DogTraits: [
+      'Runs fast',
+      'Likes treats'
+    ],
+    DogBreed: 'Irish Wolfhound',
+    DogToy: 'Frisbee',
+    LifeStory: 'Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Donec ullamcorper nulla non metus auctor fringilla.',
+    agree: true,
+    queryParams: {
+      'member-id': '123456789',
+      source: 'newspaper',
+      malicious: 'evil'
+    }
+  };
 
-  // it('should accept a valid submission', async function () {
-  //   submission1._id = savedForm1._id;
+  it('should accept a valid submission', async function () {
+    submission1._id = savedForm1._id;
 
-  //   const response = await axios({
-  //     method: 'post',
-  //     url: 'http://localhost:4242/modules/apostrophe-forms/submit',
-  //     data: submission1
-  //   });
+    let response;
+    try {
+      response = await apos.http.post(
+        '/api/v1/@apostrophecms/form/submit?apikey=skeleton_key',
+        {
+          body: submission1
+        }
+      );
+    } catch (error) {
+      assert(!error);
+    }
 
-  //   assert(response.status === 200);
-  //   assert(response.data.status === 'ok');
-  // });
+    assert(response.status === 'ok');
+  });
 
-  // // Submission is stored in the db
-  // it('can find the form submission in the database', function (done) {
-  //   apos.db.collection('aposFormSubmissions').findOne({
-  //     'data.DogName': 'Jasper'
-  //   }, function (err, doc) {
-  //     assert(!err);
-  //     assert(doc.data.DogBreed === 'Irish Wolfhound');
+  // Submission is stored in the db
+  it('can find the form submission in the database', async function () {
+    try {
+      const doc = await apos.db.collection('aposFormSubmissions').findOne({
 
-  //     return done();
-  //   });
-  // });
+      });
+
+      assert(doc.data.DogBreed === 'Irish Wolfhound');
+    } catch (err) {
+      assert(!err);
+    }
+  });
 
   // // Submission captures and limits query parameters
   // it('can find query parameter data saved and limited', function (done) {
@@ -542,21 +552,21 @@ describe('Forms module', function () {
   //   const output1 = {};
   //   const input1 = { textField: 'A valid string.' };
 
-  //   textWidgets.sanitizeFormField(null, null, widget, input1, output1);
+  //   textWidgets.sanitizeFormField(widget, input1, output1);
 
   //   assert(output1.textField === 'A valid string.');
 
   //   const input2 = { textField: 127 };
   //   const output2 = {};
 
-  //   textWidgets.sanitizeFormField(null, null, widget, input2, output2);
+  //   textWidgets.sanitizeFormField(widget, input2, output2);
 
   //   assert(output2.textField === '127');
 
   //   const input3 = { textField: null };
   //   const output3 = {};
 
-  //   textWidgets.sanitizeFormField(null, null, widget, input3, output3);
+  //   textWidgets.sanitizeFormField(widget, input3, output3);
 
   //   assert(output3.textField === '');
 
@@ -569,13 +579,13 @@ describe('Forms module', function () {
   //   const input1 = { textAreaField: longText };
   //   const output1 = {};
 
-  //   textareaWidgets.sanitizeFormField(null, null, widget, input1, output1);
+  //   textareaWidgets.sanitizeFormField(widget, input1, output1);
   //   assert(output1.textAreaField === longText);
 
   //   const input2 = { textAreaField: [ 127, 0 ] };
   //   const output2 = {};
 
-  //   textareaWidgets.sanitizeFormField(null, null, widget, input2, output2);
+  //   textareaWidgets.sanitizeFormField(widget, input2, output2);
 
   //   assert(!output2.textAreaField);
 
@@ -595,14 +605,14 @@ describe('Forms module', function () {
   //   const input1 = { selectField: 'second' };
   //   const output1 = {};
 
-  //   selectWidgets.sanitizeFormField(null, null, widget, input1, output1);
+  //   selectWidgets.sanitizeFormField(widget, input1, output1);
 
   //   assert(output1.selectField === 'second');
 
   //   const input2 = { selectField: 'ninetieth' };
   //   const output2 = {};
 
-  //   selectWidgets.sanitizeFormField(null, null, widget, input2, output2);
+  //   selectWidgets.sanitizeFormField(widget, input2, output2);
 
   //   assert(!output2.selectField);
   //   done();
@@ -621,14 +631,14 @@ describe('Forms module', function () {
   //   const input1 = { radioField: 'second' };
   //   const output1 = {};
 
-  //   radioWidgets.sanitizeFormField(null, null, widget, input1, output1);
+  //   radioWidgets.sanitizeFormField(widget, input1, output1);
 
   //   assert(output1.radioField === 'second');
 
   //   const input2 = { radioField: 'ninetieth' };
   //   const output2 = {};
 
-  //   radioWidgets.sanitizeFormField(null, null, widget, input2, output2);
+  //   radioWidgets.sanitizeFormField(widget, input2, output2);
 
   //   assert(!output2.radioField);
   //   done();
@@ -647,7 +657,7 @@ describe('Forms module', function () {
   //   const input1 = { checkboxField: [ 'second', 'fourth', 'seventeenth' ] };
   //   const output1 = {};
 
-  //   checkboxesWidgets.sanitizeFormField(null, null, widget, input1, output1);
+  //   checkboxesWidgets.sanitizeFormField(widget, input1, output1);
 
   //   assert(output1.checkboxField.length === 2);
   //   assert(output1.checkboxField[0] === 'second');
@@ -670,14 +680,14 @@ describe('Forms module', function () {
   //   const output1 = {};
   //   const input1 = { fileField: [ fileId ] };
 
-  //   await fileWidgets.sanitizeFormField(null, null, widget, input1, output1);
+  //   await fileWidgets.sanitizeFormField(widget, input1, output1);
 
   //   assert(output1.fileField[0] === `/uploads/attachments/${fileId}-upload-test.txt`);
 
   //   const input2 = { fileField: '8675309' };
   //   const output2 = {};
 
-  //   await fileWidgets.sanitizeFormField(null, null, widget, input2, output2);
+  //   await fileWidgets.sanitizeFormField(widget, input2, output2);
 
   //   assert(Array.isArray(output2.fileField));
   //   assert(output2.fileField.length === 0);
@@ -694,14 +704,14 @@ describe('Forms module', function () {
   //   const output1 = {};
   //   const input1 = { booleanField: true };
 
-  //   booleanWidgets.sanitizeFormField(null, null, widget, input1, output1);
+  //   booleanWidgets.sanitizeFormField(widget, input1, output1);
 
   //   assert(output1.booleanField === true);
 
   //   const input2 = { booleanField: false };
   //   const output2 = {};
 
-  //   booleanWidgets.sanitizeFormField(null, null, widget, input2, output2);
+  //   booleanWidgets.sanitizeFormField(widget, input2, output2);
 
   //   assert(output2.booleanField === false);
 

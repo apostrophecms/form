@@ -22,12 +22,12 @@ export default () => {
         }
       }
 
-      function submit(event) {
+      async function submit(event) {
         event.preventDefault();
 
         if (form.querySelector('[data-apos-forms-busy]')) {
-          return setTimeout(function() {
-            submit(event);
+          return setTimeout(async function() {
+            await submit(event);
           }, 100);
         }
 
@@ -88,26 +88,38 @@ export default () => {
           captureParameters(event);
         }
 
-        return apos.http.post('/api/v1/@apostrophecms/form/submit', event.input, function (err, res) {
-          apos.util.removeClass(spinner, 'apos-forms-visible');
-          if (err || (res && (res.status !== 'ok'))) {
-            apos.util.emit(document.body, '@apostrophecms/form:submission-failed', {
-              form: form,
-              err: err,
-              res: res
-            });
-            apos.util.addClass(errorMsg, 'apos-forms-visible');
-            highlightErrors(res);
+        let res = {};
+        let error = null;
 
-            if (recaptchaId) {
-              grecaptcha.reset(recaptchaId);
-            }
-          } else {
-            apos.util.emit(document.body, '@apostrophecms/form:submission-form', { form: form });
-            apos.util.addClass(thankYou, 'apos-forms-visible');
-            apos.util.addClass(form, 'apos-forms-hidden');
+        try {
+          res = await apos.http.post('/api/v1/@apostrophecms/form/submit', {
+            body: event.input
+          });
+        } catch (err) {
+          error = err;
+        }
+
+        if (error || (res && (res.status !== 'ok'))) {
+          apos.util.emit(document.body, 'apostrophe-forms:submission-failed', {
+            form: form,
+            err: error,
+            res: res
+          });
+          apos.util.addClass(errorMsg, 'apos-forms-visible');
+          highlightErrors(res);
+
+          if (recaptchaId) {
+            grecaptcha.reset(recaptchaId);
           }
+        }
+
+        apos.util.removeClass(spinner, 'apos-forms-visible');
+
+        apos.util.emit(document.body, '@apostrophecms/form:submission-form', {
+          form
         });
+        apos.util.addClass(thankYou, 'apos-forms-visible');
+        apos.util.addClass(form, 'apos-forms-hidden');
       }
 
       function highlightErrors(res) {
