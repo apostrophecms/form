@@ -264,7 +264,7 @@ describe('Forms module', function () {
   it('can find the form submission in the database', async function () {
     try {
       const doc = await apos.db.collection('aposFormSubmissions').findOne({
-
+        'data.DogName': 'Jasper'
       });
 
       assert(doc.data.DogBreed === 'Irish Wolfhound');
@@ -273,19 +273,16 @@ describe('Forms module', function () {
     }
   });
 
-  // // Submission captures and limits query parameters
-  // it('can find query parameter data saved and limited', function (done) {
-  //   apos.db.collection('aposFormSubmissions').findOne({
-  //     'data.DogName': 'Jasper'
-  //   }, function (err, doc) {
-  //     assert(!err);
-  //     assert(doc.data['member-id'] === '123456');
-  //     assert(doc.data.source === 'newspaper');
-  //     assert(doc.data.malicious === undefined);
+  // Submission captures and limits query parameters
+  it('can find query parameter data saved and limited', async function () {
+    const doc = await apos.db.collection('aposFormSubmissions').findOne({
+      'data.DogName': 'Jasper'
+    });
 
-  //     return done();
-  //   });
-  // });
+    assert(doc.data['member-id'] === '123456');
+    assert(doc.data.source === 'newspaper');
+    assert(doc.data.malicious === undefined);
+  });
 
   // // Submission is not stored in the db if disabled.
   // let apos2;
