@@ -7,8 +7,7 @@ module.exports = {
     // Get the form widgets from the form piece module and add them in the
     // conditional contents area, removing the conditional field itself.
     const forms = self.options.apos.modules['@apostrophecms/form'];
-    const formWidgets = Object.assign({}, forms.fields.contents.widgets);
-
+    const formWidgets = Object.assign({}, forms.fields.contents.options.widgets);
     delete formWidgets['@apostrophecms/form-conditional'];
 
     return {

@@ -199,26 +199,26 @@ describe('Forms module', function () {
   // TEMP to quiet eslint
   console.log('🤫', !!savedForm1);
 
-  // it('should have the same widgets in conditional widget areas', function () {
-  //   const formWidgets = forms.schema.find(field => {
-  //     return field.name === 'contents';
-  //   }).options.widgets;
+  it('should have the same widgets in conditional widget areas', function () {
+    const formWidgets = forms.schema.find(field => {
+      return field.name === 'contents';
+    }).options.widgets;
 
-  //   // Main form widgets has the conditional widget as an option.
-  //   assert(formWidgets['apostrophe-forms-conditional']);
+    // Main form widgets has the conditional widget as an option.
+    assert(formWidgets['@apostrophecms/form-conditional']);
 
-  //   delete formWidgets['apostrophe-forms-conditional'];
+    delete formWidgets['@apostrophecms/form-conditional'];
 
-  //   const condWidgets = conditionalWidgets.schema.find(field => {
-  //     return field.name === 'contents';
-  //   }).options.widgets;
+    const condWidgets = conditionalWidgets.schema.find(field => {
+      return field.name === 'contents';
+    }).options.widgets;
 
-  //   assert(Object.keys(formWidgets).length === Object.keys(condWidgets).length);
+    assert(Object.keys(formWidgets).length === Object.keys(condWidgets).length);
 
-  //   for (const widget in condWidgets) {
-  //     assert(formWidgets[widget]);
-  //   }
-  // });
+    for (const widget in condWidgets) {
+      assert(formWidgets[widget]);
+    }
+  });
 
   // // Submitting gets 200 response
   // const submission1 = {
