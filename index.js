@@ -106,6 +106,40 @@ module.exports = {
         }
 
         return value;
+      },
+      async checkRecaptcha (req, input, formErrors) {
+        const recaptchaSecret = self.getOption(req, 'recaptchaSecret');
+
+        if (!input.recaptcha) {
+          formErrors.push({
+            global: true,
+            error: 'recaptcha',
+            errorMessage: req.t('apos_form:recaptchaError')
+          });
+        }
+
+        try {
+          const url = 'https://www.google.com/recaptcha/api/siteverify';
+          const recaptchaUri = `${url}?secret=${recaptchaSecret}&response=${input.recaptcha}`;
+
+          const response = await self.apos.http.post(recaptchaUri);
+
+          if (!response.success) {
+            formErrors.push({
+              global: true,
+              error: 'recaptcha',
+              errorMessage: req.t('apos_form:recaptchaValidationError')
+            });
+          }
+        } catch (e) {
+          self.apos.util.error(e);
+
+          formErrors.push({
+            global: true,
+            error: 'recaptcha',
+            errorMessage: req.t('apos_form:recaptchaConfigError')
+          });
+        }
       }
     };
   },

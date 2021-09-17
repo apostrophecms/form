@@ -316,7 +316,7 @@ describe('Forms module', function () {
       }
     });
 
-    const forms = apos.modules['@apostrophecms/form'];
+    const forms = apos2.modules['@apostrophecms/form'];
 
     assert(forms.__meta.name === '@apostrophecms/form');
   });
@@ -369,6 +369,7 @@ describe('Forms module', function () {
           body: submission3
         }
       );
+      assert(false);
     } catch (error) {
       assert(error);
       assert(error.status === 400);
@@ -378,127 +379,135 @@ describe('Forms module', function () {
     }
   });
 
-  // // Test basic reCAPTCHA requirements.
-  // let apos3;
-  // let savedForm3;
-  // const submission4 = { ...submission1 };
-  // const form3 = {
-  //   ...form1,
-  //   emails: [
-  //     {
-  //       id: 'emailCondOne',
-  //       email: 'emailOne@example.net',
-  //       conditions: []
-  //     },
-  //     {
-  //       id: 'emailCondTwo',
-  //       email: 'emailTwo@example.net',
-  //       conditions: [
-  //         {
-  //           field: 'DogTraits',
-  //           value: 'Likes treats, It\'s a dog'
-  //         },
-  //         {
-  //           field: 'DogBreed',
-  //           value: 'Cesky Terrier, Pumi'
-  //         }
-  //       ]
-  //     },
-  //     {
-  //       id: 'emailCondThree',
-  //       email: 'emailThree@example.net',
-  //       conditions: [
-  //         {
-  //           field: 'DogTraits',
-  //           value: 'Likes treats, "Comma, test"'
-  //         }
-  //       ]
-  //     }
-  //   ]
-  // };
-  // form3.slug = 'test-form-three';
-  // form3._id = 'form3';
+  // Test basic reCAPTCHA requirements.
+  let apos3;
+  let savedForm3;
+  const submission4 = { ...submission1 };
+  const form3 = {
+    ...form1,
+    emails: [
+      {
+        id: 'emailCondOne',
+        email: 'emailOne@example.net',
+        conditions: []
+      },
+      {
+        id: 'emailCondTwo',
+        email: 'emailTwo@example.net',
+        conditions: [
+          {
+            field: 'DogTraits',
+            value: 'Likes treats, It\'s a dog'
+          },
+          {
+            field: 'DogBreed',
+            value: 'Cesky Terrier, Pumi'
+          }
+        ]
+      },
+      {
+        id: 'emailCondThree',
+        email: 'emailThree@example.net',
+        conditions: [
+          {
+            field: 'DogTraits',
+            value: 'Likes treats, "Comma, test"'
+          }
+        ]
+      }
+    ]
+  };
+  form3.slug = 'test-form-three';
+  form3._id = 'form3';
 
-  // it('should be a property of the apos3 object', function (done) {
-  //   apos3 = require('apostrophe')({
-  //     shortName: 'test3',
-  //     baseUrl: 'http://localhost:6000',
-  //     modules: {
-  //       'apostrophe-express': {
-  //         port: 6000,
-  //         csrf: {
-  //           exceptions: [ '/api/v1/@apostrophecms/form/submit' ]
-  //         },
-  //         session: {
-  //           secret: 'test-the-forms-again'
-  //         }
-  //       },
-  //       '@apostrophecms/form': {
-  //         emailSubmissions: true,
-  //         testing: true,
-  //         // reCAPTCHA test keys https://developers.google.com/recaptcha/docs/faq#id-like-to-run-automated-tests-with-recaptcha-what-should-i-do
-  //         recaptchaSite: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
-  //         recaptchaSecret: '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'
-  //       },
-  //       ...formWidgets
-  //     },
-  //     afterInit: function (callback) {
-  //       const forms = apos.modules['@apostrophecms/form'];
+  it('should be a property of the apos3 object', async function () {
+    apos3 = await testUtil.create({
+      shortName: 'formsTest3',
+      testModule: true,
+      baseUrl: 'http://localhost:6000',
+      modules: {
+        '@apostrophecms/express': {
+          options: {
+            port: 6000,
+            csrf: {
+              exceptions: [ '/api/v1/@apostrophecms/form/submit' ]
+            },
+            session: {
+              secret: 'test-the-forms-more'
+            },
+            apiKeys: {
+              skeleton_key: { role: 'admin' }
+            }
+          }
+        },
+        '@apostrophecms/form': {
+          options: {
+            emailSubmissions: true,
+            testing: true,
+            // reCAPTCHA test keys https://developers.google.com/recaptcha/docs/faq#id-like-to-run-automated-tests-with-recaptcha-what-should-i-do
+            recaptchaSite: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
+            recaptchaSecret: '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'
+          }
+        },
+        ...formWidgets
+      }
+    });
 
-  //       assert(forms.__meta.name === '@apostrophecms/form');
+    const forms = apos3.modules['@apostrophecms/form'];
+    assert(forms.__meta.name === '@apostrophecms/form');
+  });
 
-  //       return callback(null);
-  //     },
-  //     afterListen: function (err) {
-  //       assert(!err);
-  //       done();
-  //     }
-  //   });
-  // });
+  it('should return a form error if missing required reCAPTHCA token', async function () {
+    const req = apos3.task.getReq();
 
-  // it('should return a form error if missing required reCAPTHCA token', async function () {
-  //   const req = apos3.task.getReq();
+    await apos3.doc.db.insertOne(form3)
+      .then(function () {
+        return apos3.doc.getManager('@apostrophecms/form').find(req, {})
+          .toObject();
+      })
+      .then(function (form) {
+        savedForm3 = form;
+      })
+      .catch(function (err) {
+        console.log(err);
+        assert(!err);
+      });
 
-  //   await apos3.doc.db.insertOne(form3)
-  //     .then(function () {
-  //       return apos3.doc.getManager('@apostrophecms/form').find(req, {})
-  //         .toObject();
-  //     })
-  //     .then(function (form) {
-  //       savedForm3 = form;
-  //     })
-  //     .catch(function (err) {
-  //       console.log(err);
-  //       assert(!err);
-  //     });
+    submission4._id = savedForm3._id;
 
-  //   submission4._id = savedForm3._id;
+    try {
+      await apos3.http.post(
+        '/api/v1/@apostrophecms/form/submit?apikey=skeleton_key',
+        {
+          body: submission4
+        }
+      );
+      // Don't make it here.
+      assert(false);
+    } catch (error) {
+      assert(error.status === 400);
+      assert(error.body.data.formErrors[0].error === 'recaptcha');
+      assert(error.body.data.formErrors[0].global === true);
+    }
+  });
 
-  //   const response = await axios({
-  //     method: 'post',
-  //     url: 'http://localhost:6000/modules/apostrophe-forms/submit',
-  //     data: submission4
-  //   });
+  console.info('🤫', !!savedForm3);
 
-  //   assert(response.status === 200);
-  //   assert(response.data.status === 'error');
-  //   assert(response.data.formErrors[0].error === 'recaptcha');
-  //   assert(response.data.formErrors[0].global === true);
-  // });
+  it('should submit successfully with a reCAPTCHA token', async function () {
+    submission4.recaptcha = 'validRecaptchaToken';
 
-  // it('should submit successfully with a reCAPTCHA token', async function () {
-  //   submission4.recaptcha = 'validRecaptchaToken';
-
-  //   const response = await axios({
-  //     method: 'post',
-  //     url: 'http://localhost:6000/modules/apostrophe-forms/submit',
-  //     data: submission4
-  //   });
-
-  //   assert(response.status === 200);
-  //   assert(response.data.status === 'ok');
-  //   assert(!response.data.formErrors);
-  // });
+    try {
+      await apos3.http.post(
+        '/api/v1/@apostrophecms/form/submit?apikey=skeleton_key',
+        {
+          body: submission4
+        }
+      );
+      assert('👍');
+    } catch (error) {
+      assert(!error);
+    }
+  });
 
   // const submission5 = {
   //   DogName: 'Jenkins',
@@ -536,9 +545,9 @@ describe('Forms module', function () {
   //   assert(emailSetTwo.indexOf('emailThree@example.net') > -1);
   // });
 
-  // it('destroys the third instance', function (done) {
-  //   testUtil.destroy(apos3, done);
-  // });
+  it('destroys the third instance', async function () {
+    await testUtil.destroy(apos3);
+  });
 
   // // Individual tests for sanitizeFormField methods on field widgets.
   // it('sanitizes text widget input', function (done) {
