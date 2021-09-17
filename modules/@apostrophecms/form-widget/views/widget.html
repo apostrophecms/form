@@ -54,14 +54,14 @@
     <p role="alert" data-apos-forms-recaptcha-error
       class="apos-forms-hidden apos-forms-error {{ prependIfPrefix('__error') }}"
     >
-      {{ __t("Please complete the reCAPTCHA validation.") }}
+      {{ __t("apos_form:widgetCompleteCaptcha") }}
     </p>
   {% endif %}
   <p
     class="apos-forms-hidden {{ prependIfPrefix('__spinner') }}"
     data-apos-forms-spinner
   >
-    Submitting...
+    {{ __t('apos_form:widgetSubmitting') }}
   </p>
   <div role="alert" data-apos-forms-thank-you
     class="apos-forms-hidden apos-forms-submission-thank-you {{ prependIfPrefix('__submission-thank-you') }}"

@@ -1,12 +1,12 @@
 module.exports = {
   extend: '@apostrophecms/widget-type',
   options: {
-    label: 'Form'
+    label: 'apos_form:widgetForm'
   },
   fields: {
     add: {
       _form: {
-        label: 'Form to display',
+        label: 'apos_form:widgetFormSelect',
         type: 'relationship',
         withType: '@apostrophecms/form',
         required: true
