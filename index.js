@@ -141,86 +141,83 @@ module.exports = {
           }).toObject();
 
           if (!form) {
-            throw self.apos.error('notfound', req.t('apos_form:notFoundForm'));
+            throw self.apos.error('notfound');
           }
 
           try {
             if (self.getOption(req, 'recaptchaSecret')) {
               await self.checkRecaptcha(req, input, formErrors);
             }
+          } catch (e) {
+            throw self.apos.error('invalid');
+          }
 
-            // Recursively walk the area and its sub-areas so we find
-            // fields nested in two-column widgets and the like
+          // Recursively walk the area and its sub-areas so we find
+          // fields nested in two-column widgets and the like
 
-            // walk is not an async function so build an array of them to start
-            const areas = [];
-            self.apos.area.walk({
-              contents: form.contents
-            }, function(area) {
-              areas.push(area);
-            });
+          // walk is not an async function so build an array of them to start
+          const areas = [];
+          self.apos.area.walk({
+            contents: form.contents
+          }, function(area) {
+            areas.push(area);
+          });
 
-            const fieldNames = [];
-            const conditionals = {};
-            const skipFields = [];
+          const fieldNames = [];
+          const conditionals = {};
+          const skipFields = [];
 
-            // Populate the conditionals object fully to clear disabled values
-            // before starting sanitization.
-            for (const area of areas) {
-              const widgets = area.items || [];
-              for (const widget of widgets) {
-                // Capture field names for the params check list.
-                fieldNames.push(widget.fieldName);
+          // Populate the conditionals object fully to clear disabled values
+          // before starting sanitization.
+          for (const area of areas) {
+            const widgets = area.items || [];
+            for (const widget of widgets) {
+              // Capture field names for the params check list.
+              fieldNames.push(widget.fieldName);
 
-                if (widget.type === 'apostrophe-forms-conditional') {
-                  trackConditionals(conditionals, widget);
-                }
+              if (widget.type === 'apostrophe-forms-conditional') {
+                trackConditionals(conditionals, widget);
               }
             }
+          }
 
-            collectToSkip(input, conditionals, skipFields);
+          collectToSkip(input, conditionals, skipFields);
 
-            for (const area of areas) {
-              const widgets = area.items || [];
-              for (const widget of widgets) {
-                const manager = self.apos.area.getWidgetManager(widget.type);
-                if (
-                  manager && manager.sanitizeFormField &&
+          for (const area of areas) {
+            const widgets = area.items || [];
+            for (const widget of widgets) {
+              const manager = self.apos.area.getWidgetManager(widget.type);
+              if (
+                manager && manager.sanitizeFormField &&
                   !skipFields.includes(widget.fieldName)
-                ) {
-                  try {
-                    manager.checkRequired(widget, input);
-                    await manager.sanitizeFormField(widget, input, output);
-                  } catch (err) {
-                    if (err.fieldError) {
-                      formErrors.push(err.fieldError);
-                    } else {
-                      throw err;
-                    }
+              ) {
+                try {
+                  manager.checkRequired(widget, input);
+                  await manager.sanitizeFormField(widget, input, output);
+                } catch (err) {
+                  if (err.data && err.data.fieldError) {
+                    formErrors.push(err.data.fieldError);
+                  } else {
+                    throw err;
                   }
                 }
               }
             }
-
-            if (formErrors.length > 0) {
-              return {
-                status: 'error',
-                formErrors
-              };
-            }
-
-            if (form.enableQueryParams && form.queryParamList.length > 0) {
-              self.processQueryParams(form, input, output, fieldNames);
-            }
-
-            await self.emit('submission', req, form, output);
-          } catch (e) {
-            throw self.apos.error('error', e);
           }
 
-          return {
-            status: 'ok'
-          };
+          if (formErrors.length > 0) {
+            throw self.apos.error('invalid', {
+              formErrors
+            });
+          }
+
+          if (form.enableQueryParams && form.queryParamList.length > 0) {
+            self.processQueryParams(form, input, output, fieldNames);
+          }
+
+          await self.emit('submission', req, form, output);
+
+          return {};
         }
       }
     };

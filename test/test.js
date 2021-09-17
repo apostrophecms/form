@@ -37,7 +37,8 @@ describe('Forms module', function () {
 
   it('should be a property of the apos object', async function () {
     apos = await testUtil.create({
-      testModule: 'apostrophe',
+      shortname: 'formsTest',
+      testModule: true,
       baseUrl: 'http://localhost:4242',
       modules: {
         '@apostrophecms/express': {
@@ -200,9 +201,6 @@ describe('Forms module', function () {
     assert(form.title === 'First test form');
   });
 
-  // TEMP to quiet eslint
-  console.log('🤫', !!savedForm1);
-
   it('should have the same widgets in conditional widget areas', function () {
     const formWidgets = forms.schema.find(field => {
       return field.name === 'contents';
@@ -245,9 +243,8 @@ describe('Forms module', function () {
   it('should accept a valid submission', async function () {
     submission1._id = savedForm1._id;
 
-    let response;
     try {
-      response = await apos.http.post(
+      await apos.http.post(
         '/api/v1/@apostrophecms/form/submit?apikey=skeleton_key',
         {
           body: submission1
@@ -256,8 +253,6 @@ describe('Forms module', function () {
     } catch (error) {
       assert(!error);
     }
-
-    assert(response.status === 'ok');
   });
 
   // Submission is stored in the db
@@ -284,102 +279,104 @@ describe('Forms module', function () {
     assert(doc.data.malicious === undefined);
   });
 
-  // // Submission is not stored in the db if disabled.
-  // let apos2;
-  // const form2 = { ...form1 };
-  // form2.slug = 'test-form-two';
-  // form2._id = 'form2';
-  // let savedForm2;
-  // const submission2 = { ...submission1 };
+  // Submission is not stored in the db if disabled.
+  let apos2;
+  const form2 = { ...form1 };
+  form2.slug = 'test-form-two';
+  form2._id = 'form2';
+  let savedForm2;
+  const submission2 = { ...submission1 };
 
-  // it('should be a property of the apos2 object', function (done) {
-  //   apos2 = require('apostrophe')({
-  //     shortName: 'test2',
-  //     baseUrl: 'http://localhost:5000',
-  //     modules: {
-  //       'apostrophe-express': {
-  //         port: 5000,
-  //         csrf: {
-  //           exceptions: [ '/modules/apostrophe-forms/submit' ]
-  //         },
-  //         session: {
-  //           secret: 'test-the-forms-more'
-  //         }
-  //       },
-  //       '@apostrophecms/form': {
-  //         saveSubmissions: false
-  //       },
-  //       ...formWidgets
-  //     },
-  //     afterInit: function (callback) {
-  //       const forms = apos.modules['@apostrophecms/form'];
+  it('should be a property of the apos2 object', async function () {
+    apos2 = await testUtil.create({
+      shortName: 'formsTest2',
+      testModule: true,
+      baseUrl: 'http://localhost:5252',
+      modules: {
+        '@apostrophecms/express': {
+          options: {
+            port: 5252,
+            csrf: {
+              exceptions: [ '/api/v1/@apostrophecms/form/submit' ]
+            },
+            session: {
+              secret: 'test-the-forms-more'
+            },
+            apiKeys: {
+              skeleton_key: { role: 'admin' }
+            }
+          }
+        },
+        '@apostrophecms/form': {
+          options: {
+            saveSubmissions: false
+          }
+        },
+        ...formWidgets
+      }
+    });
 
-  //       assert(forms.__meta.name === '@apostrophecms/form');
+    const forms = apos.modules['@apostrophecms/form'];
 
-  //       return callback(null);
-  //     },
-  //     afterListen: function (err) {
-  //       assert(!err);
-  //       done();
-  //     }
-  //   });
-  // });
+    assert(forms.__meta.name === '@apostrophecms/form');
+  });
 
-  // it('should not save in the database if disabled', async function () {
-  //   const req = apos2.tasks.getReq();
+  it('should not save in the database if disabled', async function () {
+    const req = apos2.task.getReq();
 
-  //   await apos2.docs.db.insert(form2)
-  //     .then(function () {
-  //       return apos2.docs.getManager('@apostrophecms/form').find(req, {}).toObject();
-  //     })
-  //     .then(function (form) {
-  //       savedForm2 = form;
-  //     })
-  //     .catch(function (err) {
-  //       assert(!err);
-  //     });
+    await apos2.doc.db.insertOne(form2);
 
-  //   submission2._id = savedForm2._id;
+    const form = await apos2.doc.getManager('@apostrophecms/form').find(req, {}).toObject();
 
-  //   const response = await axios({
-  //     method: 'post',
-  //     url: 'http://localhost:5000/modules/apostrophe-forms/submit',
-  //     data: submission2
-  //   });
+    savedForm2 = form;
 
-  //   assert(response.status === 200);
+    submission2._id = savedForm2._id;
 
-  //   const doc = await apos2.db.collection('aposFormSubmissions').findOne({
-  //     'data.DogName': 'Jasper'
-  //   });
+    try {
+      await apos2.http.post(
+        '/api/v1/@apostrophecms/form/submit?apikey=skeleton_key',
+        {
+          body: submission2
+        }
+      );
+    } catch (error) {
+      assert(!error);
+    }
 
-  //   assert(!doc);
-  // });
+    const doc = await apos2.db.collection('aposFormSubmissions').findOne({
+      'data.DogName': 'Jasper'
+    });
 
-  // it('destroys the second instance', function (done) {
-  //   testUtil.destroy(apos2, done);
-  // });
+    assert(!doc);
+  });
 
-  // // Get form errors returned from missing required data.
-  // const submission3 = {
-  //   agree: true
-  // };
+  it('destroys the second instance', async function () {
+    testUtil.destroy(apos2);
+  });
 
-  // it('should return errors for missing data', async function () {
-  //   submission3._id = savedForm1._id;
+  // Get form errors returned from missing required data.
+  const submission3 = {
+    agree: true
+  };
 
-  //   const response = await axios({
-  //     method: 'post',
-  //     url: 'http://localhost:4242/modules/apostrophe-forms/submit',
-  //     data: submission3
-  //   });
+  it('should return errors for missing data', async function () {
+    submission3._id = savedForm1._id;
 
-  //   assert(response.status === 200);
-  //   assert(response.data.status === 'error');
-  //   assert(response.data.formErrors.length === 2);
-  //   assert(response.data.formErrors[0].error === 'required');
-  //   assert(response.data.formErrors[1].error === 'required');
-  // });
+    try {
+      await apos.http.post(
+        '/api/v1/@apostrophecms/form/submit?apikey=skeleton_key',
+        {
+          body: submission3
+        }
+      );
+    } catch (error) {
+      assert(error);
+      assert(error.status === 400);
+      assert(error.body.data.formErrors.length === 2);
+      assert(error.body.data.formErrors[0].error === 'required');
+      assert(error.body.data.formErrors[1].error === 'required');
+    }
+  });
 
   // // Test basic reCAPTCHA requirements.
   // let apos3;
@@ -430,7 +427,7 @@ describe('Forms module', function () {
   //       'apostrophe-express': {
   //         port: 6000,
   //         csrf: {
-  //           exceptions: [ '/modules/apostrophe-forms/submit' ]
+  //           exceptions: [ '/api/v1/@apostrophecms/form/submit' ]
   //         },
   //         session: {
   //           secret: 'test-the-forms-again'
@@ -460,11 +457,11 @@ describe('Forms module', function () {
   // });
 
   // it('should return a form error if missing required reCAPTHCA token', async function () {
-  //   const req = apos3.tasks.getReq();
+  //   const req = apos3.task.getReq();
 
-  //   await apos3.docs.db.insert(form3)
+  //   await apos3.doc.db.insertOne(form3)
   //     .then(function () {
-  //       return apos3.docs.getManager('@apostrophecms/form').find(req, {})
+  //       return apos3.doc.getManager('@apostrophecms/form').find(req, {})
   //         .toObject();
   //     })
   //     .then(function (form) {
@@ -522,7 +519,7 @@ describe('Forms module', function () {
   // };
 
   // it('should populate email notification lists based on conditions', async function () {
-  //   const req = apos3.tasks.getReq();
+  //   const req = apos3.task.getReq();
 
   //   const emailSetOne = await apos3.modules['@apostrophecms/form'].sendEmailSubmissions(req, savedForm3, submission5);
 

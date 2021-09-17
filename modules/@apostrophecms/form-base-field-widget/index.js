@@ -25,13 +25,13 @@ module.exports = {
     return {
       checkRequired (widget, input) {
         if (widget.required && !input[widget.fieldName]) {
-          throw {
+          throw self.apos.error('invalid', {
             fieldError: {
               field: widget.fieldName,
               error: 'required',
               errorMessage: 'apos_form:requiredError'
             }
-          };
+          });
         }
       },
       getChoicesValues (widget) {

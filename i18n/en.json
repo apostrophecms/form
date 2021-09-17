@@ -1,5 +1,6 @@
 {
-  "notFoundForm": "No matching form was found.",
+  "notFoundForm": "No matching form was found",
+  "formErrors": "Errors found in the form submission",
 
   "form": "Form",
   "formName": "Form name",
