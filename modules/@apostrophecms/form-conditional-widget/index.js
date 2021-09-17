@@ -13,19 +13,19 @@ module.exports = {
     return {
       add: {
         conditionName: {
-          label: 'Form field to check to show this group.',
-          htmlHelp: 'Enter the "Field Name" value for a <strong>select, radio, or boolean</strong> form field.',
+          label: 'apos_form:conditionalName',
+          htmlHelp: 'apos_form:conditionalNameHelp',
           required: true,
           type: 'string'
         },
         conditionValue: {
-          label: 'Value to check for to show this group.',
-          htmlHelp: 'If using a <strong>boolean/opt-in field</strong>, set this to "true".',
+          label: 'apos_form:conditionalValue',
+          htmlHelp: 'apos_form:conditionalValueHelp',
           required: true,
           type: 'string'
         },
         contents: {
-          label: 'Form Contents',
+          label: 'apos_form:formContents',
           type: 'area',
           contextual: false,
           options: {

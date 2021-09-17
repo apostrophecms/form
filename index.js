@@ -5,7 +5,7 @@ const fields = require('./lib/fields');
 module.exports = {
   extend: '@apostrophecms/piece-type',
   options: {
-    label: 'Form',
+    label: 'apos_form:form',
     quickCreate: true,
     seo: false,
     openGraph: false,
@@ -23,17 +23,17 @@ module.exports = {
     // if (self.options.emailSubmissions !== false) {
     //   add = {
     //     ...add,
-    //     ...fields.email
+    //     ...fields.emailFields
     //   };
     // }
 
     const group = {
       basics: {
-        label: 'Form',
+        label: 'apos_form:groupForm',
         fields: [ 'contents', 'submitLabel' ]
       },
       afterSubmit: {
-        label: 'After-Submission',
+        label: 'apos_form:groupAfterSubmission',
         fields: [
           'thankYouHeading',
           'thankYouBody',
@@ -45,7 +45,7 @@ module.exports = {
         ] : [])
       },
       advanced: {
-        label: 'Advanced',
+        label: 'apos_form:groupAdvanced',
         fields: [
           'enableQueryParams',
           'queryParamList'

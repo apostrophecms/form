@@ -7,8 +7,8 @@ module.exports = {
     return {
       add: {
         checked: {
-          label: 'Default to pre-checked',
-          help: 'If "yes," the checkbox will start in the checked state.',
+          label: 'apos_form:booleanChecked',
+          help: 'apos_form:booleanCheckedHelp',
           type: 'boolean'
         }
       }

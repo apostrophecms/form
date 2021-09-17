@@ -1,7 +1,7 @@
 module.exports = {
   extend: '@apostrophecms/form-base-field-widget',
   options: {
-    label: 'File attachment'
+    label: 'apos_form:file'
   },
   methods (self) {
     return {

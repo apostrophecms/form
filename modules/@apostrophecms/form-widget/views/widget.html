@@ -36,17 +36,17 @@
         data-apos-recaptcha-slot="{{ widget._id }}"
         data-apos-recaptcha-sitekey="{{ recaptchaSite }}"></div>
       <noscript>
-        <p>{{ __t('NOTE: The form above requires JavaScript enabled in the browser for submission.') }}</p>
+        <p>{{ __t('apos_form:widgetNoScript') }}</p>
       </noscript>
     {% endif %}
     <button type="submit" class="{{ prependIfPrefix('__submit') }}">
-      {{ form.submitLabel or 'Submit' }}
+      {{ form.submitLabel or __t('apos_form:widgetSubmit') }}
     </button>
   </form>
   <p role="alert" data-apos-forms-submit-error
     class="apos-forms-hidden apos-forms-error {{ prependIfPrefix('__error') }}"
   >
-    {{ __t("An error occurred submitting the form. Please try again.") }}
+    {{ __t("apos_form:widgetSubmitError") }}
     <span data-apos-forms-global-error></span>
   </p>
 

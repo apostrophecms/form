@@ -6,37 +6,37 @@ module.exports = {
   fields: {
     add: {
       choices: {
-        label: 'Checkbox input options',
+        label: 'apos_form:checkboxChoices',
         type: 'array',
         titleField: 'label',
         required: true,
         fields: {
           add: {
             label: {
-              label: 'Option label',
+              label: 'apos_form:checkboxChoicesLabel',
               type: 'string',
               required: true,
-              help: 'The readable label displayed to users.'
+              help: 'apos_form:checkboxChoicesLabelHelp'
             },
             value: {
-              label: 'Option value',
+              label: 'apos_form:checkboxChoicesValue',
               type: 'string',
-              help: 'The value saved (as text) in the database. If not entered, the label will be used.'
+              help: 'apos_form:checkboxChoicesValueHelp'
             }
           }
         }
       },
       style: {
-        label: 'Display style',
+        label: 'apos_form:checkboxStyle',
         type: 'select',
         def: 'checkboxes',
         choices: [
           {
-            label: 'Inline list of checkboxes',
+            label: 'apos_form:checkboxStyleInline',
             value: 'checkboxes'
           },
           {
-            label: 'Dropdown menu of checkboxes',
+            label: 'apos_form:checkboxStyleDropdown',
             value: 'dropdown'
           }
         ]

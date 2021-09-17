@@ -1,14 +1,14 @@
 module.exports = {
   extend: '@apostrophecms/form-base-field-widget',
   options: {
-    label: 'Text area input'
+    label: 'apos_form:textArea'
   },
   fields: {
     add: {
       placeholder: {
-        label: 'Placeholder',
+        label: 'apos_form:textPlaceholder',
         type: 'string',
-        help: 'Text to display in the field before someone uses it (e.g., to provide additional directions).'
+        help: 'apos_form:textPlaceholderHelp'
       }
     }
   },

@@ -1,42 +1,42 @@
 module.exports = {
   extend: '@apostrophecms/form-base-field-widget',
   options: {
-    label: 'Text input'
+    label: 'apos_form:text'
   },
   fields: {
     add: {
       placeholder: {
-        label: 'Placeholder',
+        label: 'apos_form:textPlaceholder',
         type: 'string',
-        help: 'Text to display in the field before someone uses it (e.g., to provide additional directions).'
+        help: 'apos_form:textPlaceholderHelp'
       },
       inputType: {
-        label: 'Input Type',
+        label: 'apos_form:textType',
         type: 'select',
-        help: 'If you are requesting certain formatted information (e.g., email, url, phone number), select the relevant input type here. If not, use "Text".',
+        help: 'apos_form:textTypeHelp',
         choices: [
           {
-            label: 'Text',
+            label: 'textTypeText',
             value: 'text'
           },
           {
-            label: 'Email',
+            label: 'textTypeEmail',
             value: 'email'
           },
           {
-            label: 'Telephone',
+            label: 'textTypePhone',
             value: 'tel'
           },
           {
-            label: 'URL',
+            label: 'textTypeUrl',
             value: 'url'
           },
           {
-            label: 'Date',
+            label: 'textTypeDate',
             value: 'date'
           },
           {
-            label: 'Password',
+            label: 'textTypePassword',
             value: 'password'
           }
         ],

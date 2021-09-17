@@ -1,12 +1,12 @@
 module.exports = {
   extend: '@apostrophecms/form-select-field-widget',
   options: {
-    label: 'Radio input'
+    label: 'apos_form:radio'
   },
   fields: {
     add: {
       choices: {
-        label: 'Radio input options',
+        label: 'apos_form:radioChoice',
         type: 'array',
         titleField: 'label',
         required: true,
@@ -15,13 +15,13 @@ module.exports = {
             label: {
               type: 'string',
               required: true,
-              label: 'Option label',
-              help: 'The readable label displayed to users.'
+              label: 'apos_form:checkboxChoicesLabel',
+              help: 'apos_form:checkboxChoicesLabelHelp'
             },
             value: {
               type: 'string',
-              label: 'Option value',
-              help: 'The value saved (as text) in the database. If not entered, the label will be used.'
+              label: 'apos_form:checkboxChoicesValue',
+              help: 'apos_form:checkboxChoicesValueHelp'
             }
           }
         }
