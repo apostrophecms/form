@@ -20,7 +20,7 @@ npm install @apostrophecms/form
 ## Use
 
 ### Initialization
-Configure `@apostrophecms/form` and the form widgets in `app.js`.
+Configure `@apostrophecms/form` and the form widgets in `app.js`. All the fields below are included in this forms module bundle.
 
 ```javascript
 require('apostrophe')({
@@ -73,7 +73,7 @@ There are a few options available for the Apostrophe form module.
 
 #### `formWidgets` option
 
-The `formWidgets` allows us to change the widgets allowed in a form. Most of these will likely be the form field widgets. The default configuration is:
+The `formWidgets` option allows us to change the widgets allowed in a form. It is configured exactly the same as any area's widget configuration. Most of these will likely be the form field widgets. The default configuration is:
 
 ```javascript
 {
@@ -94,7 +94,7 @@ The `formWidgets` allows us to change the widgets allowed in a form. Most of the
 }
 ```
 
-This includes the rich text widget so editors can add directions or note in the form. Any widget type can be included. A very simple form widget configuration might look like this:
+This includes the rich text widget so editors can add directions or notes in the form. Any widget type can be included. A very simple form widget configuration might look like this:
 
 ```javascript
 // modules/@apostrophecms/form/index.js
@@ -253,4 +253,4 @@ module.exports = {
 ```
 -->
 
-The reCAPTCHA field will then be present on all fields.
+The reCAPTCHA field will then be present on all forms.

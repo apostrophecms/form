@@ -17,16 +17,14 @@ module.exports = {
     modules: getBundleModuleNames()
   },
   fields (self) {
-    const add = fields.initial(self.options);
+    let add = fields.initial(self.options);
 
-    // TODO: Uncomment when implementing email submissions.
-    // ⚠️ Requires dynamic choices.
-    // if (self.options.emailSubmissions !== false) {
-    //   add = {
-    //     ...add,
-    //     ...fields.emailFields
-    //   };
-    // }
+    if (self.options.emailSubmissions !== false) {
+      add = {
+        ...add,
+        ...fields.emailFields
+      };
+    }
 
     const group = {
       basics: {
