@@ -20,7 +20,7 @@ export default () => {
         event.input[inputName] = input.value;
       });
 
-      const conditionalGroups = formsWidget.querySelectorAll('[data-apos-form-condition=' + inputName + ']');
+      const conditionalGroups = formsWidget.querySelectorAll('[data-apos-form-condition="' + inputName + '"]');
 
       if (conditionalGroups.length > 0) {
         const check = apos.aposForms.checkConditional;

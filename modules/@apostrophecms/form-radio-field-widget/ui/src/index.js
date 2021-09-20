@@ -22,7 +22,7 @@ export default () => {
         event.input[inputName] = checked.value;
       });
 
-      const conditionalGroups = formsWidget.querySelectorAll('[data-apos-form-condition=' + inputName + ']');
+      const conditionalGroups = formsWidget.querySelectorAll('[data-apos-form-condition="' + inputName + '"]');
 
       if (conditionalGroups.length > 0) {
         const input = el.querySelector('input[type="radio"]:checked');

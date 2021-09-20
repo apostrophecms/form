@@ -1,7 +1,7 @@
 module.exports = {
   extend: '@apostrophecms/widget-type',
   options: {
-    label: 'Conditional field group'
+    label: 'apos_form:conditional'
   },
   fields (self) {
     // Get the form widgets from the form piece module and add them in the

@@ -6,6 +6,7 @@ module.exports = {
   extend: '@apostrophecms/piece-type',
   options: {
     label: 'apos_form:form',
+    pluralLabel: 'apos_form:forms',
     quickCreate: true,
     seo: false,
     openGraph: false,
@@ -226,7 +227,7 @@ module.exports = {
 
           return null;
         } catch (err) {
-          self.apos.utils.error('⚠️ apostrophe-forms submission email notification error: ', err);
+          self.apos.utils.error('⚠️ @apostrophecms/form submission email notification error: ', err);
 
           return null;
         }
@@ -237,7 +238,7 @@ module.exports = {
     return {
       prependIfPrefix(str) {
         if (self.options.classPrefix) {
-          return `${self.options.classPrefix}str`;
+          return `${self.options.classPrefix}${str}`;
         }
 
         return '';
@@ -252,13 +253,14 @@ module.exports = {
           const input = req.body;
           const output = {};
           const formErrors = [];
-          const overrideOptions = self.apos.modules['apostrophe-override-options'];
+          // TODO: Revisit if and when option overrides are available.
+          // const overrideOptions = self.apos.modules['apostrophe-override-options'];
 
-          if (overrideOptions) {
-            // Make sure we can get reCAPTCHA configurations from the global object
-            // with self.getOption if needed.
-            overrideOptions.calculateOverrides(req);
-          }
+          // if (overrideOptions) {
+          //   // Make sure we can get reCAPTCHA configurations from the global object
+          //   // with self.getOption if needed.
+          //   overrideOptions.calculateOverrides(req);
+          // }
 
           const form = await self.find(req, {
             _id: self.apos.launder.id(req.body._id)
@@ -299,7 +301,7 @@ module.exports = {
               // Capture field names for the params check list.
               fieldNames.push(widget.fieldName);
 
-              if (widget.type === 'apostrophe-forms-conditional') {
+              if (widget.type === '@apostrophecms/form-conditional') {
                 trackConditionals(conditionals, widget);
               }
             }

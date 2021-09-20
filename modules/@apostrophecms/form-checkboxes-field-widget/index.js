@@ -1,7 +1,7 @@
 module.exports = {
   extend: '@apostrophecms/form-base-field-widget',
   options: {
-    label: 'Checkbox input'
+    label: 'apos_form:checkbox'
   },
   fields: {
     add: {

@@ -26,7 +26,7 @@ export default () => {
 
       const inputs = el.querySelectorAll('input[type="checkbox"]');
       const inputName = inputs[0].getAttribute('name');
-      const conditionalGroups = formsWidget.querySelectorAll('[data-apos-form-condition=' + inputName + ']');
+      const conditionalGroups = formsWidget.querySelectorAll('[data-apos-form-condition="' + inputName + '"]');
 
       if (conditionalGroups.length > 0) {
         const check = apos.aposForms.checkConditional;

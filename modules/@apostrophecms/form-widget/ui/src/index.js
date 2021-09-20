@@ -100,7 +100,7 @@ export default () => {
         }
 
         if (error || (res && (res.status !== 'ok'))) {
-          apos.util.emit(document.body, 'apostrophe-forms:submission-failed', {
+          apos.util.emit(document.body, '@apostrophecms/form:submission-failed', {
             form,
             formError: error
           });

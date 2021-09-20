@@ -1,7 +1,7 @@
 module.exports = {
   extend: '@apostrophecms/form-base-field-widget',
   options: {
-    label: 'Boolean/opt-in input'
+    label: 'apos_form:boolean'
   },
   fields (self, options) {
     return {

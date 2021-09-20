@@ -8,7 +8,7 @@
   data-apos-forms-radio
   class="apos-forms-fieldset {{ prependIfPrefix('__fieldset') }}"
 >
-  <legend class="{{ prependIfPrefix('__legend' }}">
+  <legend class="{{ prependIfPrefix('__legend') }}">
     {{ widget.fieldLabel}}
   </legend>
   {{ utils.optional(widget.required) }}
@@ -16,10 +16,10 @@
     {% set choiceId = id + apos.util.slugify(choice.value) %}
     <div class="{{ prependIfPrefix('__check-wrapper') }}">
       <input
-        class="{{ prependIfPrefix('__input' }}"
+        class="{{ prependIfPrefix('__input') }}"
         type="radio" id="{{ choiceId }}" name="{{ widget.fieldName}}"
         value="{{ choice.value }}">
-      <label class="{{ prependIfPrefix('__label' }}" for="{{ choiceId }}">
+      <label class="{{ prependIfPrefix('__label') }}" for="{{ choiceId }}">
         {{ choice.label }}
       </label>
     </div>
