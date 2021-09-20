@@ -101,9 +101,8 @@ export default () => {
 
         if (error || (res && (res.status !== 'ok'))) {
           apos.util.emit(document.body, 'apostrophe-forms:submission-failed', {
-            form: form,
-            err: error,
-            res: res
+            form,
+            formError: error
           });
           apos.util.addClass(errorMsg, 'apos-forms-visible');
           highlightErrors(res);
@@ -116,7 +115,8 @@ export default () => {
         apos.util.removeClass(spinner, 'apos-forms-visible');
 
         apos.util.emit(document.body, '@apostrophecms/form:submission-form', {
-          form
+          form,
+          formError: null
         });
         apos.util.addClass(thankYou, 'apos-forms-visible');
         apos.util.addClass(form, 'apos-forms-hidden');
