@@ -5,7 +5,6 @@
 
 <div data-apos-forms-wrapper>
 {% if form %}
-  {# {{ apos.log('👙', form) }} #}
   {% set params = false %}
   {% if form.queryParamList %}
     {% set params = '' %}
@@ -22,8 +21,6 @@
     class="{{ prependIfPrefix('__form') }}" autocomplete="off"
     {% if form.enableQueryParams %}data-apos-forms-params='{{params}}'{% endif %}
   >
-    {# {% for name, item in form %}{{ apos.log('🔑', name)}}{% endfor %} #}
-
     {% area form, 'contents' %}
     {# TODO: Check on edit: false in A3 #}
     {# {{ apos.area(form, 'contents', {
