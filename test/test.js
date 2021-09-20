@@ -691,22 +691,20 @@ describe('Forms module', function () {
     await fileUtils.wipeIt(uploadTarget, apos);
   });
 
-  // it('sanitizes boolean widget input', function (done) {
-  //   const widget = { fieldName: 'booleanField' };
-  //   const output1 = {};
-  //   const input1 = { booleanField: true };
+  it('sanitizes boolean widget input', function () {
+    const widget = { fieldName: 'booleanField' };
+    const output1 = {};
+    const input1 = { booleanField: true };
 
-  //   booleanWidgets.sanitizeFormField(widget, input1, output1);
+    booleanWidgets.sanitizeFormField(widget, input1, output1);
 
-  //   assert(output1.booleanField === true);
+    assert(output1.booleanField === true);
 
-  //   const input2 = { booleanField: false };
-  //   const output2 = {};
+    const input2 = { booleanField: false };
+    const output2 = {};
 
-  //   booleanWidgets.sanitizeFormField(widget, input2, output2);
+    booleanWidgets.sanitizeFormField(widget, input2, output2);
 
-  //   assert(output2.booleanField === false);
-
-  //   done();
-  // });
+    assert(output2.booleanField === false);
+  });
 });
