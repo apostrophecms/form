@@ -12,12 +12,12 @@ module.exports = {
         output[widget.fieldName] = [];
 
         for (const id of fileIds) {
-          const info = await self.apos.attachments.db.findOne({
+          const info = await self.apos.attachment.db.findOne({
             _id: id
           });
 
           if (info) {
-            output[widget.fieldName].push(self.apos.attachments.url(info, {
+            output[widget.fieldName].push(self.apos.attachment.url(info, {
               size: 'original'
             }));
           }

@@ -1,7 +1,7 @@
 const assert = require('assert');
 const testUtil = require('apostrophe/test-lib/test');
 // const axios = require('axios');
-// const fileUtils = require('./lib/file-utils');
+const fileUtils = require('./lib/file-utils');
 
 describe('Forms module', function () {
   let apos;
@@ -39,7 +39,6 @@ describe('Forms module', function () {
     apos = await testUtil.create({
       shortname: 'formsTest',
       testModule: true,
-      baseUrl: 'http://localhost:4242',
       modules: {
         '@apostrophecms/express': {
           options: {
@@ -291,7 +290,6 @@ describe('Forms module', function () {
     apos2 = await testUtil.create({
       shortName: 'formsTest2',
       testModule: true,
-      baseUrl: 'http://localhost:5252',
       modules: {
         '@apostrophecms/express': {
           options: {
@@ -424,7 +422,6 @@ describe('Forms module', function () {
     apos3 = await testUtil.create({
       shortName: 'formsTest3',
       testModule: true,
-      baseUrl: 'http://localhost:6000',
       modules: {
         '@apostrophecms/express': {
           options: {
@@ -662,38 +659,37 @@ describe('Forms module', function () {
     assert(output1.checkboxField[1] === 'fourth');
   });
 
-  // let fileId;
+  let fileId;
 
-  // it('should upload a test file using the attachments api', function (done) {
-  //   return fileUtils.insert('upload-test.txt', apos, function (result) {
-  //     fileId = result._id;
-  //     done();
-  //   });
-  // });
+  it('should upload a test file using the attachments api', async function () {
+    const attachment = await fileUtils.insert('upload-test.txt', apos);
 
-  // it('sanitizes file widget input', async function () {
-  //   const widget = { fieldName: 'fileField' };
-  //   const output1 = {};
-  //   const input1 = { fileField: [ fileId ] };
+    fileId = attachment._id;
+  });
 
-  //   await fileWidgets.sanitizeFormField(widget, input1, output1);
+  it('sanitizes file widget input', async function () {
+    const widget = { fieldName: 'fileField' };
+    const output1 = {};
+    const input1 = { fileField: [ fileId ] };
 
-  //   assert(output1.fileField[0] === `/uploads/attachments/${fileId}-upload-test.txt`);
+    await fileWidgets.sanitizeFormField(widget, input1, output1);
 
-  //   const input2 = { fileField: '8675309' };
-  //   const output2 = {};
+    assert(output1.fileField[0] === `/uploads/attachments/${fileId}-upload-test.txt`);
 
-  //   await fileWidgets.sanitizeFormField(widget, input2, output2);
+    const input2 = { fileField: '8675309' };
+    const output2 = {};
 
-  //   assert(Array.isArray(output2.fileField));
-  //   assert(output2.fileField.length === 0);
-  // });
+    await fileWidgets.sanitizeFormField(widget, input2, output2);
 
-  // const uploadTarget = `${__dirname}/public/uploads/`;
+    assert(Array.isArray(output2.fileField));
+    assert(output2.fileField.length === 0);
+  });
 
-  // it('should clear uploads material if any', function (done) {
-  //   fileUtils.wipeIt(uploadTarget, apos, done);
-  // });
+  const uploadTarget = `${__dirname}/public/uploads/`;
+
+  it('should clear uploads material if any', async function () {
+    await fileUtils.wipeIt(uploadTarget, apos);
+  });
 
   // it('sanitizes boolean widget input', function (done) {
   //   const widget = { fieldName: 'booleanField' };
