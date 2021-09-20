@@ -1,5 +1,5 @@
 export default () => {
-  apos.util.widgetPlayers.formsTextarea = {
+  apos.util.widgetPlayers['@apostrophecms/form-textarea-field'] = {
     selector: '[data-apos-forms-textarea]',
     player: function (el) {
       const formsWidget = apos.util.closest(el, '[data-apos-forms-form]');

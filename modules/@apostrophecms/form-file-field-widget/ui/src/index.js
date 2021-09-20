@@ -1,5 +1,5 @@
 export default () => {
-  apos.util.widgetPlayers.formsFile = {
+  apos.util.widgetPlayers['@apostrophecms/form-file-field'] = {
     selector: '[data-apos-forms-file]',
     player: function (el) {
       const formsWidget = apos.util.closest(el, '[data-apos-forms-form]');

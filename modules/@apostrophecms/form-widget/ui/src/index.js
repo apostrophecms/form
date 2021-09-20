@@ -1,6 +1,6 @@
 /* global grecaptcha */
 export default () => {
-  apos.util.widgetPlayers.formsWidget = {
+  apos.util.widgetPlayers['@apostrophecms/form'] = {
     selector: '[data-apos-forms-wrapper]',
     player: function (el) {
       const form = el.querySelector('[data-apos-forms-form]');

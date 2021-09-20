@@ -1,5 +1,5 @@
 export default () => {
-  apos.util.widgetPlayers.formsRadio = {
+  apos.util.widgetPlayers['@apostrophecms/form-radio-field'] = {
     selector: '[data-apos-forms-radio]',
     player: function (el) {
       const formsWidget = apos.util.closest(el, '[data-apos-forms-form]');

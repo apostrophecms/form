@@ -1,5 +1,5 @@
 export default () => {
-  apos.util.widgetPlayers.formsBoolean = {
+  apos.util.widgetPlayers['@apostrophecms/form-boolean-field'] = {
     selector: '[data-apos-forms-boolean]',
     player: function (el) {
       const formsWidget = apos.util.closest(el, '[data-apos-forms-form]');

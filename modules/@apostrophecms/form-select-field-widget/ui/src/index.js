@@ -1,5 +1,5 @@
 export default () => {
-  apos.util.widgetPlayers.formsCheckboxes = {
+  apos.util.widgetPlayers['@apostrophecms/form-select-field'] = {
     selector: '[data-apos-forms-select]',
     player: function (el) {
       const formsWidget = apos.util.closest(el, '[data-apos-forms-form]');
