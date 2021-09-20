@@ -549,125 +549,118 @@ describe('Forms module', function () {
     await testUtil.destroy(apos3);
   });
 
-  // // Individual tests for sanitizeFormField methods on field widgets.
-  // it('sanitizes text widget input', function (done) {
-  //   const widget = { fieldName: 'textField' };
-  //   const output1 = {};
-  //   const input1 = { textField: 'A valid string.' };
+  // Individual tests for sanitizeFormField methods on field widgets.
+  it('sanitizes text widget input', function () {
+    const widget = { fieldName: 'textField' };
+    const output1 = {};
+    const input1 = { textField: 'A valid string.' };
 
-  //   textWidgets.sanitizeFormField(widget, input1, output1);
+    textWidgets.sanitizeFormField(widget, input1, output1);
 
-  //   assert(output1.textField === 'A valid string.');
+    assert(output1.textField === 'A valid string.');
 
-  //   const input2 = { textField: 127 };
-  //   const output2 = {};
+    const input2 = { textField: 127 };
+    const output2 = {};
 
-  //   textWidgets.sanitizeFormField(widget, input2, output2);
+    textWidgets.sanitizeFormField(widget, input2, output2);
 
-  //   assert(output2.textField === '127');
+    assert(output2.textField === '127');
 
-  //   const input3 = { textField: null };
-  //   const output3 = {};
+    const input3 = { textField: null };
+    const output3 = {};
 
-  //   textWidgets.sanitizeFormField(widget, input3, output3);
+    textWidgets.sanitizeFormField(widget, input3, output3);
 
-  //   assert(output3.textField === '');
+    assert(output3.textField === '');
+  });
 
-  //   done();
-  // });
+  it('sanitizes textArea widget input', function () {
+    const widget = { fieldName: 'textAreaField' };
+    const longText = 'Nullam id dolor id nibh ultricies vehicula ut id elit. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Aenean lacinia bibendum nulla sed consectetur.';
 
-  // it('sanitizes textArea widget input', function (done) {
-  //   const widget = { fieldName: 'textAreaField' };
-  //   const longText = 'Nullam id dolor id nibh ultricies vehicula ut id elit. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Aenean lacinia bibendum nulla sed consectetur.';
-  //   const input1 = { textAreaField: longText };
-  //   const output1 = {};
+    const input1 = { textAreaField: longText };
+    const output1 = {};
 
-  //   textareaWidgets.sanitizeFormField(widget, input1, output1);
-  //   assert(output1.textAreaField === longText);
+    textareaWidgets.sanitizeFormField(widget, input1, output1);
+    assert(output1.textAreaField === longText);
 
-  //   const input2 = { textAreaField: [ 127, 0 ] };
-  //   const output2 = {};
+    const input2 = { textAreaField: [ 127, 0 ] };
+    const output2 = {};
 
-  //   textareaWidgets.sanitizeFormField(widget, input2, output2);
+    textareaWidgets.sanitizeFormField(widget, input2, output2);
 
-  //   assert(!output2.textAreaField);
+    assert(!output2.textAreaField);
+  });
 
-  //   done();
-  // });
+  it('sanitizes select widget input', function () {
+    const widget = {
+      fieldName: 'selectField',
+      choices: [
+        { value: 'first' },
+        { value: 'second' },
+        { value: 'third' },
+        { value: 'fourth' }
+      ]
+    };
+    const input1 = { selectField: 'second' };
+    const output1 = {};
 
-  // it('sanitizes select widget input', function (done) {
-  //   const widget = {
-  //     fieldName: 'selectField',
-  //     choices: [
-  //       { value: 'first' },
-  //       { value: 'second' },
-  //       { value: 'third' },
-  //       { value: 'fourth' }
-  //     ]
-  //   };
-  //   const input1 = { selectField: 'second' };
-  //   const output1 = {};
+    selectWidgets.sanitizeFormField(widget, input1, output1);
 
-  //   selectWidgets.sanitizeFormField(widget, input1, output1);
+    assert(output1.selectField === 'second');
 
-  //   assert(output1.selectField === 'second');
+    const input2 = { selectField: 'ninetieth' };
+    const output2 = {};
 
-  //   const input2 = { selectField: 'ninetieth' };
-  //   const output2 = {};
+    selectWidgets.sanitizeFormField(widget, input2, output2);
 
-  //   selectWidgets.sanitizeFormField(widget, input2, output2);
+    assert(!output2.selectField);
+  });
 
-  //   assert(!output2.selectField);
-  //   done();
-  // });
+  it('sanitizes radio widget input', function () {
+    const widget = {
+      fieldName: 'radioField',
+      choices: [
+        { value: 'first' },
+        { value: 'second' },
+        { value: 'third' },
+        { value: 'fourth' }
+      ]
+    };
+    const input1 = { radioField: 'second' };
+    const output1 = {};
 
-  // it('sanitizes radio widget input', function (done) {
-  //   const widget = {
-  //     fieldName: 'radioField',
-  //     choices: [
-  //       { value: 'first' },
-  //       { value: 'second' },
-  //       { value: 'third' },
-  //       { value: 'fourth' }
-  //     ]
-  //   };
-  //   const input1 = { radioField: 'second' };
-  //   const output1 = {};
+    radioWidgets.sanitizeFormField(widget, input1, output1);
 
-  //   radioWidgets.sanitizeFormField(widget, input1, output1);
+    assert(output1.radioField === 'second');
 
-  //   assert(output1.radioField === 'second');
+    const input2 = { radioField: 'ninetieth' };
+    const output2 = {};
 
-  //   const input2 = { radioField: 'ninetieth' };
-  //   const output2 = {};
+    radioWidgets.sanitizeFormField(widget, input2, output2);
 
-  //   radioWidgets.sanitizeFormField(widget, input2, output2);
+    assert(!output2.radioField);
+  });
 
-  //   assert(!output2.radioField);
-  //   done();
-  // });
+  it('sanitizes checkbox widget input', function () {
+    const widget = {
+      fieldName: 'checkboxField',
+      choices: [
+        { value: 'first' },
+        { value: 'second' },
+        { value: 'third' },
+        { value: 'fourth' }
+      ]
+    };
+    const input1 = { checkboxField: [ 'second', 'fourth', 'seventeenth' ] };
+    const output1 = {};
 
-  // it('sanitizes checkbox widget input', function (done) {
-  //   const widget = {
-  //     fieldName: 'checkboxField',
-  //     choices: [
-  //       { value: 'first' },
-  //       { value: 'second' },
-  //       { value: 'third' },
-  //       { value: 'fourth' }
-  //     ]
-  //   };
-  //   const input1 = { checkboxField: [ 'second', 'fourth', 'seventeenth' ] };
-  //   const output1 = {};
+    checkboxesWidgets.sanitizeFormField(widget, input1, output1);
 
-  //   checkboxesWidgets.sanitizeFormField(widget, input1, output1);
-
-  //   assert(output1.checkboxField.length === 2);
-  //   assert(output1.checkboxField[0] === 'second');
-  //   assert(output1.checkboxField[1] === 'fourth');
-
-  //   done();
-  // });
+    assert(output1.checkboxField.length === 2);
+    assert(output1.checkboxField[0] === 'second');
+    assert(output1.checkboxField[1] === 'fourth');
+  });
 
   // let fileId;
 
