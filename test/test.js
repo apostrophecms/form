@@ -491,8 +491,6 @@ describe('Forms module', function () {
     }
   });
 
-  console.info('🤫', !!savedForm3);
-
   it('should submit successfully with a reCAPTCHA token', async function () {
     submission4.recaptcha = 'validRecaptchaToken';
 
@@ -509,41 +507,43 @@ describe('Forms module', function () {
     }
   });
 
-  // const submission5 = {
-  //   DogName: 'Jenkins',
-  //   DogTraits: [
-  //     'Runs fast',
-  //     'Comma, test'
-  //   ],
-  //   DogBreed: 'Irish Wolfhound'
-  // };
+  const submission5 = {
+    DogName: 'Jenkins',
+    DogTraits: [
+      'Runs fast',
+      'Comma, test'
+    ],
+    DogBreed: 'Irish Wolfhound'
+  };
 
-  // const submission6 = {
-  //   DogName: 'Jenkins',
-  //   DogTraits: [
-  //     'Runs fast',
-  //     'Likes treats'
-  //   ],
-  //   DogBreed: 'Cesky Terrier'
-  // };
+  const submission6 = {
+    DogName: 'Jenkins',
+    DogTraits: [
+      'Runs fast',
+      'Likes treats'
+    ],
+    DogBreed: 'Cesky Terrier'
+  };
 
-  // it('should populate email notification lists based on conditions', async function () {
-  //   const req = apos3.task.getReq();
+  it('should populate email notification lists based on conditions', async function () {
+    const req = apos3.task.getReq();
 
-  //   const emailSetOne = await apos3.modules['@apostrophecms/form'].sendEmailSubmissions(req, savedForm3, submission5);
+    const emailSetOne = await apos3.modules['@apostrophecms/form']
+      .sendEmailSubmissions(req, savedForm3, submission5);
 
-  //   assert(emailSetOne.length === 2);
-  //   assert(emailSetOne.indexOf('emailOne@example.net') > -1);
-  //   assert(emailSetOne.indexOf('emailTwo@example.net') === -1);
-  //   assert(emailSetOne.indexOf('emailThree@example.net') > -1);
+    assert(emailSetOne.length === 2);
+    assert(emailSetOne.indexOf('emailOne@example.net') > -1);
+    assert(emailSetOne.indexOf('emailTwo@example.net') === -1);
+    assert(emailSetOne.indexOf('emailThree@example.net') > -1);
 
-  //   const emailSetTwo = await apos3.modules['@apostrophecms/form'].sendEmailSubmissions(req, savedForm3, submission6);
+    const emailSetTwo = await apos3.modules['@apostrophecms/form']
+      .sendEmailSubmissions(req, savedForm3, submission6);
 
-  //   assert(emailSetTwo.length === 3);
-  //   assert(emailSetTwo.indexOf('emailOne@example.net') > -1);
-  //   assert(emailSetTwo.indexOf('emailTwo@example.net') > -1);
-  //   assert(emailSetTwo.indexOf('emailThree@example.net') > -1);
-  // });
+    assert(emailSetTwo.length === 3);
+    assert(emailSetTwo.indexOf('emailOne@example.net') > -1);
+    assert(emailSetTwo.indexOf('emailTwo@example.net') > -1);
+    assert(emailSetTwo.indexOf('emailThree@example.net') > -1);
+  });
 
   it('destroys the third instance', async function () {
     await testUtil.destroy(apos3);

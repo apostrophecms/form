@@ -140,6 +140,96 @@ module.exports = {
             errorMessage: req.t('apos_form:recaptchaConfigError')
           });
         }
+      },
+      async sendEmailSubmissions (req, form, data) {
+        if (self.options.emailSubmissions === false ||
+          !form.emails || form.emails.length === 0) {
+          return;
+        }
+
+        let emails = [];
+
+        form.emails.forEach(mailRule => {
+          if (!mailRule.conditions || mailRule.conditions.length === 0) {
+            emails.push(mailRule.email);
+            return;
+          }
+
+          let passed = true;
+
+          mailRule.conditions.forEach(condition => {
+            if (!condition.value) {
+              return;
+            }
+
+            let answer = data[condition.field];
+
+            if (!answer) {
+              passed = false;
+            } else {
+              // Regex for comma-separation from https://stackoverflow.com/questions/11456850/split-a-string-by-commas-but-ignore-commas-within-double-quotes-using-javascript/11457952#comment56094979_11457952
+              const regex = /(".*?"|[^",]+)(?=\s*,|\s*$)/g;
+              let acceptable = condition.value.match(regex);
+
+              acceptable = acceptable.map(value => {
+                // Remove leading/trailing white space and bounding double-quotes.
+                value = value.trim();
+
+                if (value[0] === '"' && value[value.length - 1] === '"') {
+                  value = value.slice(1, -1);
+                }
+
+                return value.trim();
+              });
+
+              // If the value is stored as a string, convert to an array for checking.
+              if (!Array.isArray(answer)) {
+                answer = [ answer ];
+              }
+
+              if (!(answer.some(val => acceptable.includes(val)))) {
+                passed = false;
+              }
+            }
+          });
+
+          if (passed === true) {
+            emails.push(mailRule.email);
+          }
+        });
+        // Get array of email addresses without duplicates.
+        emails = [ ...new Set(emails) ];
+
+        if (self.options.testing) {
+          return emails;
+        }
+
+        if (emails.length === 0) {
+          return null;
+        }
+
+        for (const key in data) {
+          // Add some space to array lists.
+          if (Array.isArray(data[key])) {
+            data[key] = data[key].join(', ');
+          }
+        }
+
+        try {
+          const emailOptions = {
+            form,
+            data,
+            to: emails.join(',')
+          };
+
+          await self.sendEmail(req, 'emailSubmission', emailOptions);
+
+          return null;
+        } catch (err) {
+          self.apos.utils.error('⚠️ apostrophe-forms submission email notification error: ', err);
+
+          return null;
+        }
       }
     };
   },
