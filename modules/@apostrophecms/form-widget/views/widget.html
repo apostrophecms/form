@@ -1,0 +1,74 @@
+{% set widget = data.widget %}
+{% set form = data.widget._form[0] %}
+{% set classPrefix = data.widget.classPrefix %}
+{% set prependIfPrefix = apos.modules['@apostrophecms/form'].prependIfPrefix %}
+
+<div data-apos-forms-wrapper>
+{% if form %}
+  {% set params = false %}
+  {% if form.queryParamList %}
+    {% set params = '' %}
+    {% for param in form.queryParamList %}
+      {% if loop.last %}
+        {% set params = params + param.key %}
+      {% else %}
+        {% set params = params + param.key + ',' %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+  <form
+    data-apos-forms-form="{{ form._id }}"
+    class="{{ prependIfPrefix('__form') }}" autocomplete="off"
+    {% if form.enableQueryParams %}data-apos-forms-params='{{params}}'{% endif %}
+  >
+    {% area form, 'contents' %}
+    {# TODO: Check on edit: false in A3 #}
+    {# {{ apos.area(form, 'contents', {
+      edit: false
+    }) }} #}
+    {% set recaptchaSite = getOption('recaptchaSite') %}
+    {% if recaptchaSite %}
+      <div
+        id="aposRecaptcha{{ widget._id }}"
+        data-apos-recaptcha-slot="{{ widget._id }}"
+        data-apos-recaptcha-sitekey="{{ recaptchaSite }}"></div>
+      <noscript>
+        <p>{{ __t('apos_form:widgetNoScript') }}</p>
+      </noscript>
+    {% endif %}
+    <button type="submit" class="{{ prependIfPrefix('__submit') }}">
+      {{ form.submitLabel or __t('apos_form:widgetSubmit') }}
+    </button>
+  </form>
+  <p role="alert" data-apos-forms-submit-error
+    class="apos-forms-hidden apos-forms-error {{ prependIfPrefix('__error') }}"
+  >
+    {{ __t("apos_form:widgetSubmitError") }}
+    <span data-apos-forms-global-error></span>
+  </p>
+
+  {% if recaptchaSite %}
+    <p role="alert" data-apos-forms-recaptcha-error
+      class="apos-forms-hidden apos-forms-error {{ prependIfPrefix('__error') }}"
+    >
+      {{ __t("apos_form:widgetCompleteCaptcha") }}
+    </p>
+  {% endif %}
+  <p
+    class="apos-forms-hidden {{ prependIfPrefix('__spinner') }}"
+    data-apos-forms-spinner
+  >
+    {{ __t('apos_form:widgetSubmitting') }}
+  </p>
+  <div role="alert" data-apos-forms-thank-you
+    class="apos-forms-hidden apos-forms-submission-thank-you {{ prependIfPrefix('__submission-thank-you') }}"
+  >
+    {% if form.thankYouHeading %}
+      <h3>{{ form.thankYouHeading }}</h3>
+    {% endif %}
+    {% if not apos.area.isEmpty(form, 'thankYouBody') %}
+      {% area form, 'thankYouBody' %}
+    {% endif %}
+  </div>
+{% endif %}
+</div>

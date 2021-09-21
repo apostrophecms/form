@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "npm run eslint",
     "eslint": "eslint .",
-    "test": "npm run lint"
+    "test": "npm run lint && npx mocha"
   },
   "repository": {
     "type": "git",
@@ -22,7 +22,7 @@
     "form builder"
   ],
   "devDependencies": {
-    "apostrophe": "^3.4.1",
+    "apostrophe": "github:apostrophecms/apostrophe",
     "eslint": "^7.9.0",
     "eslint-config-apostrophe": "^3.4.0",
     "eslint-config-standard": "^14.1.1",
