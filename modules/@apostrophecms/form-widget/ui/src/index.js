@@ -183,24 +183,9 @@ export default () => {
         });
       }
 
-      function getParameters () {
-        const queryParams = window.location.search.substring(1).split('&');
-
-        const params = {};
-
-        queryParams.forEach(function (string) {
-          const pair = string.split('=');
-
-          pair[0] = decodeURIComponent(pair[0]);
-          params[pair[0]] = decodeURIComponent(pair[1]);
-        });
-
-        return params;
-      }
-
       function setParameterValues () {
         const paramList = form.getAttribute('data-apos-forms-params').split(',');
-        const params = getParameters();
+        const params = apos.http.query(window.location.search);
 
         paramList.forEach(function (param) {
           const paramInput = form.querySelector('[name="' + param + '"]');
@@ -235,7 +220,7 @@ export default () => {
       }
 
       function captureParameters (event) {
-        event.input.queryParams = getParameters();
+        event.input.queryParams = apos.http.query(window.location.search);
       }
     }
   };

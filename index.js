@@ -225,7 +225,7 @@ module.exports = {
 
           return null;
         } catch (err) {
-          self.apos.utils.error('⚠️ @apostrophecms/form submission email notification error: ', err);
+          self.apos.util.error('⚠️ @apostrophecms/form submission email notification error: ', err);
 
           return null;
         }
