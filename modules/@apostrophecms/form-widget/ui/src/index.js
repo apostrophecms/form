@@ -185,7 +185,7 @@ export default () => {
 
       function setParameterValues () {
         const paramList = form.getAttribute('data-apos-forms-params').split(',');
-        const params = apos.http.query(window.location.search);
+        const params = apos.http.parseQuery(window.location.search);
 
         paramList.forEach(function (param) {
           const paramInput = form.querySelector('[name="' + param + '"]');
@@ -220,7 +220,7 @@ export default () => {
       }
 
       function captureParameters (event) {
-        event.input.queryParams = apos.http.query(window.location.search);
+        event.input.queryParams = apos.http.parseQuery(window.location.search);
       }
     }
   };
