@@ -10,7 +10,10 @@ module.exports = {
     quickCreate: true,
     seo: false,
     openGraph: false,
-    i18n: { ns: 'apos_form' }
+    i18n: {
+      ns: 'apos_form',
+      browser: true
+    }
   },
   bundle: {
     directory: 'modules',
