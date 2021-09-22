@@ -43,15 +43,12 @@ export default () => {
         toggle.onclick = function(e) {
           e.stopPropagation();
           e.preventDefault();
-          const dropdown = el.querySelector('[data-apos-form-dropdown]');
-          if (!dropdown) {
-            return;
-          }
-          const active = 'apos-forms-checkboxes--dropdown-active';
-          if (dropdown.classList.contains(active)) {
-            dropdown.classList.remove(active);
+
+          const active = 'is-active';
+          if (el.classList.contains(active)) {
+            el.classList.remove(active);
           } else {
-            dropdown.classList.add(active);
+            el.classList.add(active);
           }
         };
       }
