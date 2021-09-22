@@ -18,7 +18,7 @@
     class="apos-forms-input {{ prependIfPrefix('__input') }}" id="{{ id }}"
     name="{{ widget.fieldName}}" {% if widget.required %}required{% endif %}
   >
-    <option value="">{{ __t("selectBlank") }}</option>
+    <option value="">{{ __t("apos_form:selectBlank") }}</option>
     {% for choice in widget.choices %}
       <option value="{{ choice.value }}">{{ choice.label }}</option>
     {% endfor %}
