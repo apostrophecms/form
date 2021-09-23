@@ -232,6 +232,24 @@ module.exports = {
 
           return null;
         }
+      },
+      // Should be handled async. Options are: form, data, from, to and subject
+      async sendEmail (req, emailTemplate, options) {
+        const form = options.form;
+        const data = options.data;
+        return self.email(
+          req,
+          emailTemplate,
+          {
+            form: form,
+            input: data
+          },
+          {
+            from: options.from || form.email,
+            to: options.to,
+            subject: options.subject || form.title
+          }
+        );
       }
     };
   },
@@ -361,6 +379,36 @@ module.exports = {
             formId: form._id,
             data: data
           });
+        },
+        async emailSubmission (req, form, data) {
+          await self.sendEmailSubmissions(req, form, data);
+        },
+        async emailConfirmation (req, form, data) {
+          if (form.sendConfirmationEmail !== true || !form.emailConfirmationField) {
+            return;
+          }
+
+          // Email validation (Regex reference: https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript)
+          const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+          if (!re.test(data[form.emailConfirmationField])) {
+            return null;
+          }
+
+          try {
+            const emailOptions = {
+              form,
+              data,
+              to: data[form.emailConfirmationField]
+            };
+            await self.sendEmail(req, 'emailConfirmation', emailOptions);
+
+            return null;
+          } catch (err) {
+            self.apos.util.error('⚠️ @apostrophecms/form submission email confirmation error: ', err);
+
+            return null;
+          }
         }
       }
     };
