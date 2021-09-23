@@ -319,7 +319,7 @@ module.exports = {
                   !skipFields.includes(widget.fieldName)
               ) {
                 try {
-                  manager.checkRequired(widget, input);
+                  manager.checkRequired(req, widget, input);
                   await manager.sanitizeFormField(widget, input, output);
                 } catch (err) {
                   if (err.data && err.data.fieldError) {
