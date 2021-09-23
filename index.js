@@ -262,9 +262,9 @@ module.exports = {
           //   // with self.getOption if needed.
           //   overrideOptions.calculateOverrides(req);
           // }
-
+          const formId = self.inferIdLocaleAndMode(req, req.body._id);
           const form = await self.find(req, {
-            _id: self.apos.launder.id(req.body._id)
+            _id: self.apos.launder.id(formId)
           }).toObject();
 
           if (!form) {

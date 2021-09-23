@@ -282,7 +282,7 @@ describe('Forms module', function () {
   let apos2;
   const form2 = { ...form1 };
   form2.slug = 'test-form-two';
-  form2._id = 'form2';
+  form2._id = 'form2:en:published';
   let savedForm2;
   const submission2 = { ...submission1 };
 
@@ -416,7 +416,7 @@ describe('Forms module', function () {
     ]
   };
   form3.slug = 'test-form-three';
-  form3._id = 'form3';
+  form3._id = 'form3:en:published';
 
   it('should be a property of the apos3 object', async function () {
     apos3 = await testUtil.create({
