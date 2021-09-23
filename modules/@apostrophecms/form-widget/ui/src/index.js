@@ -32,12 +32,13 @@ export default () => {
         }
 
         // Deprecated, but IE-compatible, way to make an event
+        // TODO: Update this, probably.
         event = document.createEvent('Event');
         event.initEvent('apos-forms-validate', true, true);
         event.input = {
           _id: form.getAttribute('data-apos-forms-form')
         };
-        el.dispatchEvent(event);
+        form.dispatchEvent(event);
 
         if (el.querySelector('[data-apos-forms-error]')) {
           return;
@@ -88,47 +89,46 @@ export default () => {
           captureParameters(event);
         }
 
-        let res = {};
         let error = null;
 
         try {
-          res = await apos.http.post('/api/v1/@apostrophecms/form/submit', {
+          await apos.http.post('/api/v1/@apostrophecms/form/submit', {
             body: event.input
           });
         } catch (err) {
           error = err;
         }
 
-        if (error || (res && (res.status !== 'ok'))) {
+        apos.util.removeClass(spinner, 'apos-forms-visible');
+
+        if (error) {
           apos.util.emit(document.body, '@apostrophecms/form:submission-failed', {
             form,
-            formError: error
+            formError: error.body?.data?.formErrors
           });
           apos.util.addClass(errorMsg, 'apos-forms-visible');
-          highlightErrors(res);
+          highlightErrors(error.body?.data?.formErrors);
 
           if (recaptchaId) {
             grecaptcha.reset(recaptchaId);
           }
+        } else {
+          apos.util.emit(document.body, '@apostrophecms/form:submission-form', {
+            form,
+            formError: null
+          });
+          apos.util.addClass(thankYou, 'apos-forms-visible');
+          apos.util.addClass(form, 'apos-forms-hidden');
         }
-
-        apos.util.removeClass(spinner, 'apos-forms-visible');
-
-        apos.util.emit(document.body, '@apostrophecms/form:submission-form', {
-          form,
-          formError: null
-        });
-        apos.util.addClass(thankYou, 'apos-forms-visible');
-        apos.util.addClass(form, 'apos-forms-hidden');
       }
 
-      function highlightErrors(res) {
-        if (!res || !res.formErrors) {
+      function highlightErrors(formErrors) {
+        if (!formErrors) {
           return;
         }
 
         const globalError = el.querySelector('[data-apos-forms-global-error]');
-        const errors = res.formErrors;
+        const errors = formErrors;
         globalError.innerText = '';
 
         errors.forEach(function (error) {
