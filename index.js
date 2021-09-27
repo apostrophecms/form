@@ -391,7 +391,17 @@ module.exports = {
           // Email validation (Regex reference: https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript)
           const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-          if (!re.test(data[form.emailConfirmationField])) {
+          if (
+            typeof data[form.emailConfirmationField] !== 'string' ||
+            !re.test(data[form.emailConfirmationField])
+          ) {
+            await self.apos.notify(req, 'apos_form:errorEmailConfirm', {
+              type: 'warning',
+              icon: 'alert-circle-icon',
+              interpolate: {
+                field: form.emailConfirmationField
+              }
+            });
             return null;
           }
 
