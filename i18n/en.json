@@ -12,7 +12,7 @@
   "confEmailEnable": "Send a confirmation email",
   "confEmailEnableHelp": "Enable this to send a message to the person who submits this form.",
   "confEmailField": "Which is your confirmation email field?",
-  "confEmailFieldHelp": "Enter the \"name\" value of the field where people with enter their email address.",
+  "confEmailFieldHelp": "Enter the \"name\" value of the field where people with enter their email address. For best results, make sure this field only accepts email addresses.",
   "enableQueryParams": "Enable query parameter capture",
   "enableQueryParamsHtmlHelp": "If enabled, <em>all</em> query parameters (the key/value pairs in a <a href=\"https://en.wikipedia.org/wiki/Query_string\" target=\"_blank\">query string</a>) will be collected when the form is submitted. You may also set list of specific parameter keys that you wish to collect.",
   "queryParamList": "Query parameter keys",
@@ -44,6 +44,7 @@
   "widgetSubmitError": "An error occurred submitting the form. Please try again.",
   "widgetCompleteCaptcha": "Please complete the reCAPTCHA validation.",
   "widgetSubmitting": "Submitting...",
+  "errorEmailConfirm": "The form field {{ field }} is configured to be used for the confirmation email address, but it allows non-email formats.",
 
   "baseWidget": "Form base widget",
   "fieldLabel": "Field label",
