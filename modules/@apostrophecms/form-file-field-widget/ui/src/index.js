@@ -11,7 +11,7 @@ export default () => {
       const file = formsWidget.querySelector('input[type="file"]');
       const spinner = formsWidget.querySelector('[data-apos-forms-file-spinner]');
 
-      formsWidget.addEventListener('apos-forms-validate', function(event) {
+      formsWidget.addEventListener('apos-forms-collect', function(event) {
         // We already did the hard work, this is a hidden field with the _id of
         // the attachment.
         const attachmentIds = file.getAttribute('data-apos-forms-attachment-ids');

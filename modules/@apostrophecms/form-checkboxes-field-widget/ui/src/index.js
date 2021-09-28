@@ -9,7 +9,7 @@ export default () => {
         return;
       }
 
-      formsWidget.addEventListener('apos-forms-validate', function(event) {
+      formsWidget.addEventListener('apos-forms-collect', function(event) {
         const inputs = el.querySelectorAll('input[type="checkbox"]:checked');
 
         if (inputs.length === 0) {

@@ -12,7 +12,7 @@ export default () => {
 
       const inputName = inputs[0].getAttribute('name');
 
-      formsWidget.addEventListener('apos-forms-validate', function(event) {
+      formsWidget.addEventListener('apos-forms-collect', function(event) {
         const checked = el.querySelector('input[type="radio"]:checked');
 
         if (!checked) {

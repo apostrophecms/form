@@ -1,5 +1,5 @@
 function collectValues(form) {
-  const COLLECT_EVENT = 'apos-forms-validate';
+  const COLLECT_EVENT = 'apos-forms-collect';
   let event;
 
   try {

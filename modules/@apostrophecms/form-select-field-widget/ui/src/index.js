@@ -11,7 +11,7 @@ export default () => {
       const input = el.querySelector('select');
       const inputName = input.getAttribute('name');
 
-      formsWidget.addEventListener('apos-forms-validate', function(event) {
+      formsWidget.addEventListener('apos-forms-collect', function(event) {
         event.input[inputName] = input.value;
       });
 

@@ -7,7 +7,7 @@ export default () => {
         // Editing the form in the piece modal, it is not active for submissions
         return;
       }
-      formsWidget.addEventListener('apos-forms-validate', function(event) {
+      formsWidget.addEventListener('apos-forms-collect', function(event) {
         const input = el.querySelector('input');
         event.input[input.getAttribute('name')] = input.value;
       });
