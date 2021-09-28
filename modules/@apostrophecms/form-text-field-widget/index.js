@@ -16,27 +16,27 @@ module.exports = {
         help: 'apos_form:textTypeHelp',
         choices: [
           {
-            label: 'textTypeText',
+            label: 'apos_form:textTypeText',
             value: 'text'
           },
           {
-            label: 'textTypeEmail',
+            label: 'apos_form:textTypeEmail',
             value: 'email'
           },
           {
-            label: 'textTypePhone',
+            label: 'apos_form:textTypePhone',
             value: 'tel'
           },
           {
-            label: 'textTypeUrl',
+            label: 'apos_form:textTypeUrl',
             value: 'url'
           },
           {
-            label: 'textTypeDate',
+            label: 'apos_form:textTypeDate',
             value: 'date'
           },
           {
-            label: 'textTypePassword',
+            label: 'apos_form:textTypePassword',
             value: 'password'
           }
         ],

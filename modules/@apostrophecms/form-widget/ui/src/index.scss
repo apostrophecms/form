@@ -28,7 +28,8 @@ $apos-forms-spacing: 20px;
 .apos-forms-conditional[disabled] {
   display: none;
 
-  .apos-modal-content & {
+  // Display the fieldset when in an editor modal.
+  .apos-modal & {
     display: block;
   }
 }

@@ -12,7 +12,8 @@ module.exports = {
       },
       fieldName: {
         label: 'apos_form:fieldName',
-        type: 'string',
+        type: 'slug',
+        following: [ 'fieldLabel' ],
         help: 'apos_form:fieldNameHelp'
       },
       required: {
@@ -23,13 +24,13 @@ module.exports = {
   },
   methods (self) {
     return {
-      checkRequired (widget, input) {
+      checkRequired (req, widget, input) {
         if (widget.required && !input[widget.fieldName]) {
           throw self.apos.error('invalid', {
             fieldError: {
               field: widget.fieldName,
               error: 'required',
-              errorMessage: 'apos_form:requiredError'
+              errorMessage: req.t('apos_form:requiredError')
             }
           });
         }

@@ -12,7 +12,7 @@ $apos-forms-spacing: 35px;
 
 .apos-forms-input,
 .apos-forms-fieldset {
-  .apos-ui & {
+  .apos-modal & {
     margin-bottom: $apos-forms-spacing;
   }
 }
@@ -29,7 +29,7 @@ $apos-forms-spacing: 35px;
   padding-left: 24px;
   content: '▶';
 
-  .apos-forms-checkboxes-dropdown--active & {
+  .apos-forms-checkboxes--dropdown.is-active & {
     padding-left: 24px;
     content: '▲';
   }
@@ -46,7 +46,7 @@ $apos-forms-spacing: 35px;
     line-height: 1.5;
   }
 
-  .apos-forms-checkboxes--dropdown-active & {
+  .apos-forms-checkboxes--dropdown.is-active & {
     overflow: auto;
     height: auto;
   }

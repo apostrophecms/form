@@ -17,12 +17,12 @@
     <div class="{{ prependIfPrefix('__check-wrapper') }}">
       <input
         class="{{ prependIfPrefix('__input') }}"
-        type="radio" id="{{ choiceId }}" name="{{ widget.fieldName}}"
+        type="radio" id="{{ choiceId }}" name="{{ widget.fieldName }}"
         value="{{ choice.value }}">
       <label class="{{ prependIfPrefix('__label') }}" for="{{ choiceId }}">
         {{ choice.label }}
       </label>
     </div>
   {% endfor %}
-  <p data-apos-input-message="{{ widget.fieldName}}" hidden></p>
+  <p data-apos-input-message="{{ widget.fieldName }}" hidden></p>
 </fieldset>
