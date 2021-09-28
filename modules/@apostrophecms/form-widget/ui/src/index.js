@@ -1,3 +1,5 @@
+import { collectValues } from './fields';
+
 /* global grecaptcha */
 export default () => {
   apos.util.widgetPlayers['@apostrophecms/form'] = {
@@ -31,14 +33,8 @@ export default () => {
           }, 100);
         }
 
-        // Deprecated, but IE-compatible, way to make an event
-        // TODO: Update this, probably.
-        event = document.createEvent('Event');
-        event.initEvent('apos-forms-validate', true, true);
-        event.input = {
-          _id: form.getAttribute('data-apos-forms-form')
-        };
-        form.dispatchEvent(event);
+        // Collect field values on the event
+        const input = collectValues(form);
 
         if (el.querySelector('[data-apos-forms-error]')) {
           return;
@@ -61,7 +57,7 @@ export default () => {
           }
 
           apos.util.removeClass(recaptchaError, 'apos-forms-visible');
-          event.input.recaptcha = token;
+          input.recaptcha = token;
         }
 
         // For resubmissions
@@ -86,14 +82,14 @@ export default () => {
 
         // Capture query parameters.
         if (form.hasAttribute('data-apos-forms-params')) {
-          captureParameters(event);
+          captureParameters(input);
         }
 
         let error = null;
 
         try {
           await apos.http.post('/api/v1/@apostrophecms/form/submit', {
-            body: event.input
+            body: input
           });
         } catch (err) {
           error = err;
@@ -219,8 +215,8 @@ export default () => {
         });
       }
 
-      function captureParameters (event) {
-        event.input.queryParams = apos.http.parseQuery(window.location.search);
+      function captureParameters (input) {
+        input.queryParams = apos.http.parseQuery(window.location.search);
       }
     }
   };
