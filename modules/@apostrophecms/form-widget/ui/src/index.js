@@ -1,27 +1,24 @@
 import { collectValues } from './fields';
+import enableRecaptcha from './recaptcha';
 
-/* global grecaptcha */
 export default () => {
   apos.util.widgetPlayers['@apostrophecms/form'] = {
     selector: '[data-apos-forms-wrapper]',
     player: function (el) {
       const form = el.querySelector('[data-apos-forms-form]');
-      let recaptchaSlot;
 
-      if (form) {
-        form.addEventListener('submit', submit);
+      if (!form) {
+        return;
+      }
 
-        if (form.querySelector('[data-apos-recaptcha-slot]')) {
-          recaptchaSlot = el.querySelector('[data-apos-recaptcha-slot]');
-          window.renderCaptchas = renderCaptchas;
-          addRecaptchaScript();
-        }
+      form.addEventListener('submit', submit);
 
-        // If there are specified query parameters to capture, see if fields can be
-        // populated.
-        if (form.hasAttribute('data-apos-forms-params')) {
-          setParameterValues();
-        }
+      const recaptcha = enableRecaptcha(el);
+
+      // If there are specified query parameters to capture, see if fields
+      // can be populated.
+      if (form.hasAttribute('data-apos-forms-params')) {
+        setParameterValues();
       }
 
       async function submit(event) {
@@ -40,24 +37,8 @@ export default () => {
           return;
         }
 
-        const recaptchaError = el.querySelector('[data-apos-forms-recaptcha-error]');
-
-        let recaptchaId;
-        if (recaptchaSlot) {
-          recaptchaId = recaptchaSlot.getAttribute('data-apos-recaptcha-id');
-          const token = grecaptcha.getResponse(recaptchaId);
-
-          if (!token) {
-            apos.util.addClass(recaptchaError, 'apos-forms-visible');
-            apos.util.emit(document.body, '@apostrophecms/form:submission-missing-recaptcha', {
-              form: form,
-              recaptchaSlot: recaptchaSlot
-            });
-            return;
-          }
-
-          apos.util.removeClass(recaptchaError, 'apos-forms-visible');
-          input.recaptcha = token;
+        if (recaptcha) {
+          input.recaptcha = recaptcha.getToken();
         }
 
         // For resubmissions
@@ -105,9 +86,10 @@ export default () => {
           apos.util.addClass(errorMsg, 'apos-forms-visible');
           highlightErrors(error.body?.data?.formErrors);
 
-          if (recaptchaId) {
-            grecaptcha.reset(recaptchaId);
+          if (recaptcha) {
+            recaptcha.reset();
           }
+
         } else {
           apos.util.emit(document.body, '@apostrophecms/form:submission-form', {
             form,
@@ -146,36 +128,6 @@ export default () => {
           apos.util.addClass(labelMessage, 'apos-forms-error');
           labelMessage.innerText = error.errorMessage;
           labelMessage.hidden = false;
-        });
-      }
-
-      function addRecaptchaScript () {
-        if (document.querySelector('[data-apos-recaptcha-script]')) {
-          return;
-        }
-
-        const container = document.querySelector('[data-apos-refreshable]') || document.body;
-        const recaptchaScript = document.createElement('script');
-        recaptchaScript.src = 'https://www.google.com/recaptcha/api.js?onload=renderCaptchas&render=explicit';
-        recaptchaScript.setAttribute('data-apos-recaptcha-script', '');
-        recaptchaScript.setAttribute('async', '');
-        recaptchaScript.setAttribute('defer', '');
-        container.appendChild(recaptchaScript);
-      }
-
-      function renderCaptchas () {
-        let recaptchaSlots = document.querySelectorAll('[data-apos-recaptcha-slot]');
-        recaptchaSlots = Array.prototype.slice.call(recaptchaSlots);
-
-        recaptchaSlots.forEach(function(slot) {
-          const slotId = grecaptcha.render(
-            'aposRecaptcha' + slot.getAttribute('data-apos-recaptcha-slot'),
-            {
-              sitekey: slot.getAttribute('data-apos-recaptcha-sitekey')
-            }
-          );
-
-          slot.setAttribute('data-apos-recaptcha-id', slotId);
         });
       }
 
