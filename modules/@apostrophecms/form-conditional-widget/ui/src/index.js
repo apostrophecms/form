@@ -1,6 +1,4 @@
 export default () => {
-  apos.aposForms = apos.aposForms || {};
-
   apos.aposForms.checkConditional = function (groups, input) {
     if (!groups) {
       groups = [];
@@ -29,6 +27,4 @@ export default () => {
       }
     });
   };
-
-}
-;
+};

@@ -20,7 +20,7 @@ npm install @apostrophecms/form
 ## Use
 
 ### Initialization
-Configure `@apostrophecms/form` and the form widgets in `app.js`. All the fields below are included in this forms module bundle.
+Configure `@apostrophecms/form` and the form widgets in `app.js`. `@apostrophecms/form` must appear before the other modules. All the field widget modules below are included in this forms module bundle.
 
 ```javascript
 require('apostrophe')({
@@ -254,3 +254,55 @@ module.exports = {
 -->
 
 The reCAPTCHA field will then be present on all forms.
+
+## Custom field validation
+
+Before field values are collected and submitted to the server, field validators can run to check user input. There are none by default, but you can add them by pushing validator functions to `apos.aposForms.validators`, an *array*. Validator functions may be asynchronous functions.
+
+The validator function can review fields however you need, but the error structure needs to include:
+
+- *Either* a `field` property, set to a field's `name` attribute, *or* `global: true`, indicating it is an error that applies to the form as a whole.
+- An `errorMessage` property, explaining the error to end users.
+
+For example, if adding a custom field type, you could add the validator from within the widget player.
+
+```javascript
+export default () => {
+  apos.util.widgetPlayers['long-textarea-field'] = {
+    selector: '[data-long-textarea]',
+    player: function (el) {
+      const formsWidget = apos.util.closest(el, '[data-apos-forms-form]');
+      if (!formsWidget) {
+        // Editing the form in the piece modal, it is not active for submissions
+        return;
+      }
+
+      // 👇 Adding our validator.
+      addValidator(el.querySelector('textarea'));
+
+      // Mechanism to collect input value for submission.
+      formsWidget.addEventListener('apos-forms-collect', function(event) {
+        const input = el.querySelector('textarea');
+        event.input[input.getAttribute('name')] = input.value;
+      });
+    }
+  };
+};
+
+function addValidator (input) {
+  // 👇 The validator function.
+  function lengthValidator (form, errors) {
+    if (input.value && input.value.split(' ').length < 10) {
+      errors.push({
+        field: input.getAttribute('name'),
+        error: 'invalid',
+        errorMessage: 'Write at least 10 words.'
+      });
+    }
+  }
+
+  apos.aposForms.validators.push(lengthValidator);
+}
+```
+
+The validator could also be added in other client-side JavaScript. In most cases it would be important to apply the validator based on the field type.

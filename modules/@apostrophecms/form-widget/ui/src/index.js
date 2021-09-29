@@ -1,4 +1,8 @@
-import { collectValues } from './fields';
+import { highlight } from './errors';
+import {
+  validateFields,
+  collectValues
+} from './fields';
 import enableRecaptcha from './recaptcha';
 
 export default () => {
@@ -30,12 +34,20 @@ export default () => {
           }, 100);
         }
 
-        // Collect field values on the event
-        const input = collectValues(form);
+        try {
+          await validateFields();
+        } catch (error) {
+          highlight(el, error?.data?.formErrors);
 
-        if (el.querySelector('[data-apos-forms-error]')) {
+          if (recaptcha) {
+            recaptcha.reset();
+          }
+          // Cancel.
           return;
         }
+
+        // Collect field values on the event
+        const input = collectValues(form);
 
         if (recaptcha) {
           input.recaptcha = recaptcha.getToken();
@@ -84,7 +96,8 @@ export default () => {
             formError: error.body?.data?.formErrors
           });
           apos.util.addClass(errorMsg, 'apos-forms-visible');
-          highlightErrors(error.body?.data?.formErrors);
+
+          highlight(el, error.body?.data?.formErrors);
 
           if (recaptcha) {
             recaptcha.reset();
@@ -98,37 +111,6 @@ export default () => {
           apos.util.addClass(thankYou, 'apos-forms-visible');
           apos.util.addClass(form, 'apos-forms-hidden');
         }
-      }
-
-      function highlightErrors(formErrors) {
-        if (!formErrors) {
-          return;
-        }
-
-        const globalError = el.querySelector('[data-apos-forms-global-error]');
-        const errors = formErrors;
-        globalError.innerText = '';
-
-        errors.forEach(function (error) {
-          if (error.global) {
-            globalError.innerText = globalError.innerText + ' ' +
-              error.errorMessage;
-
-            return;
-          }
-          let fields = form.querySelectorAll('[name=' + error.field + ']');
-          fields = Array.prototype.slice.call(fields);
-
-          const labelMessage = form.querySelector('[data-apos-input-message=' + error.field + ']');
-
-          fields.forEach(function (field) {
-            apos.util.addClass(field, 'apos-forms-input-error');
-          });
-
-          apos.util.addClass(labelMessage, 'apos-forms-error');
-          labelMessage.innerText = error.errorMessage;
-          labelMessage.hidden = false;
-        });
       }
 
       function setParameterValues () {
