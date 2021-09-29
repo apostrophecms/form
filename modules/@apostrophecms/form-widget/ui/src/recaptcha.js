@@ -2,7 +2,6 @@
 let recaptchaSlot;
 let recaptchaError;
 let el;
-let form;
 
 export default function (widgetEl) {
   if (!widgetEl.querySelector('[data-apos-recaptcha-slot]')) {
