@@ -1,5 +1,5 @@
 export default () => {
-  apos.aposForms.checkConditional = function (groups, input) {
+  apos.aposForm.checkConditional = function (groups, input) {
     if (!groups) {
       groups = [];
     }

@@ -18,7 +18,7 @@ export default () => {
       const conditionalGroups = formsWidget.querySelectorAll('[data-apos-form-condition="' + inputName + '"]');
 
       if (conditionalGroups.length > 0) {
-        const check = apos.aposForms.checkConditional;
+        const check = apos.aposForm.checkConditional;
         check(conditionalGroups, input);
 
         input.addEventListener('change', function () {

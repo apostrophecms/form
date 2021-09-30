@@ -1,12 +1,12 @@
 // Async field validation, in case this needs to hit an API route.
 async function validateFields (form) {
-  if (!apos.aposForms.validators || apos.aposForms.validators.length === 0) {
+  if (!apos.aposForm.validators || apos.aposForm.validators.length === 0) {
     return;
   }
 
   const formErrors = [];
 
-  for (const validator of apos.aposForms.validators) {
+  for (const validator of apos.aposForm.validators) {
     await validator(form, formErrors);
   }
 

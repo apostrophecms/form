@@ -6,8 +6,7 @@
   "overrides": [
     {
       "files": [
-        "modules/@apostrophecms/*/ui/src/*.js",
-        "ui/src/*.js"
+        "**/ui/src/*.js"
       ],
       "globals": {
         "apos": "readonly"

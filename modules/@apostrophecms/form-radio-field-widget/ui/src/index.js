@@ -27,7 +27,7 @@ export default () => {
       if (conditionalGroups.length > 0) {
         const input = el.querySelector('input[type="radio"]:checked');
 
-        const check = apos.aposForms.checkConditional;
+        const check = apos.aposForm.checkConditional;
         check(conditionalGroups, input);
 
         Array.prototype.forEach.call(inputs, function (radio) {

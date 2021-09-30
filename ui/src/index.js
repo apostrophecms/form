@@ -1,4 +1,4 @@
 export default () => {
-  apos.aposForms = apos.aposForms || {};
-  apos.aposForms.validators = [];
+  apos.aposForm = apos.aposForm || {};
+  apos.aposForm.validators = [];
 };
