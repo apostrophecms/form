@@ -17,6 +17,7 @@ async function collectValues (form) {
         const response = await collector(field);
         if (typeof response !== 'object' || !response.field) {
           // Log this. Not useful information for an end user.
+          // eslint-disable-next-line
           console.error(`${type} field widget type is returning an invalid collector response.`);
         }
 

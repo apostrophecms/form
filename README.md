@@ -20,7 +20,7 @@ npm install @apostrophecms/form
 ## Use
 
 ### Initialization
-Configure `@apostrophecms/form` and the form widgets in `app.js`. `@apostrophecms/form` must appear before the other modules. All the field widget modules below are included in this forms module bundle.
+Configure `@apostrophecms/form` and the form widgets in `app.js`. `@apostrophecms/form` must appear before the form widget and form field widget modules. All the field widget modules below are included in this forms module bundle.
 
 ```javascript
 require('apostrophe')({
@@ -220,89 +220,62 @@ module.exports = {
 }
 ```
 
-<!-- To make these options configurable by end-users, you can use `apostrophe-override-options` to make global fields set these for you. This would look something like:
-
-```javascript
-// in app.js
-modules: {
-  'apostrophe-override-options': {},
-```
-
-```javascript
-// in lib/modules/@apostrophecms/global/index.js
-module.exports = {
-  addFields: [
-    {
-      name: 'recaptchaSecret',
-      label: 'reCAPTCHA Secret',
-      type: 'string'
-    },
-    {
-      name: 'recaptchaSite',
-      label: 'reCAPTCHA Site',
-      type: 'string'
-    }
-  ],
-  overrideOptions: {
-    editable: {
-      'apos.@apostrophecms/form.recaptchaSite': 'recaptchaSite',
-      'apos.@apostrophecms/form.recaptchaSecret': 'recaptchaSecret'
-    }
-  }
-};
-```
--->
-
 The reCAPTCHA field will then be present on all forms.
 
 ## Custom field validation
 
-Before field values are collected and submitted to the server, field validators can run to check user input. There are none by default, but you can add them by pushing validator functions to `apos.aposForms.validators`, an *array*. Validator functions may be asynchronous functions.
+Each field returns its value from a collector function located on the `apos.aposForm.collectors` array in the browser. You can extend these collector functions to adjust the value or do additional validation before the form posts to the server. You can write them as asynchronous functions if needed.
 
-The validator function can review fields however you need, but the error structure needs to include:
+Collector functions take the widget element as an argument and return a response object on a successful submission. The response object properties are:
 
-- *Either* a `field` property, set to a field's `name` attribute, *or* `global: true`, indicating it is an error that applies to the form as a whole.
-- An `errorMessage` property, explaining the error to end users.
+| Property | Description |
+| ------- | ------- |
+| `field` | The field element's `name` attribute (identical to the field widget's `name` property) |
+| `value` | The field value |
 
-For example, if adding a custom field type, you could add the validator from within the widget player.
+These functions can be extended for project-level validation using the super pattern. This involves:
+
+1. Assigning the original function to a variable.
+2. Creating a new function that uses the original one, adds functionality, and returns an identically structured response.
+3. Assigning the new function to the original function property.
+
+An example for the text area field in project code might look like this:
 
 ```javascript
+// modules/@apostrophecms/form-textarea-field-widget/ui/src/index.js
+
 export default () => {
-  apos.util.widgetPlayers['long-textarea-field'] = {
-    selector: '[data-long-textarea]',
-    player: function (el) {
-      const formsWidget = apos.util.closest(el, '[data-apos-forms-form]');
-      if (!formsWidget) {
-        // Editing the form in the piece modal, it is not active for submissions
-        return;
-      }
+  const TEXTAREA_WIDGET = '@apostrophecms/form-textarea-field';
 
-      // 👇 Adding our validator.
-      addValidator(el.querySelector('textarea'));
+  // 1️⃣ Store the original collector function on `superCollector`.
+  const superCollector = apos.aposForm.collectors[TEXTAREA_WIDGET].collector;
 
-      // Mechanism to collect input value for submission.
-      formsWidget.addEventListener('apos-forms-collect', function(event) {
-        const input = el.querySelector('textarea');
-        event.input[input.getAttribute('name')] = input.value;
-      });
-    }
-  };
-};
+  // 2️⃣ Create a new collector function that accepts the same widget element
+  // parameter.
+  function newCollector (el) {
+    // Get the response from the original collector.
+    const response = superCollector(el);
 
-function addValidator (input) {
-  // 👇 The validator function.
-  function lengthValidator (form, errors) {
-    if (input.value && input.value.split(' ').length < 10) {
-      errors.push({
-        field: input.getAttribute('name'),
-        error: 'invalid',
-        errorMessage: 'Write at least 10 words.'
-      });
+    if (response.value && response.value.split(' ').length < 10) {
+      // Throwing an object if there are fewer than ten words.
+      throw {
+        field: response.field,
+        message: 'Write at least 10 words'
+      };
+    } else {
+      // Returning the original response if everything is okay.
+      return response;
     }
   }
 
-  apos.aposForms.validators.push(lengthValidator);
-}
+  // 3️⃣ Assign our new collector to the original property.
+  apos.aposForm.collectors[TEXTAREA_WIDGET].collector = newCollector;
+};
 ```
 
-The validator could also be added in other client-side JavaScript. In most cases it would be important to apply the validator based on the field type.
+If you want to indicate an error on the field, `throw` and object with the following values (as shown above):
+
+| Property | Description |
+| ------- | ------- |
+| `field` | The field element's `name` attribute (identical to the field widget's `name` property) |
+| `message` | A string to display on the field as an error message |
