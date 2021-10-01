@@ -1,53 +1,49 @@
+const WIDGET_NAME = '@apostrophecms/form-file-field';
+const WIDGET_SELECTOR = '[data-apos-forms-file]';
+const FILE_IDS_ATTR = 'data-apos-forms-attachment-ids';
+
 export default () => {
-  apos.util.widgetPlayers['@apostrophecms/form-file-field'] = {
-    selector: '[data-apos-forms-file]',
-    player: function (el) {
+  apos.util.widgetPlayers[WIDGET_NAME] = {
+    selector: WIDGET_SELECTOR,
+    player (el) {
       const formsWidget = apos.util.closest(el, '[data-apos-forms-form]');
       if (!formsWidget) {
         // Editing the form in the piece modal, it is not active for submissions
         return;
       }
 
-      const file = formsWidget.querySelector('input[type="file"]');
-      const spinner = formsWidget.querySelector('[data-apos-forms-file-spinner]');
+      const input = el.querySelector('input[type="file"]');
+      const spinner = el.querySelector('[data-apos-forms-file-spinner]');
 
-      formsWidget.addEventListener('apos-forms-collect', function(event) {
-        // We already did the hard work, this is a hidden field with the _id of
-        // the attachment.
-        const attachmentIds = file.getAttribute('data-apos-forms-attachment-ids');
-        event.input[file.getAttribute('name')] = attachmentIds ? attachmentIds.split(',') : null;
-      });
+      const errorEl = el.querySelector('[data-apos-forms-file-error]');
+      errorEl.hidden = true;
 
-      const error = formsWidget.querySelector('[data-apos-forms-file-error]');
-      error.hidden = true;
-
-      file.addEventListener('change', function(event) {
+      input.addEventListener('change', function(event) {
         el.setAttribute('data-apos-forms-busy', '1');
         spinner.hidden = false;
 
-        sendFiles(file.files, 0, []);
+        sendFiles(input.files, 0, []);
       });
 
       function sendFiles(files, fileIndex, fileIds) {
         const formData = new window.FormData();
         formData.append('file', files[fileIndex]);
 
-        return apos.http.post('/api/v1/@apostrophecms/attachment/upload', formData, function (err, info) {
+        return apos.http.post('/api/v1/@apostrophecms/attachment/upload', {
+          busy: true,
+          body: formData
+        }, function (err, file) {
           if (err) {
             return fail();
-          } else {
-            if (info.status !== 'ok') {
-              return fail();
-            }
           }
 
-          fileIds.push(info.file._id);
+          fileIds.push(file._id);
           fileIndex++;
 
           if (files[fileIndex]) {
             sendFiles(files, fileIndex, fileIds);
           } else {
-            file.setAttribute('data-apos-forms-attachment-ids', fileIds.join());
+            input.setAttribute(FILE_IDS_ATTR, fileIds.join());
 
             // Remove the busy state.
             el.removeAttribute('data-apos-forms-busy');
@@ -57,10 +53,25 @@ export default () => {
       }
 
       function fail() {
-        error.hidden = false;
-        file.removeAttribute('data-apos-forms-attachment-ids');
+        errorEl.hidden = false;
+        input.removeAttribute(FILE_IDS_ATTR);
       }
     }
-  }
-  ;
+  };
+
+  apos.aposForm.collectors[WIDGET_NAME] = {
+    selector: WIDGET_SELECTOR,
+    collector (el) {
+      const input = el.querySelector('input[type="file"]');
+
+      // We already did the hard work, this is a hidden field with the _id of
+      // the attachment.
+      const attachmentIds = input.getAttribute(FILE_IDS_ATTR);
+
+      return {
+        field: input.getAttribute('name'),
+        value: attachmentIds ? attachmentIds.split(',') : null
+      };
+    }
+  };
 };

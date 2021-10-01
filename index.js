@@ -272,15 +272,8 @@ module.exports = {
           const input = req.body;
           const output = {};
           const formErrors = [];
-          // TODO: Revisit if and when option overrides are available.
-          // const overrideOptions = self.apos.modules['apostrophe-override-options'];
-
-          // if (overrideOptions) {
-          //   // Make sure we can get reCAPTCHA configurations from the global object
-          //   // with self.getOption if needed.
-          //   overrideOptions.calculateOverrides(req);
-          // }
           const formId = self.inferIdLocaleAndMode(req, req.body._id);
+
           const form = await self.find(req, {
             _id: self.apos.launder.id(formId)
           }).toObject();
@@ -302,6 +295,7 @@ module.exports = {
 
           // walk is not an async function so build an array of them to start
           const areas = [];
+
           self.apos.area.walk({
             contents: form.contents
           }, function(area) {
@@ -333,8 +327,8 @@ module.exports = {
             for (const widget of widgets) {
               const manager = self.apos.area.getWidgetManager(widget.type);
               if (
-                manager && manager.sanitizeFormField &&
-                  !skipFields.includes(widget.fieldName)
+                manager?.sanitizeFormField &&
+                !skipFields.includes(widget.fieldName)
               ) {
                 try {
                   manager.checkRequired(req, widget, input);

@@ -1,13 +1,45 @@
 // Async field validation, in case this needs to hit an API route.
-async function validateFields (form) {
-  if (!apos.aposForm.validators || apos.aposForm.validators.length === 0) {
+async function collectValues (form) {
+  if (!apos.aposForm.collectors || apos.aposForm.collectors.length === 0) {
     return;
   }
 
   const formErrors = [];
+  const input = {};
 
-  for (const validator of apos.aposForm.validators) {
-    await validator(form, formErrors);
+  for (const type in apos.aposForm.collectors) {
+    const selector = apos.aposForm.collectors[type].selector;
+    const collector = apos.aposForm.collectors[type].collector;
+    const fields = form.querySelectorAll(selector);
+
+    for (const field of fields) {
+      try {
+        const response = await collector(field);
+        if (typeof response !== 'object' || !response.field) {
+          // Log this. Not useful information for an end user.
+          console.error(`${type} field widget type is returning an invalid collector response.`);
+        }
+
+        input[response.field] = response.value;
+      } catch (error) {
+        // Add error to formErrors
+        const fieldError = error.field ? error : error?.data?.fieldError;
+
+        if (fieldError?.field) {
+          const e = fieldError;
+
+          formErrors.push({
+            field: e.field,
+            errorMessage: e.message || 'Error'
+          });
+        } else {
+          formErrors.push({
+            global: true,
+            errorMessage: 'Unknown form field error'
+          });
+        }
+      }
+    }
   }
 
   if (formErrors.length > 0) {
@@ -18,34 +50,10 @@ async function validateFields (form) {
 
     throw error;
   }
-}
 
-// Synchronous value collection from input fields. Values should already be on
-// inputs at this point.
-function collectValues(form) {
-  const COLLECT_EVENT = 'apos-forms-collect';
-  let event;
-
-  try {
-    // Modern. We can't sniff for this, we can only try it. IE11
-    // has it but it's not a constructor and throws an exception
-    event = new window.CustomEvent(COLLECT_EVENT);
-  } catch (e) {
-    // bc for IE11
-    event = document.createEvent('Event');
-    event.initEvent(COLLECT_EVENT, true, true);
-  }
-
-  event.input = {
-    _id: form.getAttribute('data-apos-forms-form')
-  };
-
-  form.dispatchEvent(event);
-
-  return event.input;
+  return input;
 }
 
 export {
-  validateFields,
   collectValues
 };

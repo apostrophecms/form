@@ -1,8 +1,5 @@
-import { highlight } from './errors';
-import {
-  validateFields,
-  collectValues
-} from './fields';
+import { processErrors } from './errors';
+import { collectValues } from './fields';
 import enableRecaptcha from './recaptcha';
 
 export default () => {
@@ -28,26 +25,32 @@ export default () => {
       async function submit(event) {
         event.preventDefault();
 
-        if (form.querySelector('[data-apos-forms-busy]')) {
+        if (el.querySelector('[data-apos-forms-busy]')) {
           return setTimeout(async function() {
             await submit(event);
           }, 100);
         }
 
+        form.setAttribute('data-apos-forms-busy', '1');
+
+        let input;
+
         try {
-          await validateFields();
+          // Collect field values on the event
+          input = await collectValues(form);
         } catch (error) {
-          highlight(el, error?.data?.formErrors);
+          processErrors(error?.data?.formErrors, el);
 
           if (recaptcha) {
             recaptcha.reset();
           }
-          // Cancel.
+
+          form.removeAttribute('data-apos-forms-busy');
+
           return;
         }
 
-        // Collect field values on the event
-        const input = collectValues(form);
+        input._id = form.getAttribute('data-apos-forms-form');
 
         if (recaptcha) {
           input.recaptcha = recaptcha.getToken();
@@ -78,26 +81,21 @@ export default () => {
           captureParameters(input);
         }
 
-        let error = null;
+        let formErrors = null;
 
         try {
           await apos.http.post('/api/v1/@apostrophecms/form/submit', {
             body: input
           });
-        } catch (err) {
-          error = err;
+        } catch (error) {
+          formErrors = error.body?.data?.formErrors;
         }
 
+        form.removeAttribute('data-apos-forms-busy');
         apos.util.removeClass(spinner, 'apos-forms-visible');
 
-        if (error) {
-          apos.util.emit(document.body, '@apostrophecms/form:submission-failed', {
-            form,
-            formError: error.body?.data?.formErrors
-          });
-          apos.util.addClass(errorMsg, 'apos-forms-visible');
-
-          highlight(el, error.body?.data?.formErrors);
+        if (formErrors) {
+          processErrors(formErrors, el);
 
           if (recaptcha) {
             recaptcha.reset();

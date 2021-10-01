@@ -1,3 +1,16 @@
+function processErrors (errors, el) {
+  const form = el.querySelector('[data-apos-forms-form]');
+  const errorMsg = el.querySelector('[data-apos-forms-submit-error]');
+
+  apos.util.emit(document.body, '@apostrophecms/form:submission-failed', {
+    form,
+    errors
+  });
+  apos.util.addClass(errorMsg, 'apos-forms-visible');
+
+  highlight(el, errors);
+}
+
 function highlight(el, formErrors) {
   if (!Array.isArray(formErrors)) {
     return;
@@ -43,5 +56,5 @@ function validateError (error) {
 }
 
 export {
-  highlight
+  processErrors
 };

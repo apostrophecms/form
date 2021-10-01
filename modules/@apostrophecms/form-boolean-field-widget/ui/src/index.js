@@ -1,9 +1,12 @@
+const WIDGET_NAME = '@apostrophecms/form-boolean-field';
+const WIDGET_SELECTOR = '[data-apos-forms-boolean]';
+
 export default () => {
-  apos.util.widgetPlayers['@apostrophecms/form-boolean-field'] = {
-    selector: '[data-apos-forms-boolean]',
-    player: function (el) {
-      const formsWidget = apos.util.closest(el, '[data-apos-forms-form]');
-      if (!formsWidget) {
+  apos.util.widgetPlayers[WIDGET_NAME] = {
+    selector: WIDGET_SELECTOR,
+    player (el) {
+      const formWidget = apos.util.closest(el, '[data-apos-forms-form]');
+      if (!formWidget) {
         // Editing the form in the piece modal, it is not active for submissions
         return;
       }
@@ -11,16 +14,7 @@ export default () => {
       const input = el.querySelector('input[type="checkbox"]');
       const inputName = input.getAttribute('name');
 
-      formsWidget.addEventListener('apos-forms-collect', function(event) {
-
-        if (!input || !input.checked) {
-          return;
-        }
-
-        event.input[inputName] = input.value;
-      });
-
-      const conditionalGroups = formsWidget.querySelectorAll('[data-apos-form-condition="' + inputName + '"]');
+      const conditionalGroups = formWidget.querySelectorAll('[data-apos-form-condition="' + inputName + '"]');
 
       if (conditionalGroups.length > 0) {
         const check = apos.aposForm.checkConditional;
@@ -33,6 +27,18 @@ export default () => {
           check(conditionalGroups, e.target);
         });
       }
+    }
+  };
+
+  apos.aposForm.collectors[WIDGET_NAME] = {
+    selector: WIDGET_SELECTOR,
+    collector (el) {
+      const input = el.querySelector('input[type="checkbox"]');
+
+      return {
+        field: input.getAttribute('name'),
+        value: input.value
+      };
     }
   };
 };
