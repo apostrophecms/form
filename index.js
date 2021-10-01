@@ -115,6 +115,7 @@ module.exports = {
         if (!input.recaptcha) {
           formErrors.push({
             global: true,
+            error: 'recaptcha',
             message: req.t('apos_form:recaptchaError')
           });
         }
@@ -128,6 +129,7 @@ module.exports = {
           if (!response.success) {
             formErrors.push({
               global: true,
+              error: 'recaptcha',
               message: req.t('apos_form:recaptchaValidationError')
             });
           }
@@ -136,6 +138,7 @@ module.exports = {
 
           formErrors.push({
             global: true,
+            error: 'recaptcha',
             message: req.t('apos_form:recaptchaConfigError')
           });
         }

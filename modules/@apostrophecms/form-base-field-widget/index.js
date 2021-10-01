@@ -29,6 +29,7 @@ module.exports = {
           throw self.apos.error('invalid', {
             fieldError: {
               field: widget.fieldName,
+              error: 'required',
               message: req.t('apos_form:requiredError')
             }
           });
