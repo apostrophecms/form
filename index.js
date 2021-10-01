@@ -324,7 +324,7 @@ module.exports = {
             for (const widget of widgets) {
               const manager = self.apos.area.getWidgetManager(widget.type);
               if (
-                manager?.sanitizeFormField &&
+                manager && manager.sanitizeFormField &&
                 !skipFields.includes(widget.fieldName)
               ) {
                 try {
