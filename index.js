@@ -115,8 +115,7 @@ module.exports = {
         if (!input.recaptcha) {
           formErrors.push({
             global: true,
-            error: 'recaptcha',
-            errorMessage: req.t('apos_form:recaptchaError')
+            message: req.t('apos_form:recaptchaError')
           });
         }
 
@@ -129,8 +128,7 @@ module.exports = {
           if (!response.success) {
             formErrors.push({
               global: true,
-              error: 'recaptcha',
-              errorMessage: req.t('apos_form:recaptchaValidationError')
+              message: req.t('apos_form:recaptchaValidationError')
             });
           }
         } catch (e) {
@@ -138,8 +136,7 @@ module.exports = {
 
           formErrors.push({
             global: true,
-            error: 'recaptcha',
-            errorMessage: req.t('apos_form:recaptchaConfigError')
+            message: req.t('apos_form:recaptchaConfigError')
           });
         }
       },

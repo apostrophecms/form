@@ -31,12 +31,12 @@ async function collectValues (form) {
 
           formErrors.push({
             field: e.field,
-            errorMessage: e.message || 'Error'
+            message: e.message || 'Error'
           });
         } else {
           formErrors.push({
             global: true,
-            errorMessage: 'Unknown form field error'
+            message: 'Unknown form field error'
           });
         }
       }

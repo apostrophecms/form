@@ -28,7 +28,7 @@ function highlight(el, formErrors) {
 
     if (error.global) {
       globalError.innerText = globalError.innerText + ' ' +
-        error.errorMessage;
+        error.message;
 
       return;
     }
@@ -42,13 +42,13 @@ function highlight(el, formErrors) {
     });
 
     apos.util.addClass(labelMessage, 'apos-forms-error');
-    labelMessage.innerText = error.errorMessage;
+    labelMessage.innerText = error.message;
     labelMessage.hidden = false;
   });
 }
 
 function validateError (error) {
-  if ((!error.global && !error.field) || !error.errorMessage) {
+  if ((!error.global && !error.field) || !error.message) {
     return false;
   }
 
