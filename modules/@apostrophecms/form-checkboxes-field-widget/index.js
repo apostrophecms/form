@@ -10,6 +10,7 @@ module.exports = {
         type: 'array',
         titleField: 'label',
         required: true,
+        min: 1, // Two would be better, but this is primarily to avoid errors.
         fields: {
           add: {
             label: {

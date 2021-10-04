@@ -1,35 +1,24 @@
-export default () => {
-  apos.util.widgetPlayers['@apostrophecms/form-checkboxes-field'] = {
-    selector: '[data-apos-forms-checkboxes]',
-    player: function (el) {
-      const formsWidget = apos.util.closest(el, '[data-apos-forms-form]');
+const WIDGET_NAME = '@apostrophecms/form-checkboxes-field';
+const WIDGET_SELECTOR = '[data-apos-forms-checkboxes]';
 
-      if (!formsWidget) {
+export default () => {
+  apos.util.widgetPlayers[WIDGET_NAME] = {
+    selector: WIDGET_SELECTOR,
+    player (el) {
+      const formWidget = apos.util.closest(el, '[data-apos-forms-form]');
+
+      if (!formWidget) {
         // Editing the form in the piece modal, it is not active for submissions
         return;
       }
 
-      formsWidget.addEventListener('apos-forms-validate', function(event) {
-        const inputs = el.querySelectorAll('input[type="checkbox"]:checked');
-
-        if (inputs.length === 0) {
-          return;
-        }
-
-        const inputName = inputs[0].getAttribute('name');
-        const inputsArray = Array.prototype.slice.call(inputs);
-
-        event.input[inputName] = inputsArray.map(function(input) {
-          return input.value;
-        });
-      });
-
       const inputs = el.querySelectorAll('input[type="checkbox"]');
       const inputName = inputs[0].getAttribute('name');
-      const conditionalGroups = formsWidget.querySelectorAll('[data-apos-form-condition="' + inputName + '"]');
-
+      const conditionalGroups = formWidget.querySelectorAll('[data-apos-form-condition="' + inputName + '"]');
+      // TODO: Remove this logic or update the collectToSkip function to support
+      // arrays.
       if (conditionalGroups.length > 0) {
-        const check = apos.aposForms.checkConditional;
+        const check = apos.aposForm.checkConditional;
 
         Array.prototype.forEach.call(inputs, function (checkbox) {
           checkbox.addEventListener('change', function (e) {
@@ -52,6 +41,27 @@ export default () => {
           }
         };
       }
+    }
+  };
+
+  apos.aposForm.collectors[WIDGET_NAME] = {
+    selector: WIDGET_SELECTOR,
+    collector (el) {
+      const inputs = el.querySelectorAll('input[type="checkbox"]:checked');
+      const inputsArray = Array.prototype.slice.call(inputs);
+
+      if (inputsArray.length === 0) {
+        const unchecked = el.querySelector('input[type="checkbox"]');
+        return {
+          field: unchecked.getAttribute('name'),
+          value: undefined
+        };
+      }
+
+      return {
+        field: inputs[0].getAttribute('name'),
+        value: inputsArray.map(input => input.value)
+      };
     }
   };
 };

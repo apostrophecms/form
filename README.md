@@ -20,7 +20,7 @@ npm install @apostrophecms/form
 ## Use
 
 ### Initialization
-Configure `@apostrophecms/form` and the form widgets in `app.js`. All the fields below are included in this forms module bundle.
+Configure `@apostrophecms/form` and the form widgets in `app.js`. `@apostrophecms/form` must appear before the form widget and form field widget modules. All the field widget modules below are included in this forms module bundle.
 
 ```javascript
 require('apostrophe')({
@@ -220,37 +220,62 @@ module.exports = {
 }
 ```
 
-<!-- To make these options configurable by end-users, you can use `apostrophe-override-options` to make global fields set these for you. This would look something like:
+The reCAPTCHA field will then be present on all forms.
+
+## Custom field validation
+
+Each field returns its value from a collector function located on the `apos.aposForm.collectors` array in the browser. You can extend these collector functions to adjust the value or do additional validation before the form posts to the server. You can write them as asynchronous functions if needed.
+
+Collector functions take the widget element as an argument and return a response object on a successful submission. The response object properties are:
+
+| Property | Description |
+| ------- | ------- |
+| `field` | The field element's `name` attribute (identical to the field widget's `name` property) |
+| `value` | The field value |
+
+These functions can be extended for project-level validation using the super pattern. This involves:
+
+1. Assigning the original function to a variable.
+2. Creating a new function that uses the original one, adds functionality, and returns an identically structured response.
+3. Assigning the new function to the original function property.
+
+An example for the text area field in project code might look like this:
 
 ```javascript
-// in app.js
-modules: {
-  'apostrophe-override-options': {},
-```
+// modules/@apostrophecms/form-textarea-field-widget/ui/src/index.js
 
-```javascript
-// in lib/modules/@apostrophecms/global/index.js
-module.exports = {
-  addFields: [
-    {
-      name: 'recaptchaSecret',
-      label: 'reCAPTCHA Secret',
-      type: 'string'
-    },
-    {
-      name: 'recaptchaSite',
-      label: 'reCAPTCHA Site',
-      type: 'string'
-    }
-  ],
-  overrideOptions: {
-    editable: {
-      'apos.@apostrophecms/form.recaptchaSite': 'recaptchaSite',
-      'apos.@apostrophecms/form.recaptchaSecret': 'recaptchaSecret'
+export default () => {
+  const TEXTAREA_WIDGET = '@apostrophecms/form-textarea-field';
+
+  // 1️⃣ Store the original collector function on `superCollector`.
+  const superCollector = apos.aposForm.collectors[TEXTAREA_WIDGET].collector;
+
+  // 2️⃣ Create a new collector function that accepts the same widget element
+  // parameter.
+  function newCollector (el) {
+    // Get the response from the original collector.
+    const response = superCollector(el);
+
+    if (response.value && response.value.split(' ').length < 10) {
+      // Throwing an object if there are fewer than ten words.
+      throw {
+        field: response.field,
+        message: 'Write at least 10 words'
+      };
+    } else {
+      // Returning the original response if everything is okay.
+      return response;
     }
   }
+
+  // 3️⃣ Assign our new collector to the original property.
+  apos.aposForm.collectors[TEXTAREA_WIDGET].collector = newCollector;
 };
 ```
--->
 
-The reCAPTCHA field will then be present on all forms.
+If you want to indicate an error on the field, `throw` and object with the following values (as shown above):
+
+| Property | Description |
+| ------- | ------- |
+| `field` | The field element's `name` attribute (identical to the field widget's `name` property) |
+| `message` | A string to display on the field as an error message |

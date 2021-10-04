@@ -1,67 +1,59 @@
-/* global grecaptcha */
+import { processErrors } from './errors';
+import { collectValues } from './fields';
+import enableRecaptcha from './recaptcha';
+
 export default () => {
   apos.util.widgetPlayers['@apostrophecms/form'] = {
     selector: '[data-apos-forms-wrapper]',
     player: function (el) {
       const form = el.querySelector('[data-apos-forms-form]');
-      let recaptchaSlot;
 
-      if (form) {
-        form.addEventListener('submit', submit);
+      if (!form) {
+        return;
+      }
 
-        if (form.querySelector('[data-apos-recaptcha-slot]')) {
-          recaptchaSlot = el.querySelector('[data-apos-recaptcha-slot]');
-          window.renderCaptchas = renderCaptchas;
-          addRecaptchaScript();
-        }
+      form.addEventListener('submit', submit);
 
-        // If there are specified query parameters to capture, see if fields can be
-        // populated.
-        if (form.hasAttribute('data-apos-forms-params')) {
-          setParameterValues();
-        }
+      const recaptcha = enableRecaptcha(el);
+
+      // If there are specified query parameters to capture, see if fields
+      // can be populated.
+      if (form.hasAttribute('data-apos-forms-params')) {
+        setParameterValues();
       }
 
       async function submit(event) {
         event.preventDefault();
 
-        if (form.querySelector('[data-apos-forms-busy]')) {
+        if (el.querySelector('[data-apos-forms-busy]')) {
           return setTimeout(async function() {
             await submit(event);
           }, 100);
         }
 
-        // Deprecated, but IE-compatible, way to make an event
-        // TODO: Update this, probably.
-        event = document.createEvent('Event');
-        event.initEvent('apos-forms-validate', true, true);
-        event.input = {
-          _id: form.getAttribute('data-apos-forms-form')
-        };
-        form.dispatchEvent(event);
+        form.setAttribute('data-apos-forms-busy', '1');
 
-        if (el.querySelector('[data-apos-forms-error]')) {
+        let input;
+
+        try {
+          // Collect field values on the event
+          input = await collectValues(form);
+        } catch (error) {
+          processErrors(error?.data?.formErrors, el);
+
+          if (recaptcha) {
+            recaptcha.reset();
+          }
+
+          form.removeAttribute('data-apos-forms-busy');
+
           return;
         }
 
-        const recaptchaError = el.querySelector('[data-apos-forms-recaptcha-error]');
+        input._id = form.getAttribute('data-apos-forms-form');
 
-        let recaptchaId;
-        if (recaptchaSlot) {
-          recaptchaId = recaptchaSlot.getAttribute('data-apos-recaptcha-id');
-          const token = grecaptcha.getResponse(recaptchaId);
-
-          if (!token) {
-            apos.util.addClass(recaptchaError, 'apos-forms-visible');
-            apos.util.emit(document.body, '@apostrophecms/form:submission-missing-recaptcha', {
-              form: form,
-              recaptchaSlot: recaptchaSlot
-            });
-            return;
-          }
-
-          apos.util.removeClass(recaptchaError, 'apos-forms-visible');
-          event.input.recaptcha = token;
+        if (recaptcha) {
+          input.recaptcha = recaptcha.getToken();
         }
 
         // For resubmissions
@@ -86,32 +78,29 @@ export default () => {
 
         // Capture query parameters.
         if (form.hasAttribute('data-apos-forms-params')) {
-          captureParameters(event);
+          captureParameters(input);
         }
 
-        let error = null;
+        let formErrors = null;
 
         try {
           await apos.http.post('/api/v1/@apostrophecms/form/submit', {
-            body: event.input
+            body: input
           });
-        } catch (err) {
-          error = err;
+        } catch (error) {
+          formErrors = error.body?.data?.formErrors;
         }
 
+        form.removeAttribute('data-apos-forms-busy');
         apos.util.removeClass(spinner, 'apos-forms-visible');
 
-        if (error) {
-          apos.util.emit(document.body, '@apostrophecms/form:submission-failed', {
-            form,
-            formError: error.body?.data?.formErrors
-          });
-          apos.util.addClass(errorMsg, 'apos-forms-visible');
-          highlightErrors(error.body?.data?.formErrors);
+        if (formErrors) {
+          processErrors(formErrors, el);
 
-          if (recaptchaId) {
-            grecaptcha.reset(recaptchaId);
+          if (recaptcha) {
+            recaptcha.reset();
           }
+
         } else {
           apos.util.emit(document.body, '@apostrophecms/form:submission-form', {
             form,
@@ -120,67 +109,6 @@ export default () => {
           apos.util.addClass(thankYou, 'apos-forms-visible');
           apos.util.addClass(form, 'apos-forms-hidden');
         }
-      }
-
-      function highlightErrors(formErrors) {
-        if (!formErrors) {
-          return;
-        }
-
-        const globalError = el.querySelector('[data-apos-forms-global-error]');
-        const errors = formErrors;
-        globalError.innerText = '';
-
-        errors.forEach(function (error) {
-          if (error.global) {
-            globalError.innerText = globalError.innerText + ' ' +
-              error.errorMessage;
-
-            return;
-          }
-          let fields = form.querySelectorAll('[name=' + error.field + ']');
-          fields = Array.prototype.slice.call(fields);
-
-          const labelMessage = form.querySelector('[data-apos-input-message=' + error.field + ']');
-
-          fields.forEach(function (field) {
-            apos.util.addClass(field, 'apos-forms-input-error');
-          });
-
-          apos.util.addClass(labelMessage, 'apos-forms-error');
-          labelMessage.innerText = error.errorMessage;
-          labelMessage.hidden = false;
-        });
-      }
-
-      function addRecaptchaScript () {
-        if (document.querySelector('[data-apos-recaptcha-script]')) {
-          return;
-        }
-
-        const container = document.querySelector('[data-apos-refreshable]') || document.body;
-        const recaptchaScript = document.createElement('script');
-        recaptchaScript.src = 'https://www.google.com/recaptcha/api.js?onload=renderCaptchas&render=explicit';
-        recaptchaScript.setAttribute('data-apos-recaptcha-script', '');
-        recaptchaScript.setAttribute('async', '');
-        recaptchaScript.setAttribute('defer', '');
-        container.appendChild(recaptchaScript);
-      }
-
-      function renderCaptchas () {
-        let recaptchaSlots = document.querySelectorAll('[data-apos-recaptcha-slot]');
-        recaptchaSlots = Array.prototype.slice.call(recaptchaSlots);
-
-        recaptchaSlots.forEach(function(slot) {
-          const slotId = grecaptcha.render(
-            'aposRecaptcha' + slot.getAttribute('data-apos-recaptcha-slot'),
-            {
-              sitekey: slot.getAttribute('data-apos-recaptcha-sitekey')
-            }
-          );
-
-          slot.setAttribute('data-apos-recaptcha-id', slotId);
-        });
       }
 
       function setParameterValues () {
@@ -219,8 +147,8 @@ export default () => {
         });
       }
 
-      function captureParameters (event) {
-        event.input.queryParams = apos.http.parseQuery(window.location.search);
+      function captureParameters (input) {
+        input.queryParams = apos.http.parseQuery(window.location.search);
       }
     }
   };
