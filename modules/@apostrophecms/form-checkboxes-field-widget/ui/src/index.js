@@ -51,8 +51,9 @@ export default () => {
       const inputsArray = Array.prototype.slice.call(inputs);
 
       if (inputsArray.length === 0) {
+        const unchecked = el.querySelector('input[type="checkbox"]');
         return {
-          field: el.querySelector('input[type="checkbox"]'),
+          field: unchecked.getAttribute('name'),
           value: undefined
         };
       }
