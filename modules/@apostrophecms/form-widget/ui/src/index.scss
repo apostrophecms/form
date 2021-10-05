@@ -1,31 +1,31 @@
 // Colors
-$apos-forms-red: #ea433a;
+$apos-form-red: #ea433a;
 
 // Spacing
-$apos-forms-spacing: 20px;
+$apos-form-spacing: 20px;
 
-.apos-forms-label {
+.apos-form-label {
   display: block;
 
   &-message {
-    padding-left: $apos-forms-spacing;
+    padding-left: $apos-form-spacing;
   }
 }
 
-.apos-forms-input,
-.apos-forms-fieldset {
-  margin-bottom: $apos-forms-spacing;
+.apos-form-input,
+.apos-form-fieldset {
+  margin-bottom: $apos-form-spacing;
 }
 
-.apos-forms-input-error {
-  outline: 1px solid $apos-forms-red;
+.apos-form-input-error {
+  outline: 1px solid $apos-form-red;
 }
 
-.apos-forms-error {
-  color: $apos-forms-red;
+.apos-form-error {
+  color: $apos-form-red;
 }
 
-.apos-forms-conditional[disabled] {
+.apos-form-conditional[disabled] {
   display: none;
 
   // Display the fieldset when in an editor modal.

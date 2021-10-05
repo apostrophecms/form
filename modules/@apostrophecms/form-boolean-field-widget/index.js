@@ -1,14 +1,14 @@
 module.exports = {
   extend: '@apostrophecms/form-base-field-widget',
   options: {
-    label: 'apos_form:boolean'
+    label: 'aposForm:boolean'
   },
   fields (self, options) {
     return {
       add: {
         checked: {
-          label: 'apos_form:booleanChecked',
-          help: 'apos_form:booleanCheckedHelp',
+          label: 'aposForm:booleanChecked',
+          help: 'aposForm:booleanCheckedHelp',
           type: 'boolean'
         }
       }

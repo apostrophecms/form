@@ -1,6 +1,6 @@
 export default () => {
   apos.aposForm.collectors['@apostrophecms/form-textarea-field'] = {
-    selector: '[data-apos-forms-textarea]',
+    selector: '[data-apos-form-textarea]',
     collector (el) {
       const input = el.querySelector('textarea');
 

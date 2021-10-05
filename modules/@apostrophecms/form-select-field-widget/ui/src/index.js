@@ -1,11 +1,11 @@
 const WIDGET_NAME = '@apostrophecms/form-select-field';
-const WIDGET_SELECTOR = '[data-apos-forms-select]';
+const WIDGET_SELECTOR = '[data-apos-form-select]';
 
 export default () => {
   apos.util.widgetPlayers[WIDGET_NAME] = {
     selector: WIDGET_SELECTOR,
     player (el) {
-      const formWidget = apos.util.closest(el, '[data-apos-forms-form]');
+      const formWidget = apos.util.closest(el, '[data-apos-form-form]');
       if (!formWidget) {
         // Editing the form in the piece modal, it is not active for submissions
         return;

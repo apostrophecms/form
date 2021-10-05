@@ -1,12 +1,12 @@
 module.exports = {
   extend: '@apostrophecms/form-base-field-widget',
   options: {
-    label: 'apos_form:select'
+    label: 'aposForm:select'
   },
   fields: {
     add: {
       choices: {
-        label: 'apos_form:selectChoice',
+        label: 'aposForm:selectChoice',
         type: 'array',
         titleField: 'label',
         required: true,
@@ -15,13 +15,13 @@ module.exports = {
             label: {
               type: 'string',
               required: true,
-              label: 'apos_form:checkboxChoicesLabel',
-              help: 'apos_form:checkboxChoicesLabelHelp'
+              label: 'aposForm:checkboxChoicesLabel',
+              help: 'aposForm:checkboxChoicesLabelHelp'
             },
             value: {
               type: 'string',
-              label: 'apos_form:checkboxChoicesValue',
-              help: 'apos_form:checkboxChoicesValueHelp'
+              label: 'aposForm:checkboxChoicesValue',
+              help: 'aposForm:checkboxChoicesValueHelp'
             }
           }
         }

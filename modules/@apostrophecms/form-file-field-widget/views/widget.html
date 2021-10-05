@@ -4,24 +4,24 @@
 {% set prependIfPrefix = apos.modules['@apostrophecms/form'].prependIfPrefix %}
 {% import "fragments/utility.html" as utils with context %}
 
-<div data-apos-forms-file class="apos-forms-input-wrapper">
-  <label for="{{ id }}" class="apos-forms-label {{ prependIfPrefix('__label') }}">
+<div data-apos-form-file class="apos-form-input-wrapper">
+  <label for="{{ id }}" class="apos-form-label {{ prependIfPrefix('__label') }}">
     {{ widget.fieldLabel}}
     {{ utils.optional(widget.required) }}
     <span
-      class="apos-forms-label-message {{ prependIfPrefix('__label-message') }}"
+      class="apos-form-label-message {{ prependIfPrefix('__label-message') }}"
       data-apos-input-message="{{ widget.fieldName}}" hidden></span>
     <span
-      class="apos-forms-label-message {{ prependIfPrefix('__label-message') }}"
-      data-apos-forms-file-spinner
-      hidden>{{ __t('apos_form:fileUploading') }}</span>
+      class="apos-form-label-message {{ prependIfPrefix('__label-message') }}"
+      data-apos-form-file-spinner
+      hidden>{{ __t('aposForm:fileUploading') }}</span>
     <span
-      class="apos-forms-error apos-forms-label-message {{ prependIfPrefix('__error') }} {{ prependIfPrefix('__label-message') }}"
-      data-apos-forms-file-error role="alert"
-      hidden>{{ __t('apos_form:fileUploadError') }}</span>
+      class="apos-form-error apos-form-label-message {{ prependIfPrefix('__error') }} {{ prependIfPrefix('__label-message') }}"
+      data-apos-form-file-error role="alert"
+      hidden>{{ __t('aposForm:fileUploadError') }}</span>
   </label>
   <input
-    class="apos-forms-input {{ prependIfPrefix('__input') }}"
+    class="apos-form-input {{ prependIfPrefix('__input') }}"
     type="file" id="{{ id }}" multiple
     name="{{ widget.fieldName}}" {% if widget.required %}required{% endif %}>
 </div>

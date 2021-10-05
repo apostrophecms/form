@@ -7,9 +7,9 @@
 {% import "macros.html" as macros with context %}
 
 <fieldset
-  data-apos-forms-checkboxes
+  data-apos-form-checkboxes
   {% if style == 'dropdown' %}data-apos-form-dropdown{% endif %}
-  class="apos-forms-fieldset apos-forms-checkboxes--{{ style }} {{ prependIfPrefix('__fieldset') }}"
+  class="apos-form-fieldset apos-form-checkboxes--{{ style }} {{ prependIfPrefix('__fieldset') }}"
 >
   {% if style == 'checkboxes' %}
     {{ macros.checkboxStyle() }}
