@@ -1,42 +1,42 @@
 module.exports = {
   extend: '@apostrophecms/form-base-field-widget',
   options: {
-    label: 'apos_form:text'
+    label: 'aposForm:text'
   },
   fields: {
     add: {
       placeholder: {
-        label: 'apos_form:textPlaceholder',
+        label: 'aposForm:textPlaceholder',
         type: 'string',
-        help: 'apos_form:textPlaceholderHelp'
+        help: 'aposForm:textPlaceholderHelp'
       },
       inputType: {
-        label: 'apos_form:textType',
+        label: 'aposForm:textType',
         type: 'select',
-        help: 'apos_form:textTypeHelp',
+        help: 'aposForm:textTypeHelp',
         choices: [
           {
-            label: 'apos_form:textTypeText',
+            label: 'aposForm:textTypeText',
             value: 'text'
           },
           {
-            label: 'apos_form:textTypeEmail',
+            label: 'aposForm:textTypeEmail',
             value: 'email'
           },
           {
-            label: 'apos_form:textTypePhone',
+            label: 'aposForm:textTypePhone',
             value: 'tel'
           },
           {
-            label: 'apos_form:textTypeUrl',
+            label: 'aposForm:textTypeUrl',
             value: 'url'
           },
           {
-            label: 'apos_form:textTypeDate',
+            label: 'aposForm:textTypeDate',
             value: 'date'
           },
           {
-            label: 'apos_form:textTypePassword',
+            label: 'aposForm:textTypePassword',
             value: 'password'
           }
         ],

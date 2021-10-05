@@ -1,23 +1,23 @@
 module.exports = {
   extend: '@apostrophecms/widget-type',
   options: {
-    label: 'apos_form:baseWidget'
+    label: 'aposForm:baseWidget'
   },
   fields: {
     add: {
       fieldLabel: {
-        label: 'apos_form:fieldLabel',
+        label: 'aposForm:fieldLabel',
         type: 'string',
         required: true
       },
       fieldName: {
-        label: 'apos_form:fieldName',
+        label: 'aposForm:fieldName',
         type: 'slug',
         following: [ 'fieldLabel' ],
-        help: 'apos_form:fieldNameHelp'
+        help: 'aposForm:fieldNameHelp'
       },
       required: {
-        label: 'apos_form:fieldRequired',
+        label: 'aposForm:fieldRequired',
         type: 'boolean'
       }
     }
@@ -30,7 +30,7 @@ module.exports = {
             fieldError: {
               field: widget.fieldName,
               error: 'required',
-              message: req.t('apos_form:requiredError')
+              message: req.t('aposForm:requiredError')
             }
           });
         }

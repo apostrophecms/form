@@ -5,13 +5,13 @@ const fields = require('./lib/fields');
 module.exports = {
   extend: '@apostrophecms/piece-type',
   options: {
-    label: 'apos_form:form',
-    pluralLabel: 'apos_form:forms',
+    label: 'aposForm:form',
+    pluralLabel: 'aposForm:forms',
     quickCreate: true,
     seo: false,
     openGraph: false,
     i18n: {
-      ns: 'apos_form',
+      ns: 'aposForm',
       browser: true
     }
   },
@@ -31,11 +31,11 @@ module.exports = {
 
     const group = {
       basics: {
-        label: 'apos_form:groupForm',
+        label: 'aposForm:groupForm',
         fields: [ 'contents', 'submitLabel' ]
       },
       afterSubmit: {
-        label: 'apos_form:groupAfterSubmission',
+        label: 'aposForm:groupAfterSubmission',
         fields: [
           'thankYouHeading',
           'thankYouBody',
@@ -47,7 +47,7 @@ module.exports = {
         ] : [])
       },
       advanced: {
-        label: 'apos_form:groupAdvanced',
+        label: 'aposForm:groupAdvanced',
         fields: [
           'enableQueryParams',
           'queryParamList'
@@ -116,7 +116,7 @@ module.exports = {
           formErrors.push({
             global: true,
             error: 'recaptcha',
-            message: req.t('apos_form:recaptchaError')
+            message: req.t('aposForm:recaptchaError')
           });
         }
 
@@ -130,7 +130,7 @@ module.exports = {
             formErrors.push({
               global: true,
               error: 'recaptcha',
-              message: req.t('apos_form:recaptchaValidationError')
+              message: req.t('aposForm:recaptchaValidationError')
             });
           }
         } catch (e) {
@@ -139,7 +139,7 @@ module.exports = {
           formErrors.push({
             global: true,
             error: 'recaptcha',
-            message: req.t('apos_form:recaptchaConfigError')
+            message: req.t('aposForm:recaptchaConfigError')
           });
         }
       },
@@ -389,7 +389,7 @@ module.exports = {
             typeof data[form.emailConfirmationField] !== 'string' ||
             !re.test(data[form.emailConfirmationField])
           ) {
-            await self.apos.notify(req, 'apos_form:errorEmailConfirm', {
+            await self.apos.notify(req, 'aposForm:errorEmailConfirm', {
               type: 'warning',
               icon: 'alert-circle-icon',
               interpolate: {

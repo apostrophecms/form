@@ -1,7 +1,7 @@
 module.exports = {
   extend: '@apostrophecms/widget-type',
   options: {
-    label: 'apos_form:conditional'
+    label: 'aposForm:conditional'
   },
   fields (self) {
     // Get the form widgets from the form piece module and add them in the
@@ -13,19 +13,19 @@ module.exports = {
     return {
       add: {
         conditionName: {
-          label: 'apos_form:conditionalName',
-          htmlHelp: 'apos_form:conditionalNameHelp',
+          label: 'aposForm:conditionalName',
+          htmlHelp: 'aposForm:conditionalNameHelp',
           required: true,
           type: 'string'
         },
         conditionValue: {
-          label: 'apos_form:conditionalValue',
-          htmlHelp: 'apos_form:conditionalValueHelp',
+          label: 'aposForm:conditionalValue',
+          htmlHelp: 'aposForm:conditionalValueHelp',
           required: true,
           type: 'string'
         },
         contents: {
-          label: 'apos_form:formContents',
+          label: 'aposForm:formContents',
           type: 'area',
           contextual: false,
           options: {
