@@ -1,41 +1,41 @@
-$apos-forms-spacing: 35px;
+$apos-form-spacing: 35px;
 
-.apos-forms-hidden {
+.apos-form-hidden {
   display: none;
 }
-// TODO: refactor to remove apos-forms-visible. We can't depend on the parent
+// TODO: refactor to remove apos-form-visible. We can't depend on the parent
 // having the right display property. `initial` could work better, but simply
 // hiding and unhiding is safer. The `hidden` HTML attribute could work as well.
-.apos-forms-visible {
+.apos-form-visible {
   display: inherit;
 }
 
-.apos-forms-input,
-.apos-forms-fieldset {
+.apos-form-input,
+.apos-form-fieldset {
   .apos-modal & {
-    margin-bottom: $apos-forms-spacing;
+    margin-bottom: $apos-form-spacing;
   }
 }
 
-.apos-forms-checkboxes--dropdown {
+.apos-form-checkboxes--dropdown {
   display: inline-block;
 }
 
-.apos-forms-checkboxes-toggle {
+.apos-form-checkboxes-toggle {
   width: auto;
 }
 
-.apos-forms-checkboxes-toggle::after {
+.apos-form-checkboxes-toggle::after {
   padding-left: 24px;
   content: '▶';
 
-  .apos-forms-checkboxes--dropdown.is-active & {
+  .apos-form-checkboxes--dropdown.is-active & {
     padding-left: 24px;
     content: '▲';
   }
 }
 
-.apos-forms-checkboxes-dropdown-choices {
+.apos-form-checkboxes-dropdown-choices {
   overflow: hidden;
   width: auto;
   height: 0;
@@ -46,7 +46,7 @@ $apos-forms-spacing: 35px;
     line-height: 1.5;
   }
 
-  .apos-forms-checkboxes--dropdown.is-active & {
+  .apos-form-checkboxes--dropdown.is-active & {
     overflow: auto;
     height: auto;
   }

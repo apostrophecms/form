@@ -9,7 +9,7 @@ export default function (widgetEl) {
   }
 
   recaptchaSlot = widgetEl.querySelector('[data-apos-recaptcha-slot]');
-  recaptchaError = widgetEl.querySelector('[data-apos-forms-recaptcha-error]');
+  recaptchaError = widgetEl.querySelector('[data-apos-form-recaptcha-error]');
   el = widgetEl;
 
   window.renderCaptchas = render;
@@ -40,18 +40,18 @@ function getToken () {
 
   if (!token) {
     // They submitted without completing the reCaptcha
-    apos.util.addClass(recaptchaError, 'apos-forms-visible');
+    apos.util.addClass(recaptchaError, 'apos-form-visible');
     const recaptchaSlot = el.querySelector('[data-apos-recaptcha-slot]');
 
     apos.util.emit(document.body, '@apostrophecms/form:submission-missing-recaptcha', {
-      form: el.querySelector('[data-apos-forms-form]'),
+      form: el.querySelector('[data-apos-form-form]'),
       recaptchaSlot: recaptchaSlot
     });
 
     return;
   }
 
-  apos.util.removeClass(recaptchaError, 'apos-forms-visible');
+  apos.util.removeClass(recaptchaError, 'apos-form-visible');
 
   return token;
 }

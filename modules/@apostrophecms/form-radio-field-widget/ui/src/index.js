@@ -1,11 +1,11 @@
 const WIDGET_NAME = '@apostrophecms/form-radio-field';
-const WIDGET_SELECTOR = '[data-apos-forms-radio]';
+const WIDGET_SELECTOR = '[data-apos-form-radio]';
 
 export default () => {
   apos.util.widgetPlayers[WIDGET_NAME] = {
     selector: WIDGET_SELECTOR,
     player (el) {
-      const formWidget = apos.util.closest(el, '[data-apos-forms-form]');
+      const formWidget = apos.util.closest(el, '[data-apos-form-form]');
       const inputs = el.querySelectorAll('input[type="radio"]');
 
       if (!formWidget || inputs.length === 0) {

@@ -4,9 +4,9 @@ import enableRecaptcha from './recaptcha';
 
 export default () => {
   apos.util.widgetPlayers['@apostrophecms/form'] = {
-    selector: '[data-apos-forms-wrapper]',
+    selector: '[data-apos-form-wrapper]',
     player: function (el) {
-      const form = el.querySelector('[data-apos-forms-form]');
+      const form = el.querySelector('[data-apos-form-form]');
 
       if (!form) {
         return;
@@ -18,20 +18,20 @@ export default () => {
 
       // If there are specified query parameters to capture, see if fields
       // can be populated.
-      if (form.hasAttribute('data-apos-forms-params')) {
+      if (form.hasAttribute('data-apos-form-params')) {
         setParameterValues();
       }
 
       async function submit(event) {
         event.preventDefault();
 
-        if (el.querySelector('[data-apos-forms-busy]')) {
+        if (el.querySelector('[data-apos-form-busy]')) {
           return setTimeout(async function() {
             await submit(event);
           }, 100);
         }
 
-        form.setAttribute('data-apos-forms-busy', '1');
+        form.setAttribute('data-apos-form-busy', '1');
 
         let input;
 
@@ -45,39 +45,39 @@ export default () => {
             recaptcha.reset();
           }
 
-          form.removeAttribute('data-apos-forms-busy');
+          form.removeAttribute('data-apos-form-busy');
 
           return;
         }
 
-        input._id = form.getAttribute('data-apos-forms-form');
+        input._id = form.getAttribute('data-apos-form-form');
 
         if (recaptcha) {
           input.recaptcha = recaptcha.getToken();
         }
 
         // For resubmissions
-        const errorMsg = el.querySelector('[data-apos-forms-submit-error]');
-        const spinner = el.querySelector('[data-apos-forms-spinner]');
-        const thankYou = el.querySelector('[data-apos-forms-thank-you]');
-        apos.util.removeClass(errorMsg, 'apos-forms-visible');
-        apos.util.addClass(spinner, 'apos-forms-visible');
+        const errorMsg = el.querySelector('[data-apos-form-submit-error]');
+        const spinner = el.querySelector('[data-apos-form-spinner]');
+        const thankYou = el.querySelector('[data-apos-form-thank-you]');
+        apos.util.removeClass(errorMsg, 'apos-form-visible');
+        apos.util.addClass(spinner, 'apos-form-visible');
 
         // Convert to arrays old school for IE.
-        const existingErrorInputs = Array.prototype.slice.call(el.querySelectorAll('.apos-forms-input-error'));
-        const existingErrorMessages = Array.prototype.slice.call(el.querySelectorAll('[data-apos-input-message].apos-forms-error'));
+        const existingErrorInputs = Array.prototype.slice.call(el.querySelectorAll('.apos-form-input-error'));
+        const existingErrorMessages = Array.prototype.slice.call(el.querySelectorAll('[data-apos-input-message].apos-form-error'));
 
         existingErrorInputs.forEach(function (input) {
-          apos.util.removeClass(input, 'apos-forms-input-error');
+          apos.util.removeClass(input, 'apos-form-input-error');
         });
 
         existingErrorMessages.forEach(function (message) {
-          apos.util.removeClass(message, 'apos-forms-error');
+          apos.util.removeClass(message, 'apos-form-error');
           message.hidden = true;
         });
 
         // Capture query parameters.
-        if (form.hasAttribute('data-apos-forms-params')) {
+        if (form.hasAttribute('data-apos-form-params')) {
           captureParameters(input);
         }
 
@@ -91,8 +91,8 @@ export default () => {
           formErrors = error.body?.data?.formErrors;
         }
 
-        form.removeAttribute('data-apos-forms-busy');
-        apos.util.removeClass(spinner, 'apos-forms-visible');
+        form.removeAttribute('data-apos-form-busy');
+        apos.util.removeClass(spinner, 'apos-form-visible');
 
         if (formErrors) {
           processErrors(formErrors, el);
@@ -106,13 +106,13 @@ export default () => {
             form,
             formError: null
           });
-          apos.util.addClass(thankYou, 'apos-forms-visible');
-          apos.util.addClass(form, 'apos-forms-hidden');
+          apos.util.addClass(thankYou, 'apos-form-visible');
+          apos.util.addClass(form, 'apos-form-hidden');
         }
       }
 
       function setParameterValues () {
-        const paramList = form.getAttribute('data-apos-forms-params').split(',');
+        const paramList = form.getAttribute('data-apos-form-params').split(',');
         const params = apos.http.parseQuery(window.location.search);
 
         paramList.forEach(function (param) {

@@ -1,12 +1,12 @@
 function processErrors (errors, el) {
-  const form = el.querySelector('[data-apos-forms-form]');
-  const errorMsg = el.querySelector('[data-apos-forms-submit-error]');
+  const form = el.querySelector('[data-apos-form-form]');
+  const errorMsg = el.querySelector('[data-apos-form-submit-error]');
 
   apos.util.emit(document.body, '@apostrophecms/form:submission-failed', {
     form,
     errors
   });
-  apos.util.addClass(errorMsg, 'apos-forms-visible');
+  apos.util.addClass(errorMsg, 'apos-form-visible');
 
   highlight(el, errors);
 }
@@ -16,8 +16,8 @@ function highlight(el, formErrors) {
     return;
   }
 
-  const form = el.querySelector('[data-apos-forms-form]');
-  const globalError = el.querySelector('[data-apos-forms-global-error]');
+  const form = el.querySelector('[data-apos-form-form]');
+  const globalError = el.querySelector('[data-apos-form-global-error]');
   const errors = formErrors;
   globalError.innerText = '';
 
@@ -38,10 +38,10 @@ function highlight(el, formErrors) {
     const labelMessage = form.querySelector(`[data-apos-input-message=${error.field}]`);
 
     fields.forEach(function (field) {
-      apos.util.addClass(field, 'apos-forms-input-error');
+      apos.util.addClass(field, 'apos-form-input-error');
     });
 
-    apos.util.addClass(labelMessage, 'apos-forms-error');
+    apos.util.addClass(labelMessage, 'apos-form-error');
     labelMessage.innerText = error.message;
     labelMessage.hidden = false;
   });

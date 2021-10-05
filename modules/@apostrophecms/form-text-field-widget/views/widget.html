@@ -4,23 +4,23 @@
 {% set prependIfPrefix = apos.modules['@apostrophecms/form'].prependIfPrefix %}
 {% import "fragments/utility.html" as utils with context %}
 
-<div data-apos-forms-text class="apos-forms-input-wrapper">
+<div data-apos-form-text class="apos-form-input-wrapper">
   <label for="{{ id }}"
-    class="apos-forms-label {{ prependIfPrefix('__label') }}"
+    class="apos-form-label {{ prependIfPrefix('__label') }}"
   >
     {{ widget.fieldLabel}}
     {{ utils.optional(widget.required) }}
     <span
-      class="apos-forms-label-message {{ prependIfPrefix('__label-message') }}"
+      class="apos-form-label-message {{ prependIfPrefix('__label-message') }}"
       data-apos-input-message="{{ widget.fieldName }}" hidden></span>
   </label>
   {% if widget.inputType == 'date' %}
     <p>
-      <small class="apos-forms-help">{{ __t("(YYYY-MM-DD)") }}</small>
+      <small class="apos-form-help">{{ __t("(YYYY-MM-DD)") }}</small>
     </p>
   {% endif %}
   <input
-    class="apos-forms-input {{ prependIfPrefix('__input') }}"
+    class="apos-form-input {{ prependIfPrefix('__input') }}"
     type="{{ widget.inputType or "text" }}"
     placeholder="{{ widget.placeholder }}"
     id="{{ id }}" name="{{ widget.fieldName }}"

@@ -3,7 +3,7 @@
 {% set classPrefix = data.widget.classPrefix %}
 {% set prependIfPrefix = apos.modules['@apostrophecms/form'].prependIfPrefix %}
 
-<div data-apos-forms-wrapper>
+<div data-apos-form-wrapper>
 {% if form %}
   {% set params = false %}
   {% if form.queryParamList %}
@@ -17,9 +17,9 @@
     {% endfor %}
   {% endif %}
   <form
-    data-apos-forms-form="{{ form._id }}"
+    data-apos-form-form="{{ form._id }}"
     class="{{ prependIfPrefix('__form') }}" autocomplete="off"
-    {% if form.enableQueryParams %}data-apos-forms-params='{{params}}'{% endif %}
+    {% if form.enableQueryParams %}data-apos-form-params='{{params}}'{% endif %}
   >
     {% area form, 'contents' %}
 
@@ -37,28 +37,28 @@
       {{ form.submitLabel or __t('aposForm:widgetSubmit') }}
     </button>
   </form>
-  <p role="alert" data-apos-forms-submit-error
-    class="apos-forms-hidden apos-forms-error {{ prependIfPrefix('__error') }}"
+  <p role="alert" data-apos-form-submit-error
+    class="apos-form-hidden apos-form-error {{ prependIfPrefix('__error') }}"
   >
     {{ __t("aposForm:widgetSubmitError") }}
-    <span data-apos-forms-global-error></span>
+    <span data-apos-form-global-error></span>
   </p>
 
   {% if recaptchaSite %}
-    <p role="alert" data-apos-forms-recaptcha-error
-      class="apos-forms-hidden apos-forms-error {{ prependIfPrefix('__error') }}"
+    <p role="alert" data-apos-form-recaptcha-error
+      class="apos-form-hidden apos-form-error {{ prependIfPrefix('__error') }}"
     >
       {{ __t("aposForm:widgetCompleteCaptcha") }}
     </p>
   {% endif %}
   <p
-    class="apos-forms-hidden {{ prependIfPrefix('__spinner') }}"
-    data-apos-forms-spinner
+    class="apos-form-hidden {{ prependIfPrefix('__spinner') }}"
+    data-apos-form-spinner
   >
     {{ __t('aposForm:widgetSubmitting') }}
   </p>
-  <div role="alert" data-apos-forms-thank-you
-    class="apos-forms-hidden apos-forms-submission-thank-you {{ prependIfPrefix('__submission-thank-you') }}"
+  <div role="alert" data-apos-form-thank-you
+    class="apos-form-hidden apos-form-submission-thank-you {{ prependIfPrefix('__submission-thank-you') }}"
   >
     {% if form.thankYouHeading %}
       <h3>{{ form.thankYouHeading }}</h3>
