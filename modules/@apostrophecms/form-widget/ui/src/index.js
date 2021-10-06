@@ -25,6 +25,13 @@ export default () => {
       async function submit(event) {
         event.preventDefault();
 
+        if (apos?.adminBar?.editMode) {
+          await apos.notify('aposForm:disabledInEditMode', {
+            type: 'info'
+          });
+          return;
+        }
+
         if (el.querySelector('[data-apos-form-busy]')) {
           return setTimeout(async function() {
             await submit(event);

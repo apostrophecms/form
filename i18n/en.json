@@ -77,6 +77,7 @@
   "radioChoice": "Radio input options",
   "select": "Select input",
   "selectChoice": "Select input options",
+  "disabledInEditMode": "Switch to Preview or Published mode to test the form.",
   "text": "Text input",
   "textPlaceholder": "Placeholder",
   "textPlaceholderHelp": "Text to display in the field before someone uses it (e.g., to provide additional directions).",
