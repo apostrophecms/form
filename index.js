@@ -386,8 +386,9 @@ module.exports = {
           const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
           if (
-            typeof data[form.emailConfirmationField] !== 'string' ||
-            !re.test(data[form.emailConfirmationField])
+            data[form.emailConfirmationField] &&
+            (typeof data[form.emailConfirmationField] !== 'string' ||
+            !re.test(data[form.emailConfirmationField]))
           ) {
             await self.apos.notify(req, 'aposForm:errorEmailConfirm', {
               type: 'warning',
