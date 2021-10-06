@@ -5,12 +5,6 @@
 
 Allow ApostropheCMS editors to build their own forms. They can then place any form in one or more content areas across the website.
 
-<!-- ## Roadmap
-|Feature |Status  |
---- | ---
-|SEO Meta fields for pages and pieces| ✅ Implemented
-|SEO Page Scanner| 🚧 Under development -->
-
 ## Installation
 
 ```bash
@@ -20,6 +14,7 @@ npm install @apostrophecms/form
 ## Use
 
 ### Initialization
+
 Configure `@apostrophecms/form` and the form widgets in `app.js`. `@apostrophecms/form` must appear before the form widget and form field widget modules. All the field widget modules below are included in this forms module bundle.
 
 ```javascript
@@ -33,7 +28,6 @@ require('apostrophe')({
     // Form field widgets, used by the main form module to build forms.
     '@apostrophecms/form-text-field-widget': {},
     '@apostrophecms/form-textarea-field-widget': {},
-    '@apostrophecms/form-file-field-widget': {},
     '@apostrophecms/form-select-field-widget': {},
     '@apostrophecms/form-radio-field-widget': {},
     '@apostrophecms/form-checkboxes-field-widget': {},
@@ -42,14 +36,6 @@ require('apostrophe')({
   }
 });
 ```
-
-<!--
-TODO: Is there a new way to do this? To explore.
-'apostrophe-permissions': {
-  construct: function(self, options) {
-    // Required if you want file fields to work on public pages.
-    self.addPublic([ 'edit-attachment' ]);
-  } -->
 
 **Why do we include all these modules?**
 - The first module added, `@apostrophecms/form`, is the piece type module for forms and includes most other related functionality.
@@ -79,7 +65,6 @@ The `formWidgets` option allows us to change the widgets allowed in a form. It i
 {
   '@apostrophecms/form-text-field': {},
   '@apostrophecms/form-textarea-field': {},
-  '@apostrophecms/form-file-field': {},
   '@apostrophecms/form-boolean-field': {},
   '@apostrophecms/form-select-field': {},
   '@apostrophecms/form-radio-field': {},

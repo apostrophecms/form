@@ -34,6 +34,7 @@ export default () => {
           body: formData
         }, function (err, file) {
           if (err) {
+            console.error('Form upload error:', err);
             return fail();
           }
 
