@@ -23,8 +23,13 @@
   >
     {% area form, 'contents' %}
 
-    {% set recaptchaSite = getOption('@apostrophecms/form:recaptchaSite') %}
-    {% if recaptchaSite %}
+    {% if
+      form.enableRecaptcha and
+      (
+        data.global.recaptchaSite or
+        apos.modules['@apostrophecms/form'].options.recaptchaSite
+      )
+    %}
       <div
         id="aposRecaptcha{{ widget._id }}"
         data-apos-recaptcha-slot="{{ widget._id }}"

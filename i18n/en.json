@@ -1,7 +1,7 @@
 {
   "notFoundForm": "No matching form was found",
   "formErrors": "Errors found in the form submission",
-
+  "globalGroup": "Form Settings",
   "form": "Form",
   "forms": "Forms",
   "formName": "Form name",
@@ -78,6 +78,12 @@
   "select": "Select input",
   "selectChoice": "Select input options",
   "disabledInEditMode": "Switch to Preview or Published mode to test the form.",
+  "recaptchaEnable": "Enable reCAPTCHA on the form (spam prevention)",
+  "recaptchaEnableHelp": "To use, reCAPTCHA a site ID and secret key must be configured in website code or the website global settings.",
+  "recaptchaSecret": "reCAPTCHA secret key",
+  "recaptchaSecretHelp": "Enter the secret key from a reCAPTCHA account",
+  "recaptchaSite": "reCAPTCHA site key",
+  "recaptchaSiteHelp": "Enter the site key from a reCAPTCHA account",
   "text": "Text input",
   "textPlaceholder": "Placeholder",
   "textPlaceholderHelp": "Text to display in the field before someone uses it (e.g., to provide additional directions).",

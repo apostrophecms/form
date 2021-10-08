@@ -53,8 +53,6 @@ There are a few options available for the Apostrophe form module.
 | `formWidgets` | Object | A widget configuration object for form widgets to use. |
 | `saveSubmissions` | Boolean | Set to `false` to prevent Apostrophe from saving submissions in the `aposFormSubmissions` database collection. See [submission information below](#handling-submissions). |
 | `emailSubmissions` | Boolean | Set to `false` to disable the email notification fields on forms. See [email information below](#email). |
-| `recaptchaSecret` | String | The "secret key" from a configured reCAPTCHA site. See [reCAPTCHA information below](#using-recaptcha-for-user-validation). |
-| `recaptchaSite` | String | The "site key" for a configured reCAPTCHA site. See [reCAPTCHA information below](#using-recaptcha-for-user-validation). |
 | `classPrefix` | String | A namespacing string used to build CSS classes on form elements for [custom styling](#styling). |
 
 #### `formWidgets` option
@@ -193,19 +191,9 @@ This results in a class like `my-form__input` being added to input elements in t
 
 ## Using reCAPTCHA for user validation
 
-Google's reCAPTCHA is built in as an option. You will first need to [set up a reCAPTCHA site up on their website](https://www.google.com/recaptcha/) using the *version two option*. Make sure your domains are configured (using "localhost" for local development) and make note of the **site key** and **secret key**. Those should be added as options to `@apostrophecms/form`:
+Google's reCAPTCHA is built in as an optional feature. You will first need to [set up a reCAPTCHA site up on their website](https://www.google.com/recaptcha/) using the *version two option*. Make sure your domains are configured (using `localhost` for local development).
 
-```javascript
-// modules/@apostrophecms/form/index.js
-module.exports = {
-  options: {
-    recaptchaSecret: 'YOUR SECRET KEY',
-    recaptchaSite: 'YOUR SITE KEY'
-  }
-}
-```
-
-The reCAPTCHA field will then be present on all forms.
+Copy the **site key** and **secret key**. You will need to enter them in the site's global settings when logged in. Each form will have a checkbox to enable reCAPTCHA for that form.
 
 ## Custom field validation
 

@@ -8,7 +8,7 @@ module.exports = {
     label: 'aposForm:form',
     pluralLabel: 'aposForm:forms',
     quickCreate: true,
-    seo: false,
+    seoFields: false,
     openGraph: false,
     i18n: {
       ns: 'aposForm',
@@ -49,6 +49,7 @@ module.exports = {
       advanced: {
         label: 'aposForm:groupAdvanced',
         fields: [
+          'enableRecaptcha',
           'enableQueryParams',
           'queryParamList'
         ]
@@ -62,6 +63,13 @@ module.exports = {
   },
   init (self) {
     self.ensureCollection();
+
+    if (!self.options.recaptchaSecret || !self.options.recaptchaSite) {
+      // No fooling around. If they are not *both* included, both are invalid.
+      // Deleting here to avoid having to repeatedly check for both's existence.
+      delete self.options.recaptchaSite;
+      delete self.options.recaptchaSecret;
+    }
   },
   methods (self) {
     return {
@@ -110,7 +118,8 @@ module.exports = {
         return value;
       },
       async checkRecaptcha (req, input, formErrors) {
-        const recaptchaSecret = self.getOption(req, 'recaptchaSecret');
+        const globalDoc = self.apos.global.find(req, {});
+        const recaptchaSecret = globalDoc.recaptchaSecret || self.options.recaptchaSecret;
 
         if (!input.recaptcha) {
           formErrors.push({
@@ -282,6 +291,9 @@ module.exports = {
             throw self.apos.error('notfound');
           }
 
+          const recaptchaSecret = Object.keys(self.options.global);
+
+          console.info('☎️', recaptchaSecret);
           try {
             if (self.getOption(req, 'recaptchaSecret')) {
               await self.checkRecaptcha(req, input, formErrors);
