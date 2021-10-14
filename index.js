@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const fields = require('./lib/fields');
+const recaptcha = require('./lib/recaptcha');
 
 module.exports = {
   extend: '@apostrophecms/piece-type',
@@ -64,12 +65,7 @@ module.exports = {
   init (self) {
     self.ensureCollection();
 
-    if (!self.options.recaptchaSecret || !self.options.recaptchaSite) {
-      // No fooling around. If they are not *both* included, both are invalid.
-      // Deleting here to avoid having to repeatedly check for both's existence.
-      delete self.options.recaptchaSite;
-      delete self.options.recaptchaSecret;
-    }
+    recaptcha.cleanOptions(self.options);
   },
   methods (self) {
     return {
@@ -116,41 +112,6 @@ module.exports = {
         }
 
         return value;
-      },
-      async checkRecaptcha (req, input, formErrors) {
-        const globalDoc = self.apos.global.find(req, {});
-        const recaptchaSecret = globalDoc.recaptchaSecret || self.options.recaptchaSecret;
-
-        if (!input.recaptcha) {
-          formErrors.push({
-            global: true,
-            error: 'recaptcha',
-            message: req.t('aposForm:recaptchaError')
-          });
-        }
-
-        try {
-          const url = 'https://www.google.com/recaptcha/api/siteverify';
-          const recaptchaUri = `${url}?secret=${recaptchaSecret}&response=${input.recaptcha}`;
-
-          const response = await self.apos.http.post(recaptchaUri);
-
-          if (!response.success) {
-            formErrors.push({
-              global: true,
-              error: 'recaptcha',
-              message: req.t('aposForm:recaptchaValidationError')
-            });
-          }
-        } catch (e) {
-          self.apos.util.error(e);
-
-          formErrors.push({
-            global: true,
-            error: 'recaptcha',
-            message: req.t('aposForm:recaptchaConfigError')
-          });
-        }
       },
       async sendEmailSubmissions (req, form, data) {
         if (self.options.emailSubmissions === false ||
@@ -291,13 +252,9 @@ module.exports = {
             throw self.apos.error('notfound');
           }
 
-          const recaptchaSecret = Object.keys(self.options.global);
-
-          console.info('☎️', recaptchaSecret);
           try {
-            if (self.getOption(req, 'recaptchaSecret')) {
-              await self.checkRecaptcha(req, input, formErrors);
-            }
+            // Process reCAPTCHA input if needed.
+            await recaptcha.checkRecaptcha(req, self, input, formErrors);
           } catch (e) {
             throw self.apos.error('invalid');
           }

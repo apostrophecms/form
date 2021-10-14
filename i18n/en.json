@@ -1,4 +1,5 @@
 {
+  "defaultThankYou": "Thank you",
   "notFoundForm": "No matching form was found",
   "formErrors": "Errors found in the form submission",
   "globalGroup": "Form Settings",
@@ -96,6 +97,8 @@
   "textTypeDate": "Date",
   "textTypePassword": "Password",
   "textArea": "Text area input",
+  "useRecaptcha": "Use Google reCAPTCHA on forms",
+  "useRecaptchaHtmlHelp": "reCAPTCHA helps avoid spam submissions on forms. You will need a <a href=\"https://developers.google.com/recaptcha/docs/settings?hl=en\" target=\"_blank\">secret key and site key</a>.",
   "widgetForm": "Form",
   "widgetFormSelect": "Form to display"
 }

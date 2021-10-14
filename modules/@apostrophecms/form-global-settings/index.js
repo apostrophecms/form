@@ -4,27 +4,42 @@ module.exports = {
     return {
       'apostrophe:modulesRegistered': {
         addFormRecaptchaFields () {
-          const globalOptions = self.apos.modules['@apostrophecms/form'].options;
+          const formOptions = self.apos.modules['@apostrophecms/form'].options;
 
-          if (!globalOptions.recaptchaSecret && !globalOptions.recaptchaSite) {
+          if (!formOptions.recaptchaSecret && !formOptions.recaptchaSite) {
             const fieldGroup = {
               name: 'form',
-              label: 'Form'
+              label: 'aposForm:globalGroup'
             };
             const recaptchaFields = [
+              {
+                name: 'useRecaptcha',
+                label: 'aposForm:useRecaptcha',
+                type: 'boolean',
+                htmlHelp: 'aposForm:useRecaptchaHtmlHelp',
+                group: fieldGroup
+              },
               {
                 name: 'recaptchaSite',
                 label: 'aposForm:recaptchaSite',
                 help: 'aposForm:recaptchaSiteHelp',
                 type: 'string',
-                group: fieldGroup
+                required: true,
+                group: fieldGroup,
+                if: {
+                  useRecaptcha: true
+                }
               },
               {
                 name: 'recaptchaSecret',
                 label: 'aposForm:recaptchaSecret',
                 help: 'aposForm:recaptchaSecretHelp',
                 type: 'string',
-                group: fieldGroup
+                required: true,
+                group: fieldGroup,
+                if: {
+                  useRecaptcha: true
+                }
               }
             ];
             self.schema = self.schema.concat(recaptchaFields);
