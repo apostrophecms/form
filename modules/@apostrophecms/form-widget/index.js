@@ -1,7 +1,11 @@
 module.exports = {
   extend: '@apostrophecms/widget-type',
   options: {
-    label: 'aposForm:widgetForm'
+    label: 'aposForm:widgetForm',
+    icon: 'format-select-icon'
+  },
+  icons: {
+    'format-select-icon': 'FormSelect'
   },
   fields: {
     add: {
