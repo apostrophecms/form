@@ -45,9 +45,15 @@ module.exports = {
             self.schema = self.schema.concat(recaptchaFields);
             // Reorder to support `last` group ordering.
             self.schema.sort((first, second) => {
-              if (first?.group?.last && !second?.group?.last) {
+              if (
+                (first && first.group && first.group.last) &&
+                !(second && second.group && second.group.last)
+              ) {
                 return 1;
-              } else if (!first?.group?.last && second?.group?.last) {
+              } else if (
+                !(first && first.group && first.group.last) &&
+                (second && second.group && second.group.last)
+              ) {
                 return -1;
               } else {
                 return 0;
