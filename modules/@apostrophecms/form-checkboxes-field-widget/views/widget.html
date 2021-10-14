@@ -2,7 +2,6 @@
 {% set id = apos.util.generateId() %}
 {% set widget = data.widget %}
 {% set prependIfPrefix = apos.modules['@apostrophecms/form'].prependIfPrefix %}
-{% set style = data.widget.style or "checkboxes" %}
 {% import "fragments/utility.html" as utils with context %}
 {% import "macros.html" as macros with context %}
 
@@ -11,10 +10,18 @@
   {% if style == 'dropdown' %}data-apos-form-dropdown{% endif %}
   class="apos-form-fieldset apos-form-checkboxes--{{ style }} {{ prependIfPrefix('__fieldset') }}"
 >
-  {% if style == 'checkboxes' %}
-    {{ macros.checkboxStyle() }}
-  {% else %}
-    {{ macros.dropdownStyle() }}
-  {% endif %}
+  <legend class="{{ prependIfPrefix('__legend') }}">
+    {{ widget.fieldLabel}}
+  </legend>
+  {{ utils.optional(widget.required) }}
+  {% for choice in widget.choices %}
+    {% set choiceId = id + apos.util.slugify(choice.value) %}
+    <div class="{{ prependIfPrefix('__check-wrapper') }}">
+      {{ utils.checkInput(widget, choice, choiceId, prependIfPrefix) }}
+      <label class="{{ prependIfPrefix('__label') }}" for="{{ choiceId }}">
+        {{ choice.label }}
+      </label>
+    </div>
+  {% endfor %}
   <p data-apos-input-message="{{ widget.fieldName}}" hidden></p>
 </fieldset>
