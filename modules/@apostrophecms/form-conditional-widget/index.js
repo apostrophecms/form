@@ -26,6 +26,7 @@ module.exports = {
         },
         contents: {
           label: 'aposForm:formContents',
+          help: 'aposForm:conditionalContentsHelp',
           type: 'area',
           contextual: false,
           options: {

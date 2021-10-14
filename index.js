@@ -32,7 +32,7 @@ module.exports = {
     const group = {
       basics: {
         label: 'aposForm:groupForm',
-        fields: [ 'contents', 'submitLabel' ]
+        fields: [ 'contents' ]
       },
       afterSubmit: {
         label: 'aposForm:groupAfterSubmission',
@@ -49,6 +49,7 @@ module.exports = {
       advanced: {
         label: 'aposForm:groupAdvanced',
         fields: [
+          'submitLabel',
           'enableQueryParams',
           'queryParamList'
         ]
