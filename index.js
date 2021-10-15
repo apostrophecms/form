@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 const fields = require('./lib/fields');
-const recaptcha = require('./lib/recaptcha');
 
 module.exports = {
   extend: '@apostrophecms/piece-type',
@@ -65,10 +64,11 @@ module.exports = {
   init (self) {
     self.ensureCollection();
 
-    recaptcha.cleanOptions(self.options);
+    self.cleanOptions(self.options);
   },
   methods (self) {
     return {
+      ...require('./lib/recaptcha')(self),
       async ensureCollection () {
         self.db = self.apos.db.collection('aposFormSubmissions');
         await self.db.ensureIndex({
@@ -254,7 +254,7 @@ module.exports = {
 
           try {
             // Process reCAPTCHA input if needed.
-            await recaptcha.checkRecaptcha(req, self, input, formErrors);
+            await self.checkRecaptcha(req, input, formErrors);
           } catch (e) {
             throw self.apos.error('invalid');
           }
