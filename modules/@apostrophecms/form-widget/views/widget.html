@@ -23,8 +23,9 @@
   >
     {% area form, 'contents' %}
 
-    {% set recaptchaSite = getOption('@apostrophecms/form:recaptchaSite') %}
-    {% if recaptchaSite %}
+    {% set recaptchaSite = apos.modules['@apostrophecms/form'].options.recaptchaSite or (data.global.useRecaptcha and data.global.recaptchaSite) %}
+
+    {% if form.enableRecaptcha and recaptchaSite %}
       <div
         id="aposRecaptcha{{ widget._id }}"
         data-apos-recaptcha-slot="{{ widget._id }}"
@@ -40,7 +41,7 @@
   <p role="alert" data-apos-form-submit-error
     class="apos-form-hidden apos-form-error {{ prependIfPrefix('__error') }}"
   >
-    {{ __t("aposForm:widgetSubmitError") }}
+    {{ __t('aposForm:widgetSubmitError') }}
     <span data-apos-form-global-error></span>
   </p>
 
@@ -48,7 +49,7 @@
     <p role="alert" data-apos-form-recaptcha-error
       class="apos-form-hidden apos-form-error {{ prependIfPrefix('__error') }}"
     >
-      {{ __t("aposForm:widgetCompleteCaptcha") }}
+      {{ __t('aposForm:widgetCompleteCaptcha') }}
     </p>
   {% endif %}
   <p
@@ -60,9 +61,7 @@
   <div role="alert" data-apos-form-thank-you
     class="apos-form-hidden apos-form-submission-thank-you {{ prependIfPrefix('__submission-thank-you') }}"
   >
-    {% if form.thankYouHeading %}
-      <h3>{{ form.thankYouHeading }}</h3>
-    {% endif %}
+    <h3>{{ form.thankYouHeading or __t('aposForm:defaultThankYou') }}</h3>
     {% if not apos.area.isEmpty(form, 'thankYouBody') %}
       {% area form, 'thankYouBody' %}
     {% endif %}
