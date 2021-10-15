@@ -8,7 +8,7 @@ module.exports = {
     label: 'aposForm:form',
     pluralLabel: 'aposForm:forms',
     quickCreate: true,
-    seo: false,
+    seoFields: false,
     openGraph: false,
     i18n: {
       ns: 'aposForm',
@@ -50,6 +50,7 @@ module.exports = {
         label: 'aposForm:groupAdvanced',
         fields: [
           'submitLabel',
+          'enableRecaptcha',
           'enableQueryParams',
           'queryParamList'
         ]
@@ -63,9 +64,12 @@ module.exports = {
   },
   init (self) {
     self.ensureCollection();
+
+    self.cleanOptions(self.options);
   },
   methods (self) {
     return {
+      ...require('./lib/recaptcha')(self),
       async ensureCollection () {
         self.db = self.apos.db.collection('aposFormSubmissions');
         await self.db.ensureIndex({
@@ -109,40 +113,6 @@ module.exports = {
         }
 
         return value;
-      },
-      async checkRecaptcha (req, input, formErrors) {
-        const recaptchaSecret = self.getOption(req, 'recaptchaSecret');
-
-        if (!input.recaptcha) {
-          formErrors.push({
-            global: true,
-            error: 'recaptcha',
-            message: req.t('aposForm:recaptchaError')
-          });
-        }
-
-        try {
-          const url = 'https://www.google.com/recaptcha/api/siteverify';
-          const recaptchaUri = `${url}?secret=${recaptchaSecret}&response=${input.recaptcha}`;
-
-          const response = await self.apos.http.post(recaptchaUri);
-
-          if (!response.success) {
-            formErrors.push({
-              global: true,
-              error: 'recaptcha',
-              message: req.t('aposForm:recaptchaValidationError')
-            });
-          }
-        } catch (e) {
-          self.apos.util.error(e);
-
-          formErrors.push({
-            global: true,
-            error: 'recaptcha',
-            message: req.t('aposForm:recaptchaConfigError')
-          });
-        }
       },
       async sendEmailSubmissions (req, form, data) {
         if (self.options.emailSubmissions === false ||
@@ -284,9 +254,8 @@ module.exports = {
           }
 
           try {
-            if (self.getOption(req, 'recaptchaSecret')) {
-              await self.checkRecaptcha(req, input, formErrors);
-            }
+            // Process reCAPTCHA input if needed.
+            await self.checkRecaptcha(req, input, formErrors);
           } catch (e) {
             throw self.apos.error('invalid');
           }

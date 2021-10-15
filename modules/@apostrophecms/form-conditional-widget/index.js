@@ -20,7 +20,7 @@ module.exports = {
         },
         conditionValue: {
           label: 'aposForm:conditionalValue',
-          htmlHelp: 'aposForm:conditionalValueHelp',
+          htmlHelp: 'aposForm:conditionalValueHtmlHelp',
           required: true,
           type: 'string'
         },
