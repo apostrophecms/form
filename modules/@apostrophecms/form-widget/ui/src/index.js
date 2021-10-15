@@ -48,10 +48,6 @@ export default () => {
         } catch (error) {
           processErrors(error?.data?.formErrors, el);
 
-          if (recaptcha) {
-            recaptcha.reset();
-          }
-
           form.removeAttribute('data-apos-form-busy');
 
           return;
@@ -60,7 +56,7 @@ export default () => {
         input._id = form.getAttribute('data-apos-form-form');
 
         if (recaptcha) {
-          input.recaptcha = recaptcha.getToken();
+          input.recaptcha = await recaptcha.getToken(el);
         }
 
         // For resubmissions
@@ -103,10 +99,6 @@ export default () => {
 
         if (formErrors) {
           processErrors(formErrors, el);
-
-          if (recaptcha) {
-            recaptcha.reset();
-          }
 
         } else {
           apos.util.emit(document.body, '@apostrophecms/form:submission-form', {

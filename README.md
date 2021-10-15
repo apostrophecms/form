@@ -150,14 +150,6 @@ The module also emits browser events on the `body` element on submission (`@apos
 | `form` | The form object |
 | `formError` | The error object in case of a thrown error (`null` when successful) |
 
-
-If reCAPTCHA is enabled (see [Using reCAPTCHA for user validation](#Using-reCAPTCHA-for-user-validation)), it emits an **event on submission with an unchecked reCAPTCHA** (`@apostrophecms/form:submissions-missing-recaptcha`). This event is also attached to the document `body` element. Its arguments are:
-
-| Argument | Description |
-| ------- | ------- |
-| `form` | The form object |
-| `recaptchaSlot` | The reCAPTCHA slot element, with identifying data attributes |
-
 ### Email
 
 If `@apostrophecms/email` is configured, submissions can be sent to multiple email addresses as well. In the "After-Submission" tab, enter a comma-separated list of email addresses to the "Email Address(es) for Results" field. If not using this feature, set the `emailSubmissions: false` on the `@apostrophecms/form` module to hide the related field on forms.

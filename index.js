@@ -256,6 +256,7 @@ module.exports = {
             // Process reCAPTCHA input if needed.
             await self.checkRecaptcha(req, input, formErrors);
           } catch (e) {
+            console.error('reCAPTCHA submission error', e);
             throw self.apos.error('invalid');
           }
 
