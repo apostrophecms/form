@@ -16,7 +16,7 @@ export default function (widgetEl) {
       grecaptcha.ready(function() {
         const buttons = document.querySelectorAll('[data-apos-form-submit]');
 
-        Array.prototype.slice.call(buttons).forEach(btn => {
+        [ ...buttons ].forEach(btn => {
           btn.disabled = false;
         });
       });
@@ -32,7 +32,12 @@ export default function (widgetEl) {
 function addRecaptchaScript (siteKey) {
   const container = document.querySelector('[data-apos-refreshable]') || document.body;
   const recaptchaScript = document.createElement('script');
-  recaptchaScript.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}&onload=enableSubmissions`;
+
+  recaptchaScript.src = apos.http.addQueryToUrl('https://www.google.com/recaptcha/api.js', {
+    render: siteKey,
+    onload: 'enableSubmissions'
+  });
+
   recaptchaScript.setAttribute('data-apos-recaptcha-script', '');
   recaptchaScript.setAttribute('async', '');
   recaptchaScript.setAttribute('defer', '');
