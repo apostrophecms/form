@@ -1,6 +1,5 @@
 const assert = require('assert');
 const testUtil = require('apostrophe/test-lib/test');
-// const axios = require('axios');
 const fileUtils = require('./lib/file-utils');
 
 describe('Forms module', function () {

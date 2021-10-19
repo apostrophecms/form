@@ -1,6 +1,5 @@
 /* global grecaptcha */
 let siteKey;
-let recaptchaError;
 
 export default function (widgetEl) {
   if (!widgetEl.querySelector('[data-apos-recaptcha-sitekey]')) {
@@ -8,7 +7,6 @@ export default function (widgetEl) {
   }
 
   siteKey = widgetEl.querySelector('[data-apos-recaptcha-sitekey]').dataset.aposRecaptchaSitekey;
-  recaptchaError = widgetEl.querySelector('[data-apos-form-recaptcha-error]');
 
   if (!document.querySelector('[data-apos-recaptcha-script]')) {
 
@@ -45,11 +43,5 @@ function addRecaptchaScript (siteKey) {
 }
 
 async function getToken (widgetEl) {
-  try {
-    return grecaptcha.execute(siteKey, { action: 'submit' });
-  } catch (error) {
-    console.error('reCAPTCHA execution error:', error);
-    apos.util.addClass(recaptchaError, 'apos-form-visible');
-    return null;
-  }
+  return grecaptcha.execute(siteKey, { action: 'submit' });
 }

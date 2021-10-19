@@ -56,7 +56,15 @@ export default () => {
         input._id = form.getAttribute('data-apos-form-form');
 
         if (recaptcha) {
-          input.recaptcha = await recaptcha.getToken(el);
+          const recaptchaError = el.querySelector('[data-apos-form-recaptcha-error]');
+
+          try {
+            input.recaptcha = await recaptcha.getToken(el);
+          } catch (error) {
+            console.error('reCAPTCHA execution error:', error);
+            apos.util.addClass(recaptchaError, 'apos-form-visible');
+            return null;
+          }
         }
 
         // For resubmissions
