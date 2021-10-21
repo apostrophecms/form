@@ -2,6 +2,8 @@
 {% set form = data.widget._form[0] %}
 {% set classPrefix = data.widget.classPrefix %}
 {% set prependIfPrefix = apos.modules['@apostrophecms/form'].prependIfPrefix %}
+{% set recaptchaSite = apos.modules['@apostrophecms/form'].options.recaptchaSite or (data.global.useRecaptcha and data.global.recaptchaSite) %}
+{% set recaptchaReady = form.enableRecaptcha and recaptchaSite %}
 
 <div data-apos-form-wrapper>
 {% if form %}
@@ -20,21 +22,21 @@
     data-apos-form-form="{{ form._id }}"
     class="{{ prependIfPrefix('__form') }}" autocomplete="off"
     {% if form.enableQueryParams %}data-apos-form-params='{{params}}'{% endif %}
+    {% if recaptchaReady %}
+      data-apos-recaptcha-sitekey="{{ recaptchaSite }}"
+    {% endif %}
   >
     {% area form, 'contents' %}
 
-    {% set recaptchaSite = apos.modules['@apostrophecms/form'].options.recaptchaSite or (data.global.useRecaptcha and data.global.recaptchaSite) %}
-
-    {% if form.enableRecaptcha and recaptchaSite %}
-      <div
-        id="aposRecaptcha{{ widget._id }}"
-        data-apos-recaptcha-slot="{{ widget._id }}"
-        data-apos-recaptcha-sitekey="{{ recaptchaSite }}"></div>
+    {% if recaptchaReady %}
       <noscript>
         <p>{{ __t('aposForm:widgetNoScript') }}</p>
       </noscript>
     {% endif %}
-    <button type="submit" class="{{ prependIfPrefix('__submit') }}">
+    <button
+      type="submit" class="{{ prependIfPrefix('__submit') }}"
+      data-apos-form-submit {% if recaptchaReady %}disabled{% endif %}
+    >
       {{ form.submitLabel or __t('aposForm:widgetSubmit') }}
     </button>
   </form>
@@ -49,7 +51,7 @@
     <p role="alert" data-apos-form-recaptcha-error
       class="apos-form-hidden apos-form-error {{ prependIfPrefix('__error') }}"
     >
-      {{ __t('aposForm:widgetCompleteCaptcha') }}
+      {{ __t('aposForm:widgetCaptchaError') }}
     </p>
   {% endif %}
   <p
