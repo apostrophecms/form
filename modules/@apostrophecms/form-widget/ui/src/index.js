@@ -48,10 +48,6 @@ export default () => {
         } catch (error) {
           processErrors(error?.data?.formErrors, el);
 
-          if (recaptcha) {
-            recaptcha.reset();
-          }
-
           form.removeAttribute('data-apos-form-busy');
 
           return;
@@ -60,7 +56,15 @@ export default () => {
         input._id = form.getAttribute('data-apos-form-form');
 
         if (recaptcha) {
-          input.recaptcha = recaptcha.getToken();
+          const recaptchaError = el.querySelector('[data-apos-form-recaptcha-error]');
+
+          try {
+            input.recaptcha = await recaptcha.getToken(el);
+          } catch (error) {
+            console.error('reCAPTCHA execution error:', error);
+            apos.util.addClass(recaptchaError, 'apos-form-visible');
+            return null;
+          }
         }
 
         // For resubmissions
@@ -103,10 +107,6 @@ export default () => {
 
         if (formErrors) {
           processErrors(formErrors, el);
-
-          if (recaptcha) {
-            recaptcha.reset();
-          }
 
         } else {
           apos.util.emit(document.body, '@apostrophecms/form:submission-form', {

@@ -1,7 +1,8 @@
 {
+  "defaultThankYou": "Thank you",
   "notFoundForm": "No matching form was found",
   "formErrors": "Errors found in the form submission",
-
+  "globalGroup": "Form Settings",
   "form": "Form",
   "forms": "Forms",
   "formName": "Form name",
@@ -39,10 +40,10 @@
   "fileUploading": "Uploading...",
   "fileUploadError": "An error occurred uploading the file. It may be too large or of an inappropriate type.",
   "selectBlank": "",
+  "widgetCaptchaError": "There was an error connecting to the reCAPTCHA validation service. Please reload the page.",
   "widgetNoScript": "NOTE: The form above requires JavaScript enabled in the browser for submission.",
   "widgetSubmit": "Submit",
   "widgetSubmitError": "An error occurred submitting the form. Please try again.",
-  "widgetCompleteCaptcha": "Please complete the reCAPTCHA validation.",
   "widgetSubmitting": "Submitting...",
   "errorEmailConfirm": "The form field {{ field }} is configured to be used for the confirmation email address, but it allows non-email formats.",
 
@@ -54,7 +55,7 @@
   "requiredError": "This field is required",
   "recaptchaSubmitError": "There was a problem submitting your reCAPTCHA verification.",
   "recaptchaValidationError": "There was a problem validating your reCAPTCHA verfication submission.",
-  "recaptchaConfigError": "The reCAPTCHA verification system may be down or incorrectly configured. Please try again later or notify the site owner.",
+  "recaptchaConfigError": "The reCAPTCHA verification system may be down or incorrectly configured. Please try again or notify the site owner.",
   "boolean": "Boolean/opt-in input",
   "booleanChecked": "Default to pre-checked",
   "booleanCheckedHelp": "If \"yes,\" the checkbox will start in the checked state.",
@@ -75,6 +76,12 @@
   "select": "Select input",
   "selectChoice": "Select input options",
   "disabledInEditMode": "Switch to Preview or Published mode to test the form.",
+  "recaptchaEnable": "Enable reCAPTCHA on the form (spam prevention)",
+  "recaptchaEnableHelp": "To use, reCAPTCHA a site ID and secret key must be configured in website code or the website global settings.",
+  "recaptchaSecret": "reCAPTCHA secret key",
+  "recaptchaSecretHelp": "Enter the secret key from a reCAPTCHA account",
+  "recaptchaSite": "reCAPTCHA site key",
+  "recaptchaSiteHelp": "Enter the site key from a reCAPTCHA account",
   "text": "Text input",
   "textPlaceholder": "Placeholder",
   "textPlaceholderHelp": "Text to display in the field before someone uses it (e.g., to provide additional directions).",
@@ -87,6 +94,8 @@
   "textTypeDate": "Date",
   "textTypePassword": "Password",
   "textArea": "Text area input",
+  "useRecaptcha": "Use Google reCAPTCHA on forms",
+  "useRecaptchaHtmlHelp": "reCAPTCHA helps avoid spam submissions on forms. You will need a <a href=\"https://developers.google.com/recaptcha/docs/settings?hl=en\" target=\"_blank\">secret key and site key</a>.",
   "widgetForm": "Form",
   "widgetFormSelect": "Form to display"
 }
