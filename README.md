@@ -185,7 +185,7 @@ This results in a class like `my-form__input` being added to input elements in t
 
 ## Using reCAPTCHA for user validation
 
-Google's reCAPTCHA is built in as an optional feature. You will first need to [set up a reCAPTCHA site up on their website](https://www.google.com/recaptcha/) using the *version two option*. Make sure your domains are configured (using `localhost` for local development).
+Google's reCAPTCHA is built in as an optional feature. You will first need to [set up a reCAPTCHA site up on their website](https://www.google.com/recaptcha/) using the *version three option*. Make sure your domains are configured (using `localhost` for local development).
 
 Copy the **site key** and **secret key**. You will need to enter them in the site's global settings when logged in. Each form will have a checkbox to enable reCAPTCHA for that form.
 
