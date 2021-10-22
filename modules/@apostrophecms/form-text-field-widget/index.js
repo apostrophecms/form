@@ -5,11 +5,6 @@ module.exports = {
   },
   fields: {
     add: {
-      placeholder: {
-        label: 'aposForm:textPlaceholder',
-        type: 'string',
-        help: 'aposForm:textPlaceholderHelp'
-      },
       inputType: {
         label: 'aposForm:textType',
         type: 'select',
@@ -41,6 +36,11 @@ module.exports = {
           }
         ],
         def: 'text'
+      },
+      placeholder: {
+        label: 'aposForm:textPlaceholder',
+        type: 'string',
+        help: 'aposForm:textPlaceholderHelp'
       }
     }
   },

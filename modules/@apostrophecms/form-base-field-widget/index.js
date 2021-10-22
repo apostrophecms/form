@@ -10,15 +10,15 @@ module.exports = {
         type: 'string',
         required: true
       },
+      required: {
+        label: 'aposForm:fieldRequired',
+        type: 'boolean'
+      },
       fieldName: {
         label: 'aposForm:fieldName',
         type: 'slug',
         following: [ 'fieldLabel' ],
         help: 'aposForm:fieldNameHelp'
-      },
-      required: {
-        label: 'aposForm:fieldRequired',
-        type: 'boolean'
       }
     }
   },
