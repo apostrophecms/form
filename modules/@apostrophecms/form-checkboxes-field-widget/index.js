@@ -26,21 +26,6 @@ module.exports = {
             }
           }
         }
-      },
-      style: {
-        label: 'aposForm:checkboxStyle',
-        type: 'select',
-        def: 'checkboxes',
-        choices: [
-          {
-            label: 'aposForm:checkboxStyleInline',
-            value: 'checkboxes'
-          },
-          {
-            label: 'aposForm:checkboxStyleDropdown',
-            value: 'dropdown'
-          }
-        ]
       }
     }
   },
