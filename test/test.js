@@ -416,6 +416,7 @@ describe('Forms module', function () {
   };
   form3.slug = 'test-form-three';
   form3._id = 'form3:en:published';
+  form3.enableRecaptcha = true;
 
   it('should be a property of the apos3 object', async function () {
     apos3 = await testUtil.create({
