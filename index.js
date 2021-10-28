@@ -253,12 +253,14 @@ module.exports = {
             throw self.apos.error('notfound');
           }
 
-          try {
-            // Process reCAPTCHA input if needed.
-            await self.checkRecaptcha(req, input, formErrors);
-          } catch (e) {
-            console.error('reCAPTCHA submission error', e);
-            throw self.apos.error('invalid');
+          if (form.enableRecaptcha) {
+            try {
+              // Process reCAPTCHA input if needed.
+              await self.checkRecaptcha(req, input, formErrors);
+            } catch (e) {
+              console.error('reCAPTCHA submission error', e);
+              throw self.apos.error('invalid');
+            }
           }
 
           // Recursively walk the area and its sub-areas so we find
