@@ -54,7 +54,7 @@
   "fieldRequired": "Is this field required?",
   "requiredError": "This field is required",
   "recaptchaSubmitError": "There was a problem submitting your reCAPTCHA verification.",
-  "recaptchaValidationError": "There was a problem validating your reCAPTCHA verfication submission.",
+  "recaptchaValidationError": "There was a problem validating your reCAPTCHA verification submission.",
   "recaptchaConfigError": "The reCAPTCHA verification system may be down or incorrectly configured. Please try again or notify the site owner.",
   "boolean": "Boolean/opt-in input",
   "booleanChecked": "Default to pre-checked",
