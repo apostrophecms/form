@@ -1,6 +1,6 @@
 {
   "name": "@apostrophecms/form",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0",
   "description": "Build forms for ApostropheCMS in a simple user interface.",
   "main": "index.js",
   "scripts": {
@@ -22,7 +22,7 @@
     "form builder"
   ],
   "devDependencies": {
-    "apostrophe": "github:apostrophecms/apostrophe",
+    "apostrophe": "^3.4.0",
     "eslint": "^7.9.0",
     "eslint-config-apostrophe": "^3.4.0",
     "eslint-config-standard": "^14.1.1",

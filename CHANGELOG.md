@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+### Fixes
+
+* Sets the dev dependency of Apostrophe to a published version.
+* Fixes a typo in the recaptchaValidationError l10n key.
+* Fixes an incorrect error localization key usage.
+
 ## 1.0.0-beta.1 (2021-11-15)
 
 ### Changes
