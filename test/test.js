@@ -228,6 +228,7 @@ describe('Forms module', function () {
       'Runs fast',
       'Likes treats'
     ],
+    DogPhoto: 'files-pending', // Indicating a file upload.
     DogBreed: 'Irish Wolfhound',
     DogToy: 'Frisbee',
     LifeStory: 'Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Donec ullamcorper nulla non metus auctor fringilla.',
@@ -239,35 +240,17 @@ describe('Forms module', function () {
     }
   };
 
-  it('should upload file field contents', async function () {
-    const formData = new FormData();
-    formData.append('file', fs.createReadStream(path.join(__dirname, '/lib/upload_tests/upload-test.txt')));
-
-    // Make an async request to upload the image.
-    try {
-      const attachment = await apos.http.post(
-        '/api/v1/@apostrophecms/form-widget/upload',
-        {
-          body: formData
-        }
-      );
-
-      assert(attachment._id);
-      submission1.DogPhoto = [ attachment._id ];
-    } catch (error) {
-
-      assert(!error);
-    }
-  });
-
   it('should accept a valid submission', async function () {
+    const formData = new FormData();
     submission1._id = savedForm1._id;
+    formData.append('data', JSON.stringify(submission1));
+    formData.append('DogPhoto-0', fs.createReadStream(path.join(__dirname, '/lib/upload_tests/upload-test.txt')));
 
     try {
       await apos.http.post(
         '/api/v1/@apostrophecms/form/submit?apikey=skeleton_key',
         {
-          body: submission1
+          body: formData
         }
       );
     } catch (error) {
@@ -350,12 +333,14 @@ describe('Forms module', function () {
     savedForm2 = form;
 
     submission2._id = savedForm2._id;
+    const formData = new FormData();
+    formData.append('data', JSON.stringify(submission2));
 
     try {
       await apos2.http.post(
         '/api/v1/@apostrophecms/form/submit?apikey=skeleton_key',
         {
-          body: submission2
+          body: formData
         }
       );
     } catch (error) {
@@ -380,6 +365,8 @@ describe('Forms module', function () {
 
   it('should return errors for missing data', async function () {
     submission3._id = savedForm1._id;
+    const formData = new FormData();
+    formData.append('data', JSON.stringify(submission3));
 
     try {
       await apos.http.post(
@@ -490,12 +477,14 @@ describe('Forms module', function () {
       });
 
     submission4._id = savedForm3._id;
+    const formData = new FormData();
+    formData.append('data', JSON.stringify(submission4));
 
     try {
       await apos3.http.post(
         '/api/v1/@apostrophecms/form/submit?apikey=skeleton_key',
         {
-          body: submission4
+          body: formData
         }
       );
       // Don't make it here.
@@ -509,12 +498,14 @@ describe('Forms module', function () {
 
   it('should submit successfully with a reCAPTCHA token', async function () {
     submission4.recaptcha = 'validRecaptchaToken';
+    const formData = new FormData();
+    formData.append('data', JSON.stringify(submission4));
 
     try {
       await apos3.http.post(
         '/api/v1/@apostrophecms/form/submit?apikey=skeleton_key',
         {
-          body: submission4
+          body: formData
         }
       );
       assert('👍');
