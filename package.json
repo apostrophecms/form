@@ -36,5 +36,8 @@
   },
   "peerDependencies": {
     "apostrophe": "^3.4.0"
+  },
+  "dependencies": {
+    "connect-multiparty": "^2.2.0"
   }
 }
