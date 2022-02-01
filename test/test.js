@@ -372,7 +372,7 @@ describe('Forms module', function () {
       await apos.http.post(
         '/api/v1/@apostrophecms/form/submit?apikey=skeleton_key',
         {
-          body: submission3
+          body: formData
         }
       );
       assert(false);
