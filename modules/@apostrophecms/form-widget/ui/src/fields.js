@@ -21,7 +21,11 @@ async function collectValues (form) {
           console.error(`${type} field widget type is returning an invalid collector response.`);
         }
 
-        input[response.field] = response.value;
+        // If there are files to upload, return an object with the files.
+        input[response.field] = response.files ? {
+          value: response.value,
+          files: response.files
+        } : response.value;
       } catch (error) {
         // Add error to formErrors
         const fieldError = error.field ? error : error?.data?.fieldError;

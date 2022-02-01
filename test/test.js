@@ -1,6 +1,9 @@
 const assert = require('assert');
 const testUtil = require('apostrophe/test-lib/test');
 const fileUtils = require('./lib/file-utils');
+const FormData = require('form-data');
+const fs = require('fs');
+const path = require('path');
 
 describe('Forms module', function () {
   let apos;
@@ -42,9 +45,7 @@ describe('Forms module', function () {
         '@apostrophecms/express': {
           options: {
             port: 4242,
-            csrf: {
-              exceptions: [ '/api/v1/@apostrophecms/form/submit' ]
-            },
+            csrfExceptions: [ '/api/v1/@apostrophecms/form-widget/upload' ],
             session: {
               secret: 'test-the-forms'
             },
@@ -238,6 +239,27 @@ describe('Forms module', function () {
     }
   };
 
+  it('should upload file field contents', async function () {
+    const formData = new FormData();
+    formData.append('file', fs.createReadStream(path.join(__dirname, '/lib/upload_tests/upload-test.txt')));
+
+    // Make an async request to upload the image.
+    try {
+      const attachment = await apos.http.post(
+        '/api/v1/@apostrophecms/form-widget/upload',
+        {
+          body: formData
+        }
+      );
+
+      assert(attachment._id);
+      submission1.DogPhoto = [ attachment._id ];
+    } catch (error) {
+
+      assert(!error);
+    }
+  });
+
   it('should accept a valid submission', async function () {
     submission1._id = savedForm1._id;
 
@@ -259,6 +281,9 @@ describe('Forms module', function () {
       const doc = await apos.db.collection('aposFormSubmissions').findOne({
         'data.DogName': 'Jasper'
       });
+
+      const uploadRegex = /^\/uploads\/attachments\/\w+-upload-test.txt$/;
+      assert(doc.data.DogPhoto[0].match(uploadRegex));
 
       assert(doc.data.DogBreed === 'Irish Wolfhound');
     } catch (err) {
@@ -293,9 +318,6 @@ describe('Forms module', function () {
         '@apostrophecms/express': {
           options: {
             port: 5252,
-            csrf: {
-              exceptions: [ '/api/v1/@apostrophecms/form/submit' ]
-            },
             session: {
               secret: 'test-the-forms-more'
             },
@@ -426,9 +448,6 @@ describe('Forms module', function () {
         '@apostrophecms/express': {
           options: {
             port: 6000,
-            csrf: {
-              exceptions: [ '/api/v1/@apostrophecms/form/submit' ]
-            },
             session: {
               secret: 'test-the-forms-more'
             },
@@ -466,7 +485,7 @@ describe('Forms module', function () {
         savedForm3 = form;
       })
       .catch(function (err) {
-        console.log(err);
+        console.error(err);
         assert(!err);
       });
 

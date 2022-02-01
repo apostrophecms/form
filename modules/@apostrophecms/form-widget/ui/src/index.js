@@ -45,6 +45,17 @@ export default () => {
         try {
           // Collect field values on the event
           input = await collectValues(form);
+
+          // Upload each set of field files separately
+          for (const field in input) {
+            // Upload file field files if input has files.
+            if (typeof input[field] === 'object' && input[field].files) {
+              const attachmentIds = await uploadFiles(field, input[field]);
+
+              input[field] = attachmentIds;
+            }
+          }
+
         } catch (error) {
           processErrors(error?.data?.formErrors, el);
 
@@ -156,6 +167,33 @@ export default () => {
 
       function captureParameters (input) {
         input.queryParams = apos.http.parseQuery(window.location.search);
+      }
+
+      async function uploadFiles(field, fieldInput) {
+        const fileIds = [];
+        const uploadRoute = '/api/v1/@apostrophecms/form-widget/upload';
+
+        for (const file of fieldInput.files) {
+          const formData = new window.FormData();
+          formData.append('field', field);
+          formData.append('file', file);
+
+          try {
+            const attachment = await apos.http.post(uploadRoute, {
+              busy: true,
+              body: formData
+            });
+
+            fileIds.push(attachment._id);
+          } catch (error) {
+            // Arranging for field level error display.
+            error.data = error.body.data;
+
+            throw error;
+          }
+        }
+
+        return fileIds;
       }
     }
   };

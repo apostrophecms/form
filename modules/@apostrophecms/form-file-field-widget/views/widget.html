@@ -10,15 +10,7 @@
     {{ utils.optional(widget.required) }}
     <span
       class="apos-form-label-message {{ prependIfPrefix('__label-message') }}"
-      data-apos-input-message="{{ widget.fieldName}}" hidden></span>
-    <span
-      class="apos-form-label-message {{ prependIfPrefix('__label-message') }}"
-      data-apos-form-file-spinner
-      hidden>{{ __t('aposForm:fileUploading') }}</span>
-    <span
-      class="apos-form-error apos-form-label-message {{ prependIfPrefix('__error') }} {{ prependIfPrefix('__label-message') }}"
-      data-apos-form-file-error role="alert"
-      hidden>{{ __t('aposForm:fileUploadError') }}</span>
+      data-apos-input-message="{{ widget.fieldName }}" hidden></span>
   </label>
   <input
     class="apos-form-input {{ prependIfPrefix('__input') }}"
