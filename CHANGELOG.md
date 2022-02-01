@@ -8,6 +8,10 @@
 * Fixes a typo in the recaptchaValidationError l10n key.
 * Fixes an incorrect error localization key usage.
 
+### Adds
+
+* Adds full support for file field widgets, including a new dedicated upload route.
+
 ## 1.0.0-beta.1 (2021-11-15)
 
 ### Changes
