@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const fields = require('./lib/fields');
+const { uploadFieldFiles } = require('./lib/process');
 
 module.exports = {
   extend: '@apostrophecms/piece-type',
@@ -239,11 +240,14 @@ module.exports = {
     return {
       post: {
         // Route to accept the submitted form.
-        submit: async function (req) {
-          const input = req.body;
+        submit:
+      [
+        require('connect-multiparty')(),
+        async function (req) {
+          const input = JSON.parse(req.body.data);
           const output = {};
           const formErrors = [];
-          const formId = self.inferIdLocaleAndMode(req, req.body._id);
+          const formId = self.inferIdLocaleAndMode(req, input._id);
 
           const form = await self.find(req, {
             _id: self.apos.launder.id(formId)
@@ -255,11 +259,30 @@ module.exports = {
 
           if (form.enableRecaptcha) {
             try {
-              // Process reCAPTCHA input if needed.
+            // Process reCAPTCHA input if needed.
               await self.checkRecaptcha(req, input, formErrors);
             } catch (e) {
-              console.error('reCAPTCHA submission error', e);
+              self.apos.util.error('reCAPTCHA submission error', e);
               throw self.apos.error('invalid');
+            }
+          }
+
+          // Find any file field submissions and insert the files as attachments
+          for (const [ field, value ] of Object.entries(input)) {
+            if (value === 'files-pending') {
+              try {
+                input[field] = await uploadFieldFiles(req, field, req.files, {
+                  insert: self.apos.attachment.insert,
+                  warn: self.apos.util.warn
+                });
+              } catch (error) {
+                self.apos.util.error(error);
+                formErrors.push({
+                  field: field,
+                  error: 'invalid',
+                  message: req.t('aposForm:fileUploadError')
+                });
+              }
             }
           }
 
@@ -284,7 +307,7 @@ module.exports = {
           for (const area of areas) {
             const widgets = area.items || [];
             for (const widget of widgets) {
-              // Capture field names for the params check list.
+            // Capture field names for the params check list.
               fieldNames.push(widget.fieldName);
 
               if (widget.type === '@apostrophecms/form-conditional') {
@@ -330,7 +353,7 @@ module.exports = {
           await self.emit('submission', req, form, output);
 
           return {};
-        }
+        } ]
       }
     };
   },

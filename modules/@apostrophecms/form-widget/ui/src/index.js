@@ -41,6 +41,7 @@ export default () => {
         form.setAttribute('data-apos-form-busy', '1');
 
         let input;
+        const formData = new window.FormData();
 
         try {
           // Collect field values on the event
@@ -50,9 +51,9 @@ export default () => {
           for (const field in input) {
             // Upload file field files if input has files.
             if (typeof input[field] === 'object' && input[field].files) {
-              const attachmentIds = await uploadFiles(field, input[field]);
+              await appendFiles(field, input[field], formData);
 
-              input[field] = attachmentIds;
+              input[field] = 'files-pending';
             }
           }
 
@@ -105,9 +106,11 @@ export default () => {
 
         let formErrors = null;
 
+        formData.append('data', JSON.stringify(input));
+
         try {
           await apos.http.post('/api/v1/@apostrophecms/form/submit', {
-            body: input
+            body: formData
           });
         } catch (error) {
           formErrors = error.body?.data?.formErrors;
@@ -169,31 +172,12 @@ export default () => {
         input.queryParams = apos.http.parseQuery(window.location.search);
       }
 
-      async function uploadFiles(field, fieldInput) {
-        const fileIds = [];
-        const uploadRoute = '/api/v1/@apostrophecms/form-widget/upload';
-
+      async function appendFiles(field, fieldInput, data) {
+        let i = 0;
         for (const file of fieldInput.files) {
-          const formData = new window.FormData();
-          formData.append('field', field);
-          formData.append('file', file);
-
-          try {
-            const attachment = await apos.http.post(uploadRoute, {
-              busy: true,
-              body: formData
-            });
-
-            fileIds.push(attachment._id);
-          } catch (error) {
-            // Arranging for field level error display.
-            error.data = error.body.data;
-
-            throw error;
-          }
+          data.append(`${field}-${i}`, file);
+          i++;
         }
-
-        return fileIds;
       }
     }
   };
