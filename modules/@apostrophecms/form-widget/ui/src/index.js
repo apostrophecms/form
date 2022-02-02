@@ -41,10 +41,22 @@ export default () => {
         form.setAttribute('data-apos-form-busy', '1');
 
         let input;
+        const formData = new window.FormData();
 
         try {
           // Collect field values on the event
           input = await collectValues(form);
+
+          // Upload each set of field files separately
+          for (const field in input) {
+            // Upload file field files if input has files.
+            if (typeof input[field] === 'object' && input[field].files) {
+              await appendFiles(field, input[field], formData);
+
+              input[field] = 'files-pending';
+            }
+          }
+
         } catch (error) {
           processErrors(error?.data?.formErrors, el);
 
@@ -94,9 +106,11 @@ export default () => {
 
         let formErrors = null;
 
+        formData.append('data', JSON.stringify(input));
+
         try {
           await apos.http.post('/api/v1/@apostrophecms/form/submit', {
-            body: input
+            body: formData
           });
         } catch (error) {
           formErrors = error.body?.data?.formErrors;
@@ -156,6 +170,14 @@ export default () => {
 
       function captureParameters (input) {
         input.queryParams = apos.http.parseQuery(window.location.search);
+      }
+
+      async function appendFiles(field, fieldInput, data) {
+        let i = 0;
+        for (const file of fieldInput.files) {
+          data.append(`${field}-${i}`, file);
+          i++;
+        }
       }
     }
   };

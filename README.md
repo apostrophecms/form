@@ -30,6 +30,7 @@ require('apostrophe')({
     '@apostrophecms/form-textarea-field-widget': {},
     '@apostrophecms/form-select-field-widget': {},
     '@apostrophecms/form-radio-field-widget': {},
+    '@apostrophecms/form-file-field-widget': {},
     '@apostrophecms/form-checkboxes-field-widget': {},
     '@apostrophecms/form-boolean-field-widget': {},
     '@apostrophecms/form-conditional-widget': {}
@@ -79,7 +80,9 @@ The `formWidgets` option allows us to change the widgets allowed in a form. It i
 }
 ```
 
-This includes the rich text widget so editors can add directions or notes in the form. Any widget type can be included. A very simple form widget configuration might look like this:
+This includes the rich text widget so editors can add directions or notes in the form. The file field widget is *not included* by default since site owners should carefully consider the implications of potentially public upload access. See [the following section on file field support](#supporting-file-field-uploads-safely).
+
+Any widget type can be included. A very simple form widget configuration might look like this:
 
 ```javascript
 // modules/@apostrophecms/form/index.js
@@ -95,6 +98,13 @@ module.exports = {
   }
 };
 ```
+
+
+### Supporting file field uploads safely
+
+The file field widget, `@apostrophecms/form-file-field-widget`, uses a route on the form widget that allows anonymous site visitor to include files (e.g., PDFs, images) in form submissions. Those uploads are stored in the same uploads directory as all other Apostrophe uploads, such as media library images, and they each get a document in the `aposAttachments` database collection. The file access URL is included in the form submission data along with other submission data.
+
+**⚠️ Public access allows *anyone* to upload files to your media storage.** It is then recommended that any public form using a file field should also use the reCAPTCHA validation option or other means to prevent spam submissions.
 
 ### Adding forms to pages and pieces
 

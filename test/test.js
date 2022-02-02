@@ -1,6 +1,9 @@
 const assert = require('assert');
 const testUtil = require('apostrophe/test-lib/test');
 const fileUtils = require('./lib/file-utils');
+const FormData = require('form-data');
+const fs = require('fs');
+const path = require('path');
 
 describe('Forms module', function () {
   let apos;
@@ -42,9 +45,7 @@ describe('Forms module', function () {
         '@apostrophecms/express': {
           options: {
             port: 4242,
-            csrf: {
-              exceptions: [ '/api/v1/@apostrophecms/form/submit' ]
-            },
+            csrfExceptions: [ '/api/v1/@apostrophecms/form-widget/upload' ],
             session: {
               secret: 'test-the-forms'
             },
@@ -227,6 +228,7 @@ describe('Forms module', function () {
       'Runs fast',
       'Likes treats'
     ],
+    DogPhoto: 'files-pending', // Indicating a file upload.
     DogBreed: 'Irish Wolfhound',
     DogToy: 'Frisbee',
     LifeStory: 'Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Donec ullamcorper nulla non metus auctor fringilla.',
@@ -239,13 +241,16 @@ describe('Forms module', function () {
   };
 
   it('should accept a valid submission', async function () {
+    const formData = new FormData();
     submission1._id = savedForm1._id;
+    formData.append('data', JSON.stringify(submission1));
+    formData.append('DogPhoto-0', fs.createReadStream(path.join(__dirname, '/lib/upload_tests/upload-test.txt')));
 
     try {
       await apos.http.post(
         '/api/v1/@apostrophecms/form/submit?apikey=skeleton_key',
         {
-          body: submission1
+          body: formData
         }
       );
     } catch (error) {
@@ -259,6 +264,9 @@ describe('Forms module', function () {
       const doc = await apos.db.collection('aposFormSubmissions').findOne({
         'data.DogName': 'Jasper'
       });
+
+      const uploadRegex = /^\/uploads\/attachments\/\w+-upload-test.txt$/;
+      assert(doc.data.DogPhoto[0].match(uploadRegex));
 
       assert(doc.data.DogBreed === 'Irish Wolfhound');
     } catch (err) {
@@ -293,9 +301,6 @@ describe('Forms module', function () {
         '@apostrophecms/express': {
           options: {
             port: 5252,
-            csrf: {
-              exceptions: [ '/api/v1/@apostrophecms/form/submit' ]
-            },
             session: {
               secret: 'test-the-forms-more'
             },
@@ -328,12 +333,14 @@ describe('Forms module', function () {
     savedForm2 = form;
 
     submission2._id = savedForm2._id;
+    const formData = new FormData();
+    formData.append('data', JSON.stringify(submission2));
 
     try {
       await apos2.http.post(
         '/api/v1/@apostrophecms/form/submit?apikey=skeleton_key',
         {
-          body: submission2
+          body: formData
         }
       );
     } catch (error) {
@@ -358,12 +365,14 @@ describe('Forms module', function () {
 
   it('should return errors for missing data', async function () {
     submission3._id = savedForm1._id;
+    const formData = new FormData();
+    formData.append('data', JSON.stringify(submission3));
 
     try {
       await apos.http.post(
         '/api/v1/@apostrophecms/form/submit?apikey=skeleton_key',
         {
-          body: submission3
+          body: formData
         }
       );
       assert(false);
@@ -426,9 +435,6 @@ describe('Forms module', function () {
         '@apostrophecms/express': {
           options: {
             port: 6000,
-            csrf: {
-              exceptions: [ '/api/v1/@apostrophecms/form/submit' ]
-            },
             session: {
               secret: 'test-the-forms-more'
             },
@@ -466,17 +472,19 @@ describe('Forms module', function () {
         savedForm3 = form;
       })
       .catch(function (err) {
-        console.log(err);
+        console.error(err);
         assert(!err);
       });
 
     submission4._id = savedForm3._id;
+    const formData = new FormData();
+    formData.append('data', JSON.stringify(submission4));
 
     try {
       await apos3.http.post(
         '/api/v1/@apostrophecms/form/submit?apikey=skeleton_key',
         {
-          body: submission4
+          body: formData
         }
       );
       // Don't make it here.
@@ -490,12 +498,14 @@ describe('Forms module', function () {
 
   it('should submit successfully with a reCAPTCHA token', async function () {
     submission4.recaptcha = 'validRecaptchaToken';
+    const formData = new FormData();
+    formData.append('data', JSON.stringify(submission4));
 
     try {
       await apos3.http.post(
         '/api/v1/@apostrophecms/form/submit?apikey=skeleton_key',
         {
-          body: submission4
+          body: formData
         }
       );
       assert('👍');

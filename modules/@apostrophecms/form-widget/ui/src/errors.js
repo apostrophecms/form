@@ -11,14 +11,14 @@ function processErrors (errors, el) {
   highlight(el, errors);
 }
 
-function highlight(el, formErrors) {
-  if (!Array.isArray(formErrors)) {
+function highlight(el, errors) {
+  if (!Array.isArray(errors)) {
     return;
   }
 
   const form = el.querySelector('[data-apos-form-form]');
   const globalError = el.querySelector('[data-apos-form-global-error]');
-  const errors = formErrors;
+
   globalError.innerText = '';
 
   errors.forEach(function (error) {
