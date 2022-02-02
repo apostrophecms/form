@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 const fields = require('./lib/fields');
-const { uploadFieldFiles } = require('./lib/process');
 
 module.exports = {
   extend: '@apostrophecms/piece-type',
@@ -71,6 +70,7 @@ module.exports = {
   methods (self) {
     return {
       ...require('./lib/recaptcha')(self),
+      ...require('./lib/process')(self),
       async ensureCollection () {
         self.db = self.apos.db.collection('aposFormSubmissions');
         await self.db.ensureIndex({
@@ -243,115 +243,19 @@ module.exports = {
         submit: [
           require('connect-multiparty')(),
           async function (req) {
-            const input = JSON.parse(req.body.data);
-            const output = {};
-            const formErrors = [];
-            const formId = self.inferIdLocaleAndMode(req, input._id);
-
-            const form = await self.find(req, {
-              _id: self.apos.launder.id(formId)
-            }).toObject();
-
-            if (!form) {
-              throw self.apos.error('notfound');
-            }
-
-            if (form.enableRecaptcha) {
-              try {
-                // Process reCAPTCHA input if needed.
-                await self.checkRecaptcha(req, input, formErrors);
-              } catch (e) {
-                self.apos.util.error('reCAPTCHA submission error', e);
-                throw self.apos.error('invalid');
-              }
-            }
-
-            // Find any file field submissions and insert the files as attachments
-            for (const [ field, value ] of Object.entries(input)) {
-              if (value === 'files-pending') {
+            try {
+              await self.submitForm(req);
+            } finally {
+              for (const file of (Object.values(req.files || {}))) {
                 try {
-                  input[field] = await uploadFieldFiles(req, field, req.files, {
-                    insert: self.apos.attachment.insert,
-                    warn: self.apos.util.warn
-                  });
-                } catch (error) {
-                  self.apos.util.error(error);
-                  formErrors.push({
-                    field: field,
-                    error: 'invalid',
-                    message: req.t('aposForm:fileUploadError')
-                  });
+                  fs.unlinkSync(file.path);
+                } catch (e) {
+                  self.apos.util.warn(req.t('aposForm:fileMissingEarly', {
+                    path: file
+                  }));
                 }
               }
             }
-
-            // Recursively walk the area and its sub-areas so we find
-            // fields nested in two-column widgets and the like
-
-            // walk is not an async function so build an array of them to start
-            const areas = [];
-
-            self.apos.area.walk({
-              contents: form.contents
-            }, function(area) {
-              areas.push(area);
-            });
-
-            const fieldNames = [];
-            const conditionals = {};
-            const skipFields = [];
-
-            // Populate the conditionals object fully to clear disabled values
-            // before starting sanitization.
-            for (const area of areas) {
-              const widgets = area.items || [];
-              for (const widget of widgets) {
-                // Capture field names for the params check list.
-                fieldNames.push(widget.fieldName);
-
-                if (widget.type === '@apostrophecms/form-conditional') {
-                  trackConditionals(conditionals, widget);
-                }
-              }
-            }
-
-            collectToSkip(input, conditionals, skipFields);
-
-            for (const area of areas) {
-              const widgets = area.items || [];
-              for (const widget of widgets) {
-                const manager = self.apos.area.getWidgetManager(widget.type);
-                if (
-                  manager && manager.sanitizeFormField &&
-                !skipFields.includes(widget.fieldName)
-                ) {
-                  try {
-                    manager.checkRequired(req, widget, input);
-                    await manager.sanitizeFormField(widget, input, output);
-                  } catch (err) {
-                    if (err.data && err.data.fieldError) {
-                      formErrors.push(err.data.fieldError);
-                    } else {
-                      throw err;
-                    }
-                  }
-                }
-              }
-            }
-
-            if (formErrors.length > 0) {
-              throw self.apos.error('invalid', {
-                formErrors
-              });
-            }
-
-            if (form.enableQueryParams && form.queryParamList.length > 0) {
-              self.processQueryParams(form, input, output, fieldNames);
-            }
-
-            await self.emit('submission', req, form, output);
-
-            return {};
           }
         ]
       }
@@ -422,47 +326,4 @@ function getBundleModuleNames() {
     .readdirSync(source, { withFileTypes: true })
     .filter(dirent => dirent.isDirectory())
     .map(dirent => `@apostrophecms/${dirent.name}`);
-}
-
-function trackConditionals(conditionals = {}, widget) {
-  const conditionName = widget.conditionName;
-  const conditionValue = widget.conditionValue;
-
-  if (!widget || !widget.contents || !widget.contents.items) {
-    return;
-  }
-
-  conditionals[conditionName] = conditionals[conditionName] || {};
-
-  conditionals[conditionName][conditionValue] = conditionals[conditionName][conditionValue] || [];
-
-  widget.contents.items.forEach(item => {
-    conditionals[conditionName][conditionValue].push(item.fieldName);
-  });
-
-  // If there aren't any fields in the conditional group, don't bother
-  // tracking it.
-  if (conditionals[conditionName][conditionValue].length === 0) {
-    delete conditionals[conditionName][conditionValue];
-  }
-}
-
-function collectToSkip(input, conditionals, skipFields) {
-  // Check each field that controls a conditional group.
-  for (const name in conditionals) {
-    // For each value that a conditional group is looking for, check if the
-    // value matches in the output and, if not, remove the output properties
-    // for the conditional fields.
-    for (let value in conditionals[name]) {
-      // Booleans are tracked as true/false, but their field values are 'on'. TEMP?
-      if (input[name] === true && value === 'on') {
-        value = true;
-      }
-      if (input[name] !== value) {
-        conditionals[name][value].forEach(field => {
-          skipFields.push(field);
-        });
-      }
-    }
-  }
 }
