@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+### Fixes
+
+* Fixes typos in the `emailsConditionsField`, 'emailsConditionsFieldHelp', `emailsConsitionsValue`, and `emailsConditionsValueHtmlHelp` l10n keys.
+* Changes the `htmlHelp` key value for the `value` object to maintain consistency in l10n key format.
+
 ## 1.0.0 (2022-02-04)
 
 ### Fixes
