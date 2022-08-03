@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.0.1 (2022-08-03)
 
 ### Fixes
 
