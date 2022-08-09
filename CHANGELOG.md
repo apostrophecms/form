@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Fixes
+
+* Fixes missing root widget class when `classPrefix` option is set.
+
 ## 1.0.1 (2022-08-03)
 
 ### Fixes
