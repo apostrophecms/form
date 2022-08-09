@@ -5,7 +5,7 @@
 {% set recaptchaSite = apos.modules['@apostrophecms/form'].options.recaptchaSite or (data.global.useRecaptcha and data.global.recaptchaSite) %}
 {% set recaptchaReady = form.enableRecaptcha and recaptchaSite %}
 
-<div data-apos-form-wrapper>
+<div class="{{ prependIfPrefix('') }}" data-apos-form-wrapper>
 {% if form %}
   {% set params = false %}
   {% if form.queryParamList %}
