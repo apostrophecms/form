@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Adds
+
+* Emit new event `beforeSaveSubmission`.
+
 ### Fixes
 
 * Fixes missing root widget class when `classPrefix` option is set.
