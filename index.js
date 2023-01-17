@@ -268,11 +268,17 @@ module.exports = {
           if (self.options.saveSubmissions === false) {
             return;
           }
-          return self.db.insert({
+          const submission = {
             createdAt: new Date(),
             formId: form._id,
             data: data
+          };
+          await self.emit('beforeSaveSubmission', req, {
+            form,
+            data,
+            submission
           });
+          return self.db.insert(submission);
         },
         async emailSubmission (req, form, data) {
           await self.sendEmailSubmissions(req, form, data);
