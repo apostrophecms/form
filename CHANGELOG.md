@@ -4,7 +4,7 @@
 
 ### Adds
 
-* Emit new event `beforeSaveSubmission`. The event receives `req, { form, data, submission }` allowing an opportunity to modify `submission`.
+* Emit new event `beforeSaveSubmission`. The event receives `req, { form, data, submission }` allowing an opportunity to modify `submission` just before it is saved to the MongoDB collection. For most purposes the `submission` event is more useful.
 
 ### Fixes
 
