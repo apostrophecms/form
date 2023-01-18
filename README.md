@@ -153,7 +153,7 @@ module.exports = {
 | `form` | The form object |
 | `submission` | The user submission |
 
-**In addition, just before the submission is added to the MongoDB collection, form submission triggers a `'beforeSaveSubmission'` [server-side event](https://v3.docs.apostrophecms.org/guide/server-events.html)** that you can listen for and handle in the `@apostrophecms/form` module or another module. Event handler functions are passed the following arguments:
+**In addition, if saving to the MongoDB collection is not disabled, form submission triggers a `'beforeSaveSubmission'` [server-side event](https://v3.docs.apostrophecms.org/guide/server-events.html)** that you can listen for and handle in the `@apostrophecms/form` module or another module. Event handler functions are passed the following arguments:
 
 | Argument | Description |
 | ------- | ------- |
