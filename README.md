@@ -145,13 +145,22 @@ module.exports = {
 }
 ```
 
-**Form submission triggers a `'submission'` [server-side event](https://v3.docs.apostrophecms.org/guide/server-events.html)** that you can listen for and handle in the `@apostrophecms/form` module or another module. Event handler functions are passed the following arguments:
+**Form submission always triggers a `'submission'` [server-side event](https://v3.docs.apostrophecms.org/guide/server-events.html)** that you can listen for and handle in the `@apostrophecms/form` module or another module. Event handler functions are passed the following arguments:
 
 | Argument | Description |
 | ------- | ------- |
 | `req` | The request object from the submission |
 | `form` | The form object |
-| `output` | The user submission |
+| `submission` | The user submission |
+
+**In addition, if saving to the MongoDB collection is not disabled, form submission triggers a `'beforeSaveSubmission'` [server-side event](https://v3.docs.apostrophecms.org/guide/server-events.html)** that you can listen for and handle in the `@apostrophecms/form` module or another module. Event handler functions are passed the following arguments:
+
+| Argument | Description |
+| ------- | ------- |
+| `req` | The request object from the submission |
+| `info` | An object with `form`, `data`, and `submission` properties |
+
+This provides an opportunity to modify `info.submission` just before it is inserted into the database.
 
 The module also emits browser events on the `body` element on submission (`@apostrophecms/form:submission-form`) and submission failure (`@apostrophecms/form:submission-failed`). The browser events will include the following properties:
 

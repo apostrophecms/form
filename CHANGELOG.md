@@ -1,10 +1,10 @@
 # Changelog
 
-## Unreleased
+## 1.1.0 (2023-01-18)
 
 ### Adds
 
-* Emit new event `beforeSaveSubmission`.
+* Emit new event `beforeSaveSubmission`. The event receives `req, { form, data, submission }` allowing an opportunity to modify `submission` just before it is saved to the MongoDB collection. For most purposes the `submission` event is more useful.
 
 ### Fixes
 
