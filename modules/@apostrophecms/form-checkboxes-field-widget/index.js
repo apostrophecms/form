@@ -41,7 +41,8 @@ module.exports = {
         }
 
         input[widget.fieldName] = Array.isArray(input[widget.fieldName])
-          ? input[widget.fieldName] : [];
+          ? input[widget.fieldName]
+          : [];
 
         // Return an array of selected choices as the output.
         output[widget.fieldName] = input[widget.fieldName]

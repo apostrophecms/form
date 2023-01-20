@@ -1,5 +1,6 @@
 const fs = require('fs');
-const uploadSource = `${__dirname}/upload_tests/`;
+const path = require('path');
+const uploadSource = path.basename.join(__dirname, 'upload_tests');
 
 module.exports = {
   wipeIt: async function (uploadTarget, apos) {

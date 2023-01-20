@@ -19,7 +19,7 @@ module.exports = {
     directory: 'modules',
     modules: getBundleModuleNames()
   },
-  fields (self) {
+  fields(self) {
     let add = fields.initial(self.options);
 
     if (self.options.emailSubmissions !== false) {
@@ -41,10 +41,9 @@ module.exports = {
           'thankYouBody',
           'sendConfirmationEmail',
           'emailConfirmationField'
-        ].concat(self.options.emailSubmissions !== false ? [
-          'emails',
-          'email'
-        ] : [])
+        ].concat(
+          self.options.emailSubmissions !== false ? [ 'emails', 'email' ] : []
+        )
       },
       advanced: {
         label: 'aposForm:groupAdvanced',
@@ -62,16 +61,16 @@ module.exports = {
       group
     };
   },
-  init (self) {
+  init(self) {
     self.ensureCollection();
 
     self.cleanOptions(self.options);
   },
-  methods (self) {
+  methods(self) {
     return {
       ...require('./lib/recaptcha')(self),
       ...require('./lib/process')(self),
-      async ensureCollection () {
+      async ensureCollection() {
         self.db = self.apos.db.collection('aposFormSubmissions');
         await self.db.ensureIndex({
           formId: 1,
@@ -82,15 +81,17 @@ module.exports = {
           createdAt: -1
         });
       },
-      processQueryParams (form, input, output, fieldNames) {
-        if (!input.queryParams ||
-          (typeof input.queryParams !== 'object')) {
+      processQueryParams(form, input, output, fieldNames) {
+        if (!input.queryParams || typeof input.queryParams !== 'object') {
           output.queryParams = null;
           return;
         }
 
-        if (Array.isArray(form.queryParamList) && form.queryParamList.length > 0) {
-          form.queryParamList.forEach(param => {
+        if (
+          Array.isArray(form.queryParamList) &&
+          form.queryParamList.length > 0
+        ) {
+          form.queryParamList.forEach((param) => {
             // Skip if this is an existing field submitted by the form. This value
             // capture will be done by populating the form inputs client-side.
             if (fieldNames.includes(param.key)) {
@@ -110,20 +111,23 @@ module.exports = {
         value = self.apos.launder.string(value);
 
         if (param.lengthLimit && param.lengthLimit > 0) {
-          value = value.substring(0, (param.lengthLimit));
+          value = value.substring(0, param.lengthLimit);
         }
 
         return value;
       },
-      async sendEmailSubmissions (req, form, data) {
-        if (self.options.emailSubmissions === false ||
-          !form.emails || form.emails.length === 0) {
+      async sendEmailSubmissions(req, form, data) {
+        if (
+          self.options.emailSubmissions === false ||
+          !form.emails ||
+          form.emails.length === 0
+        ) {
           return;
         }
 
         let emails = [];
 
-        form.emails.forEach(mailRule => {
+        form.emails.forEach((mailRule) => {
           if (!mailRule.conditions || mailRule.conditions.length === 0) {
             emails.push(mailRule.email);
             return;
@@ -131,7 +135,7 @@ module.exports = {
 
           let passed = true;
 
-          mailRule.conditions.forEach(condition => {
+          mailRule.conditions.forEach((condition) => {
             if (!condition.value) {
               return;
             }
@@ -145,7 +149,7 @@ module.exports = {
               const regex = /(".*?"|[^",]+)(?=\s*,|\s*$)/g;
               let acceptable = condition.value.match(regex);
 
-              acceptable = acceptable.map(value => {
+              acceptable = acceptable.map((value) => {
                 // Remove leading/trailing white space and bounding double-quotes.
                 value = value.trim();
 
@@ -161,7 +165,7 @@ module.exports = {
                 answer = [ answer ];
               }
 
-              if (!(answer.some(val => acceptable.includes(val)))) {
+              if (!answer.some((val) => acceptable.includes(val))) {
                 passed = false;
               }
             }
@@ -200,13 +204,16 @@ module.exports = {
 
           return null;
         } catch (err) {
-          self.apos.util.error('⚠️ @apostrophecms/form submission email notification error: ', err);
+          self.apos.util.error(
+            '⚠️ @apostrophecms/form submission email notification error: ',
+            err
+          );
 
           return null;
         }
       },
       // Should be handled async. Options are: form, data, from, to and subject
-      async sendEmail (req, emailTemplate, options) {
+      async sendEmail(req, emailTemplate, options) {
         const form = options.form;
         const data = options.data;
         return self.email(
@@ -225,7 +232,7 @@ module.exports = {
       }
     };
   },
-  helpers (self) {
+  helpers(self) {
     return {
       prependIfPrefix(str) {
         if (self.options.classPrefix) {
@@ -236,7 +243,7 @@ module.exports = {
       }
     };
   },
-  apiRoutes (self) {
+  apiRoutes(self) {
     return {
       post: {
         // Route to accept the submitted form.
@@ -246,13 +253,15 @@ module.exports = {
             try {
               await self.submitForm(req);
             } finally {
-              for (const file of (Object.values(req.files || {}))) {
+              for (const file of Object.values(req.files || {})) {
                 try {
                   fs.unlinkSync(file.path);
                 } catch (e) {
-                  self.apos.util.warn(req.t('aposForm:fileMissingEarly', {
-                    path: file
-                  }));
+                  self.apos.util.warn(
+                    req.t('aposForm:fileMissingEarly', {
+                      path: file
+                    })
+                  );
                 }
               }
             }
@@ -261,10 +270,10 @@ module.exports = {
       }
     };
   },
-  handlers (self) {
+  handlers(self) {
     return {
       submission: {
-        async saveSubmission (req, form, data) {
+        async saveSubmission(req, form, data) {
           if (self.options.saveSubmissions === false) {
             return;
           }
@@ -280,21 +289,25 @@ module.exports = {
           });
           return self.db.insert(submission);
         },
-        async emailSubmission (req, form, data) {
+        async emailSubmission(req, form, data) {
           await self.sendEmailSubmissions(req, form, data);
         },
-        async emailConfirmation (req, form, data) {
-          if (form.sendConfirmationEmail !== true || !form.emailConfirmationField) {
+        async emailConfirmation(req, form, data) {
+          if (
+            form.sendConfirmationEmail !== true ||
+            !form.emailConfirmationField
+          ) {
             return;
           }
 
           // Email validation (Regex reference: https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript)
-          const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          const re =
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
           if (
             data[form.emailConfirmationField] &&
             (typeof data[form.emailConfirmationField] !== 'string' ||
-            !re.test(data[form.emailConfirmationField]))
+              !re.test(data[form.emailConfirmationField]))
           ) {
             await self.apos.notify(req, 'aposForm:errorEmailConfirm', {
               type: 'warning',
@@ -316,7 +329,10 @@ module.exports = {
 
             return null;
           } catch (err) {
-            self.apos.util.error('⚠️ @apostrophecms/form submission email confirmation error: ', err);
+            self.apos.util.error(
+              '⚠️ @apostrophecms/form submission email confirmation error: ',
+              err
+            );
 
             return null;
           }
@@ -330,6 +346,6 @@ function getBundleModuleNames() {
   const source = path.join(__dirname, './modules/@apostrophecms');
   return fs
     .readdirSync(source, { withFileTypes: true })
-    .filter(dirent => dirent.isDirectory())
-    .map(dirent => `@apostrophecms/${dirent.name}`);
+    .filter((dirent) => dirent.isDirectory())
+    .map((dirent) => `@apostrophecms/${dirent.name}`);
 }

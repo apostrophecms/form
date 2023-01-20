@@ -695,7 +695,7 @@ describe('Forms module', function () {
     assert(output2.fileField.length === 0);
   });
 
-  const uploadTarget = `${__dirname}/public/uploads/`;
+  const uploadTarget = path.join(__dirname, 'public', 'uploads');
 
   it('should clear uploads material if any', async function () {
     await fileUtils.wipeIt(uploadTarget, apos);

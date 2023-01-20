@@ -1,5 +1,5 @@
 // Async field validation, in case this needs to hit an API route.
-async function collectValues (form) {
+async function collectValues(form) {
   if (!apos.aposForm.collectors || apos.aposForm.collectors.length === 0) {
     return;
   }
@@ -18,14 +18,18 @@ async function collectValues (form) {
         if (typeof response !== 'object' || !response.field) {
           // Log this. Not useful information for an end user.
           // eslint-disable-next-line
-          console.error(`${type} field widget type is returning an invalid collector response.`);
+          console.error(
+            `${type} field widget type is returning an invalid collector response.`
+          );
         }
 
         // If there are files to upload, return an object with the files.
-        input[response.field] = response.files ? {
-          value: response.value,
-          files: response.files
-        } : response.value;
+        input[response.field] = response.files
+          ? {
+            value: response.value,
+            files: response.files
+          }
+          : response.value;
       } catch (error) {
         // Add error to formErrors
         const fieldError = error.field ? error : error?.data?.fieldError;
@@ -59,6 +63,4 @@ async function collectValues (form) {
   return input;
 }
 
-export {
-  collectValues
-};
+export { collectValues };
