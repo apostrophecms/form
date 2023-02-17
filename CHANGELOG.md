@@ -1,6 +1,6 @@
 # Changelog
 
-## UNRELEASED
+## 1.1.1 (2023-02-17)
 
 ### Fixes
 
