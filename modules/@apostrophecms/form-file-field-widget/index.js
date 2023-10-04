@@ -3,6 +3,19 @@ module.exports = {
   options: {
     label: 'aposForm:file'
   },
+  fields: {
+    add: {
+      allowMultiple: {
+        label: 'aposForm:fileAllowMultiple',
+        type: 'boolean',
+        def: true
+      },
+      maxSize: {
+        label: 'aposForm:fileMaxSize',
+        type: 'integer'
+      }
+    }
+  },
   methods (self) {
     return {
       async sanitizeFormField (widget, input, output) {
@@ -22,6 +35,21 @@ module.exports = {
             }));
           }
         }
+      }
+    };
+  },
+  extendMethods (self) {
+    return {
+      async output(_super, req, widget, options, _with) {
+        return _super(
+          req,
+          {
+            ...widget,
+            allowMultiple: widget.allowMultiple ?? true
+          },
+          options,
+          _with
+        );
       }
     };
   }

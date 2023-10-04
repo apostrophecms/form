@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const connectMultiparty = require('connect-multiparty');
 const fields = require('./lib/fields');
 
 module.exports = {
@@ -241,7 +242,10 @@ module.exports = {
       post: {
         // Route to accept the submitted form.
         submit: [
-          require('connect-multiparty')(),
+          connectMultiparty({
+            // TODO uncomment
+            // maxFilesSize: self.options.limits.files || Infinity
+          }),
           async function (req) {
             try {
               await self.submitForm(req);
@@ -263,6 +267,13 @@ module.exports = {
   },
   handlers (self) {
     return {
+      'apostrophe:modulesRegistered': {
+        checkLimitsConfiguration () {
+          if (typeof self.options.limits !== 'object') {
+            // TODO implement
+          }
+        }
+      },
       submission: {
         async saveSubmission (req, form, data) {
           if (self.options.saveSubmissions === false) {
