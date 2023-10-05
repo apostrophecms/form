@@ -2,38 +2,44 @@ const WIDGET_NAME = '@apostrophecms/form-file-field';
 const WIDGET_SELECTOR = '[data-apos-form-file]';
 
 export default () => {
-  function sizeLimiter(input) {
+  const readableSize = ({ units, size }) => {
+    return size < 1000
+      ? `${size} ${units.B}`
+      : size < 1000 * 1000
+        ? `${(size / 1000).toFixed(2)} ${units.KB}`
+        : size < 1000 * 1000 * 1000
+          ? `${(size / (1000 * 1000)).toFixed(2)} ${units.MB}`
+          : `${(size / (1000 * 1000 * 1000)).toFixed(2)} ${units.GB}`;
+  };
+
+  const sizeLimiter = (input) => {
     const { files } = input;
     const totalSize = Array.from(files || []).reduce((sum, { size }) => sum + size, 0);
 
-    console.log({ dataset: input.dataset });
+    const units = JSON.parse(input.dataset.fileSizeUnits) || {};
     const maxSize = input.dataset.maxSize;
-    const maxSizeError = input.dataset.maxSizeError;
+    const maxSizeError = (input.dataset.maxSizeError || '').replace(
+      '%2$s',
+      readableSize({
+        size: maxSize,
+        units
+      })
+    );
     if (maxSize && totalSize > maxSize) {
-      const error = new Error(maxSizeError.replace('%s', totalSize));
+      const error = new Error(
+        maxSizeError.replace(
+          '%1$s',
+          readableSize({
+            size: totalSize,
+            units
+          })
+        )
+      );
       error.field = input.getAttribute('name');
 
       throw error;
     }
-
-    console.log({ totalSize });
   };
-
-  // apos.util.widgetPlayers[WIDGET_NAME] = {
-  //   selector: WIDGET_SELECTOR,
-  //   player (el) {
-  //     const formWidget = apos.util.closest(el, '[data-apos-form-form]');
-  //     if (!formWidget) {
-  //       // Editing the form in the piece modal, it is not active for submissions
-  //       return;
-  //     }
-
-  //     const input = el.querySelector('input[type="file"]');
-  //     input.addEventListener('change', function () {
-  //       sizeLimiter(input);
-  //     });
-  //   }
-  // };
 
   apos.aposForm.collectors[WIDGET_NAME] = {
     selector: WIDGET_SELECTOR,

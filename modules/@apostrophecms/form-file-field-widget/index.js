@@ -12,6 +12,7 @@ module.exports = {
       },
       maxSize: {
         label: 'aposForm:fileMaxSize',
+        help: 'aposForm:fileMaxSizeHelp',
         type: 'integer'
       }
     }
@@ -45,7 +46,13 @@ module.exports = {
           req,
           {
             ...widget,
-            allowMultiple: widget.allowMultiple ?? true
+            allowMultiple: widget.allowMultiple ?? true,
+            fileSizeUnits: {
+              B: req.t('aposForm:fileSizeUnitB'),
+              KB: req.t('aposForm:fileSizeUnitKB'),
+              MB: req.t('aposForm:fileSizeUnitMB'),
+              GB: req.t('aposForm:fileSizeUnitGB')
+            }
           },
           options,
           _with
