@@ -33,8 +33,7 @@ require('apostrophe')({
     '@apostrophecms/form-file-field-widget': {},
     '@apostrophecms/form-checkboxes-field-widget': {},
     '@apostrophecms/form-boolean-field-widget': {},
-    '@apostrophecms/form-conditional-widget': {},
-    '@apostrophecms/form-divider-widget': {}
+    '@apostrophecms/form-conditional-widget': {}
   }
 });
 ```
@@ -72,7 +71,6 @@ The `formWidgets` option allows us to change the widgets allowed in a form. It i
   '@apostrophecms/form-radio-field': {},
   '@apostrophecms/form-checkboxes-field': {},
   '@apostrophecms/form-conditional': {},
-  '@apostrophecms/form-divider': {},
   '@apostrophecms/rich-text': {
     toolbar: [
       'styles', 'bold', 'italic', 'link',
@@ -95,8 +93,7 @@ module.exports = {
       '@apostrophecms/form-textarea-field': {},
       '@apostrophecms/form-boolean-field': {},
       '@apostrophecms/form-radio-field': {},
-      '@apostrophecms/form-checkboxes-field': {},
-      '@apostrophecms/form-divider': {}
+      '@apostrophecms/form-checkboxes-field': {}
     }
   }
 };
