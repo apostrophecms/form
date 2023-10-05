@@ -242,10 +242,7 @@ module.exports = {
       post: {
         // Route to accept the submitted form.
         submit: [
-          connectMultiparty({
-            // TODO uncomment
-            // maxFilesSize: self.options.limits.files || Infinity
-          }),
+          connectMultiparty(),
           async function (req) {
             try {
               await self.submitForm(req);
@@ -267,13 +264,6 @@ module.exports = {
   },
   handlers (self) {
     return {
-      'apostrophe:modulesRegistered': {
-        checkLimitsConfiguration () {
-          if (typeof self.options.limits !== 'object') {
-            // TODO implement
-          }
-        }
-      },
       submission: {
         async saveSubmission (req, form, data) {
           if (self.options.saveSubmissions === false) {
