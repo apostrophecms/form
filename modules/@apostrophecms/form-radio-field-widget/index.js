@@ -1,7 +1,11 @@
 module.exports = {
   extend: '@apostrophecms/form-select-field-widget',
   options: {
-    label: 'aposForm:radio'
+    label: 'aposForm:radio',
+    icon: 'radiobox-marked-icon'
+  },
+  icons: {
+    'radiobox-marked-icon': 'RadioboxMarked'
   },
   fields: {
     add: {

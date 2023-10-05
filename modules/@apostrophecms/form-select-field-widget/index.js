@@ -1,7 +1,8 @@
 module.exports = {
   extend: '@apostrophecms/form-base-field-widget',
   options: {
-    label: 'aposForm:select'
+    label: 'aposForm:select',
+    icon: 'form-select-icon'
   },
   fields: {
     add: {

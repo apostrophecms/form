@@ -41,10 +41,15 @@ module.exports = {
           'thankYouBody',
           'sendConfirmationEmail',
           'emailConfirmationField'
-        ].concat(self.options.emailSubmissions !== false ? [
-          'emails',
-          'email'
-        ] : [])
+        ]
+          .concat(
+            self.options.emailSubmissions !== false
+              ? [
+                'emails',
+                'email'
+              ]
+              : []
+          )
       },
       advanced: {
         label: 'aposForm:groupAdvanced',
@@ -213,7 +218,7 @@ module.exports = {
           req,
           emailTemplate,
           {
-            form: form,
+            form,
             input: data
           },
           {
@@ -271,7 +276,7 @@ module.exports = {
           const submission = {
             createdAt: new Date(),
             formId: form._id,
-            data: data
+            data
           };
           await self.emit('beforeSaveSubmission', req, {
             form,
