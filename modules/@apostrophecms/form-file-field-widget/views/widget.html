@@ -14,6 +14,12 @@
   </label>
   <input
     class="apos-form-input {{ prependIfPrefix('__input') }}"
-    type="file" id="{{ id }}" multiple
+    type="file" id="{{ id }}"
+    {% if widget.allowMultiple %}multiple{% endif %}
+    {% if widget.limitSize and widget.maxSize %}
+      data-max-size="{{ widget.maxSize }}"
+      data-max-size-error="{{ __t('aposForm:fileMaxSizeError') }}"
+      data-file-size-units="{{ widget.fileSizeUnits | jsonAttribute }}"
+    {% endif %}
     name="{{ widget.fieldName}}" {% if widget.required %}required{% endif %}>
 </div>

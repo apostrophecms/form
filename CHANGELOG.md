@@ -4,6 +4,12 @@
 
 ### Adds
 
+* File upload can now be limited in size (frontend only) by setting the max file size per file upload field.
+On the server, there are many factors that can influence this rule (for example proxies and servers used 
+between Apostrophe and the end-user). That is why this rule is not enforced on the server side.
+We use the default express connect-multiparty size limits. The rule is checked before submit.
+* Allow to configure file field `multiple` attribute. By default, file field allow the user to select multiple files.
+This can now be disabled.
 * Add divider widget (`<hr>` tag) to form widgets.
 
 ## 1.1.1 (2023-02-17)

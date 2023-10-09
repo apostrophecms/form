@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const connectMultiparty = require('connect-multiparty');
 const fields = require('./lib/fields');
 
 module.exports = {
@@ -246,7 +247,7 @@ module.exports = {
       post: {
         // Route to accept the submitted form.
         submit: [
-          require('connect-multiparty')(),
+          connectMultiparty(),
           async function (req) {
             try {
               await self.submitForm(req);

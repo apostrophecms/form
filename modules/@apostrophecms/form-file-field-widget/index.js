@@ -7,6 +7,28 @@ module.exports = {
   icons: {
     'file-upload-outline-icon': 'FileUploadOutline'
   },
+  fields: {
+    add: {
+      allowMultiple: {
+        label: 'aposForm:fileAllowMultiple',
+        type: 'boolean',
+        def: true
+      },
+      limitSize: {
+        label: 'aposForm:fileLimitSize',
+        type: 'boolean',
+        def: false
+      },
+      maxSize: {
+        label: 'aposForm:fileMaxSize',
+        help: 'aposForm:fileMaxSizeHelp',
+        type: 'integer',
+        if: {
+          limitSize: true
+        }
+      }
+    }
+  },
   methods (self) {
     return {
       async sanitizeFormField (widget, input, output) {
@@ -26,6 +48,27 @@ module.exports = {
             }));
           }
         }
+      }
+    };
+  },
+  extendMethods (self) {
+    return {
+      async output(_super, req, widget, options, _with) {
+        return _super(
+          req,
+          {
+            ...widget,
+            allowMultiple: widget.allowMultiple ?? true,
+            fileSizeUnits: {
+              B: req.t('aposForm:fileSizeUnitB'),
+              KB: req.t('aposForm:fileSizeUnitKB'),
+              MB: req.t('aposForm:fileSizeUnitMB'),
+              GB: req.t('aposForm:fileSizeUnitGB')
+            }
+          },
+          options,
+          _with
+        );
       }
     };
   }
