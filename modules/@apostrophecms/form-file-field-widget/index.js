@@ -10,10 +10,18 @@ module.exports = {
         type: 'boolean',
         def: true
       },
+      limitSize: {
+        label: 'aposForm:fileLimitSize',
+        type: 'boolean',
+        def: false
+      },
       maxSize: {
         label: 'aposForm:fileMaxSize',
         help: 'aposForm:fileMaxSizeHelp',
-        type: 'integer'
+        type: 'integer',
+        if: {
+          limitSize: true
+        }
       }
     }
   },

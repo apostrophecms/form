@@ -41,6 +41,7 @@
   "fieldRequired": "Is this field required?",
   "file": "File attachment",
   "fileAllowMultiple": "Allow multiple file attachments",
+  "fileLimitSize": "Limit file size?",
   "fileMaxSize": "Max file attachment size",
   "fileMaxSizeError": "File is too large '%1$s' (max size: %2$s).",
   "fileMaxSizeHelp": "In Bytes",
