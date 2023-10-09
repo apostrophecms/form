@@ -10,6 +10,7 @@ between Apostrophe and the end-user). That is why this rule is not enforced on t
 We use the default express connect-multiparty size limits. The rule is checked before submit.
 * Allow to configure file field `multiple` attribute. By default, file field allow the user to select multiple files.
 This can now be disabled.
+* Add divider widget (`<hr>` tag) to form widgets.
 
 ## 1.1.1 (2023-02-17)
 
