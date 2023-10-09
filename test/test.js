@@ -24,7 +24,8 @@ describe('Forms module', function () {
     '@apostrophecms/form-checkboxes-field-widget': {},
     '@apostrophecms/form-file-field-widget': {},
     '@apostrophecms/form-boolean-field-widget': {},
-    '@apostrophecms/form-conditional-widget': {}
+    '@apostrophecms/form-conditional-widget': {},
+    '@apostrophecms/form-divider-widget': {}
   };
 
   let forms;
@@ -36,6 +37,7 @@ describe('Forms module', function () {
   let fileWidgets;
   let booleanWidgets;
   let conditionalWidgets;
+  let dividerWidgets;
 
   it('should be a property of the apos object', async function () {
     apos = await testUtil.create({
@@ -70,6 +72,7 @@ describe('Forms module', function () {
     fileWidgets = apos.modules[`${aposForm}-file-field-widget`];
     booleanWidgets = apos.modules[`${aposForm}-boolean-field-widget`];
     conditionalWidgets = apos.modules[`${aposForm}-conditional-widget`];
+    dividerWidgets = apos.modules[`${aposForm}-divider-widget`];
 
     assert(forms.__meta.name === `${aposForm}`);
     assert(widgets.__meta.name === `${aposForm}-widget`);
@@ -81,6 +84,7 @@ describe('Forms module', function () {
     assert(fileWidgets.__meta.name === `${aposForm}-file-field-widget`);
     assert(booleanWidgets.__meta.name === `${aposForm}-boolean-field-widget`);
     assert(conditionalWidgets.__meta.name === `${aposForm}-conditional-widget`);
+    assert(dividerWidgets.__meta.name === `${aposForm}-divider-widget`);
   });
 
   // Submissions collection exists.
