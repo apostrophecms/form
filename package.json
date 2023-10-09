@@ -4,8 +4,9 @@
   "description": "Build forms for ApostropheCMS in a simple user interface.",
   "main": "index.js",
   "scripts": {
-    "lint": "npm run eslint",
+    "lint": "npm run eslint && npm run stylelint",
     "eslint": "eslint .",
+    "stylelint": "stylelint --custom-syntax postcss-scss **/*.scss",
     "test": "npm run lint && npx mocha"
   },
   "repository": {
@@ -23,16 +24,16 @@
   ],
   "devDependencies": {
     "apostrophe": "^3.4.0",
-    "eslint": "^7.9.0",
-    "eslint-config-apostrophe": "^3.4.0",
-    "eslint-config-standard": "^14.1.1",
+    "eslint": "^8.50.0",
+    "eslint-config-apostrophe": "^4.1.0",
+    "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.1",
-    "mocha": "^7.1.2",
-    "stylelint": "^13.7.1",
-    "stylelint-config-apostrophe": "^1.0.0"
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-standard": "^5.0.0",
+    "mocha": "^10.2.0",
+    "stylelint": "^15.10.3",
+    "stylelint-config-apostrophe": "^3.0.0"
   },
   "dependencies": {
     "connect-multiparty": "^2.2.0"

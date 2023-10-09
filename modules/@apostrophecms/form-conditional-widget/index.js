@@ -1,7 +1,11 @@
 module.exports = {
   extend: '@apostrophecms/widget-type',
   options: {
-    label: 'aposForm:conditional'
+    label: 'aposForm:conditional',
+    icon: 'arrow-decision-icon'
+  },
+  icons: {
+    'arrow-decision-icon': 'ArrowDecision'
   },
   fields (self) {
     // Get the form widgets from the form piece module and add them in the

@@ -1,7 +1,11 @@
 module.exports = {
   extend: '@apostrophecms/form-base-field-widget',
   options: {
-    label: 'aposForm:boolean'
+    label: 'aposForm:boolean',
+    icon: 'toggle-switch-outline-icon'
+  },
+  icons: {
+    'toggle-switch-outline-icon': 'ToggleSwitchOutline'
   },
   fields (self, options) {
     return {

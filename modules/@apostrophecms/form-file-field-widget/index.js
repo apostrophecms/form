@@ -1,7 +1,11 @@
 module.exports = {
   extend: '@apostrophecms/form-base-field-widget',
   options: {
-    label: 'aposForm:file'
+    label: 'aposForm:file',
+    icon: 'file-upload-outline-icon'
+  },
+  icons: {
+    'file-upload-outline-icon': 'FileUploadOutline'
   },
   methods (self) {
     return {

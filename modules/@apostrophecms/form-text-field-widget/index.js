@@ -1,7 +1,11 @@
 module.exports = {
   extend: '@apostrophecms/form-base-field-widget',
   options: {
-    label: 'aposForm:text'
+    label: 'aposForm:text',
+    icon: 'form-textbox-icon'
+  },
+  icons: {
+    'form-textbox-icon': 'FormTextbox'
   },
   fields: {
     add: {

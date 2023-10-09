@@ -22,10 +22,12 @@ async function collectValues (form) {
         }
 
         // If there are files to upload, return an object with the files.
-        input[response.field] = response.files ? {
-          value: response.value,
-          files: response.files
-        } : response.value;
+        input[response.field] = response.files
+          ? {
+            value: response.value,
+            files: response.files
+          }
+          : response.value;
       } catch (error) {
         // Add error to formErrors
         const fieldError = error.field ? error : error?.data?.fieldError;

@@ -1,7 +1,11 @@
 module.exports = {
   extend: '@apostrophecms/form-base-field-widget',
   options: {
-    label: 'aposForm:checkbox'
+    label: 'aposForm:checkbox',
+    icon: 'checkbox-marked-outline-icon'
+  },
+  icons: {
+    'checkbox-marked-outline-icon': 'CheckboxMarkedOutline'
   },
   fields: {
     add: {
@@ -41,7 +45,8 @@ module.exports = {
         }
 
         input[widget.fieldName] = Array.isArray(input[widget.fieldName])
-          ? input[widget.fieldName] : [];
+          ? input[widget.fieldName]
+          : [];
 
         // Return an array of selected choices as the output.
         output[widget.fieldName] = input[widget.fieldName]
