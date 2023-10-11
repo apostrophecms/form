@@ -73,6 +73,7 @@ export default () => {
           try {
             input.recaptcha = await recaptcha.getToken(el);
           } catch (error) {
+            // eslint-disable-next-line
             console.error('reCAPTCHA execution error:', error);
             apos.util.addClass(recaptchaError, 'apos-form-visible');
             return null;
