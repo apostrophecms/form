@@ -13,7 +13,8 @@ module.exports = {
         label: 'aposForm:widgetFormSelect',
         type: 'relationship',
         withType: '@apostrophecms/form',
-        required: true
+        required: true,
+        max: 1
       }
     }
   },

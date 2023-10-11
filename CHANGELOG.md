@@ -12,6 +12,10 @@ We use the default express connect-multiparty size limits. The rule is checked b
 This can now be disabled.
 * Add divider widget (`<hr>` tag) to form widgets.
 
+### Fixes
+
+* We can now select only one form when editing the form widget relationship to form field ('Form to display').
+
 ## 1.1.1 (2023-02-17)
 
 ### Fixes
