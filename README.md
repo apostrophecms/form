@@ -34,7 +34,8 @@ require('apostrophe')({
     '@apostrophecms/form-checkboxes-field-widget': {},
     '@apostrophecms/form-boolean-field-widget': {},
     '@apostrophecms/form-conditional-widget': {},
-    '@apostrophecms/form-divider-widget': {}
+    '@apostrophecms/form-divider-widget': {},
+    '@apostrophecms/form-stepper-widget': {}
   }
 });
 ```
