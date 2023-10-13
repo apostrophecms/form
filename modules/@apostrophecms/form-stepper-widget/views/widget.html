@@ -3,7 +3,7 @@
   <fieldset
     class="apos-form-stepper {{ prependIfPrefix('__stepper') }}"
     data-index="{{ loop.index }}"
-    disabled
+    data-submit-label="{{ step.submitLabel }}"
   >
     <legend>{{ step.label }}</legend>
     {% area step, 'contents' %}

@@ -28,6 +28,11 @@ module.exports = {
                 type: 'string',
                 required: true
               },
+              submitLabel: {
+                label: 'aposForm:stepperSubmitLabel',
+                type: 'string',
+                required: true
+              },
               contents: {
                 label: 'aposForm:formContents',
                 help: 'aposForm:stepperContentsHelp',
