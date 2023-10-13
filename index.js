@@ -33,7 +33,11 @@ module.exports = {
     const group = {
       basics: {
         label: 'aposForm:groupForm',
-        fields: [ 'contents' ]
+        fields: [
+          'hasStepper',
+          'contents',
+          'stepperContents'
+        ]
       },
       afterSubmit: {
         label: 'aposForm:groupAfterSubmission',

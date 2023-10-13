@@ -1,7 +1,11 @@
 {% set prependIfPrefix = apos.modules['@apostrophecms/form'].prependIfPrefix %}
-<fieldset
-  class="apos-form-fieldset {{ prependIfPrefix('__fieldset') }}"
-  disabled
->
-  {% area data.widget, 'contents' %}
-</fieldset>
+{% for step in data.widget.steps %}
+  <fieldset
+    class="apos-form-stepper {{ prependIfPrefix('__stepper') }}"
+    data-index="{{ loop.index }}"
+    disabled
+  >
+    <legend>{{ step.label }}</legend>
+    {% area step, 'contents' %}
+  </fieldset>
+{% endfor %}

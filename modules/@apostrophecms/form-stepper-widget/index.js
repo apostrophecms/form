@@ -22,18 +22,20 @@ module.exports = {
           required: true,
           titleField: 'label',
           fields: {
-            label: {
-              label: 'aposForm:stepperLabel',
-              type: 'string',
-              required: true
-            },
-            contents: {
-              label: 'aposForm:formContents',
-              help: 'aposForm:stepperContentsHelp',
-              type: 'area',
-              contextual: false,
-              options: {
-                widgets: formWidgets
+            add: {
+              label: {
+                label: 'aposForm:stepperLabel',
+                type: 'string',
+                required: true
+              },
+              contents: {
+                label: 'aposForm:formContents',
+                help: 'aposForm:stepperContentsHelp',
+                type: 'area',
+                contextual: false,
+                options: {
+                  widgets: formWidgets
+                }
               }
             }
           }
