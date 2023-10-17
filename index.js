@@ -2,6 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const connectMultiparty = require('connect-multiparty');
 const fields = require('./lib/fields');
+const recaptcha = require('./lib/recaptcha');
+const process = require('./lib/process');
+const migration = require('./lib/migration');
 
 module.exports = {
   extend: '@apostrophecms/piece-type',
@@ -74,13 +77,15 @@ module.exports = {
   },
   init (self) {
     self.ensureCollection();
+    self.apostropheFormAddHasStepperFieldMigration();
 
     self.cleanOptions(self.options);
   },
   methods (self) {
     return {
-      ...require('./lib/recaptcha')(self),
-      ...require('./lib/process')(self),
+      ...recaptcha(self),
+      ...process(self),
+      ...migration(self),
       async ensureCollection () {
         self.db = self.apos.db.collection('aposFormSubmissions');
         await self.db.ensureIndex({
