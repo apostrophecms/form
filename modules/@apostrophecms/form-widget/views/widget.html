@@ -26,11 +26,7 @@
       data-apos-recaptcha-sitekey="{{ recaptchaSite }}"
     {% endif %}
   >
-    {% if form.hasStepper != true %}
-      {% area form, 'contents' %}
-    {% elif form.hasStepper == true %}
-      {% area form, 'stepperContents' %}
-    {% endif %}
+    {% area form, 'contents' %}
 
     {% if recaptchaReady %}
       <noscript>
