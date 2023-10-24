@@ -11,13 +11,15 @@ module.exports = {
   fields (self) {
     // Prevent nested groups
     const form = self.options.apos.modules['@apostrophecms/form'];
-    const formWidgets = Object.assign({}, form.fields.contents.options.widgets);
-    delete formWidgets['@apostrophecms/form-group'];
+    const {
+      '@apostrophecms/form-group': groupWidget,
+      ...formWidgets
+    } = form.fields.contents.options.widgets;
 
     return {
       add: {
         groups: {
-          label: 'aposForm:groups',
+          label: 'aposForm:groupGroups',
           type: 'array',
           required: true,
           titleField: 'label',
@@ -25,13 +27,13 @@ module.exports = {
           fields: {
             add: {
               label: {
-                label: 'aposForm:groupLabel',
+                label: 'aposForm:groupGroupsLabel',
                 type: 'string',
                 required: true
               },
               contents: {
-                label: 'aposForm:groupContents',
-                help: 'aposForm:groupContentsHelp',
+                label: 'aposForm:groupGroupsContents',
+                help: 'aposForm:groupGroupsContentsHelp',
                 type: 'area',
                 contextual: false,
                 options: {

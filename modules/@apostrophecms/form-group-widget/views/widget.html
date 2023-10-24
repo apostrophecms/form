@@ -1,6 +1,6 @@
 {% set prependIfPrefix = apos.modules['@apostrophecms/form'].prependIfPrefix %}
 
-<div data-apos-form-groups class="apos-form-groups {{ prependIfPrefix('__group') }}">
+<div data-apos-form-groups class="apos-form-groups {{ prependIfPrefix('__groups') }}">
   {% for group in data.widget.groups %}
     <fieldset
       class="apos-form-group {{ prependIfPrefix('__group') }}"

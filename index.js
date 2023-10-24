@@ -35,9 +35,7 @@ module.exports = {
     const group = {
       basics: {
         label: 'aposForm:groupForm',
-        fields: [
-          'contents'
-        ]
+        fields: [ 'contents' ]
       },
       afterSubmit: {
         label: 'aposForm:groupAfterSubmission',
