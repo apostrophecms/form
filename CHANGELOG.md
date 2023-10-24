@@ -1,5 +1,11 @@
 # Changelog
 
+## UNRELEASED
+
+### Adds
+
+* Add group widget which is a fieldset container for other form widgets.
+
 ## 1.2.0 (2023-10-12)
 
 ### Adds
