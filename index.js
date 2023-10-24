@@ -3,7 +3,7 @@ const path = require('path');
 const connectMultiparty = require('connect-multiparty');
 const fields = require('./lib/fields');
 const recaptcha = require('./lib/recaptcha');
-const process = require('./lib/process');
+const processor = require('./lib/process');
 
 module.exports = {
   extend: '@apostrophecms/piece-type',
@@ -78,7 +78,7 @@ module.exports = {
   methods (self) {
     return {
       ...recaptcha(self),
-      ...process(self),
+      ...processor(self),
       async ensureCollection () {
         self.db = self.apos.db.collection('aposFormSubmissions');
         await self.db.ensureIndex({
