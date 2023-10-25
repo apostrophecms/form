@@ -34,7 +34,8 @@ require('apostrophe')({
     '@apostrophecms/form-checkboxes-field-widget': {},
     '@apostrophecms/form-boolean-field-widget': {},
     '@apostrophecms/form-conditional-widget': {},
-    '@apostrophecms/form-divider-widget': {}
+    '@apostrophecms/form-divider-widget': {},
+    '@apostrophecms/form-group-widget': {}
   }
 });
 ```
@@ -82,7 +83,7 @@ The `formWidgets` option allows us to change the widgets allowed in a form. It i
 }
 ```
 
-This includes the rich text widget so editors can add directions or notes in the form. The file field widget is *not included* by default since site owners should carefully consider the implications of potentially public upload access. See [the following section on file field support](#supporting-file-field-uploads-safely).
+This includes the rich text widget so editors can add directions or notes in the form. The file field widget is *not included* by default since site owners should carefully consider the implications of potentially public upload access. See [the following section on file field support](#supporting-file-field-uploads-safely). The group widget is a simple fieldset container for other form field widgets and is *not included* by default either.
 
 Any widget type can be included. A very simple form widget configuration might look like this:
 
