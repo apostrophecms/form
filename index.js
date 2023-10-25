@@ -3,7 +3,7 @@ const path = require('path');
 const connectMultiparty = require('connect-multiparty');
 const fields = require('./lib/fields');
 const recaptcha = require('./lib/recaptcha');
-const processor = require('./lib/process');
+const processor = require('./lib/processor');
 
 module.exports = {
   extend: '@apostrophecms/piece-type',
