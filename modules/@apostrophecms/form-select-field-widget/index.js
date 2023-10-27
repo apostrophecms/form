@@ -30,12 +30,13 @@ module.exports = {
       allowMultiple: {
         label: 'aposForm:selectAllowMultiple',
         type: 'boolean',
-        def: true
+        def: false
       },
       size: {
         label: 'aposForm:selectSize',
         type: 'integer',
         def: 0,
+        min: 0,
         if: {
           allowMultiple: true
         }
