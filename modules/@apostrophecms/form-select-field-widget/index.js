@@ -34,7 +34,7 @@ module.exports = {
       },
       size: {
         label: 'aposForm:selectSize',
-        type: 'number',
+        type: 'integer',
         def: 0,
         if: {
           allowMultiple: true
