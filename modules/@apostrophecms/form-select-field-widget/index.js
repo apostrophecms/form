@@ -26,6 +26,19 @@ module.exports = {
             }
           }
         }
+      },
+      allowMultiple: {
+        label: 'aposForm:selectAllowMultiple',
+        type: 'boolean',
+        def: true
+      },
+      size: {
+        label: 'aposForm:selectSize',
+        type: 'number',
+        def: 0,
+        if: {
+          allowMultiple: true
+        }
       }
     }
   },
@@ -36,6 +49,22 @@ module.exports = {
         const choices = self.getChoicesValues(widget);
 
         output[widget.fieldName] = self.apos.launder.select(input[widget.fieldName], choices);
+      }
+    };
+  },
+  extendMethods (self) {
+    return {
+      async output(_super, req, widget, options, _with) {
+        return _super(
+          req,
+          {
+            ...widget,
+            allowMultiple: widget.allowMultiple ?? true,
+            size: widget.size ?? 0
+          },
+          options,
+          _with
+        );
       }
     };
   }
