@@ -23,7 +23,7 @@ module.exports = {
 
     const db = await apos.db.collection('aposAttachments');
 
-    db.remove({});
+    db.deleteMany({});
   },
   insert: async function (filename, apos) {
     return apos.attachment.insert(apos.task.getReq(), {

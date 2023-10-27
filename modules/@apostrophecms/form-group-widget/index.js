@@ -18,29 +18,18 @@ module.exports = {
 
     return {
       add: {
-        groups: {
-          label: 'aposForm:groupGroups',
-          type: 'array',
-          required: true,
-          titleField: 'label',
-          inline: true,
-          fields: {
-            add: {
-              label: {
-                label: 'aposForm:groupGroupsLabel',
-                type: 'string',
-                required: true
-              },
-              contents: {
-                label: 'aposForm:groupGroupsContents',
-                help: 'aposForm:groupGroupsContentsHelp',
-                type: 'area',
-                contextual: false,
-                options: {
-                  widgets: formWidgets
-                }
-              }
-            }
+        label: {
+          label: 'aposForm:groupLabel',
+          type: 'string',
+          required: true
+        },
+        contents: {
+          label: 'aposForm:groupContents',
+          help: 'aposForm:groupContentsHelp',
+          type: 'area',
+          contextual: false,
+          options: {
+            widgets: formWidgets
           }
         }
       }

@@ -286,7 +286,7 @@ module.exports = {
             data,
             submission
           });
-          return self.db.insert(submission);
+          return self.db.insertOne(submission);
         },
         async emailSubmission (req, form, data) {
           await self.sendEmailSubmissions(req, form, data);
