@@ -6,6 +6,10 @@
 
 * Add group widget which is a fieldset container for other form widgets.
 
+### Fixes
+
+* Fix missing select widget icon.
+
 ## 1.2.0 (2023-10-12)
 
 ### Adds
