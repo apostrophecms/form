@@ -1,4 +1,4 @@
-const assert = require('assert');
+const assert = require('assert').strict;
 const testUtil = require('apostrophe/test-lib/test');
 const fileUtils = require('./lib/file-utils');
 const FormData = require('form-data');
@@ -10,8 +10,8 @@ describe('Forms module', function () {
 
   this.timeout(25000);
 
-  after(async function () {
-    testUtil.destroy(apos);
+  after(function () {
+    return testUtil.destroy(apos);
   });
 
   // Existence
@@ -25,7 +25,8 @@ describe('Forms module', function () {
     '@apostrophecms/form-file-field-widget': {},
     '@apostrophecms/form-boolean-field-widget': {},
     '@apostrophecms/form-conditional-widget': {},
-    '@apostrophecms/form-divider-widget': {}
+    '@apostrophecms/form-divider-widget': {},
+    '@apostrophecms/form-group-widget': {}
   };
 
   let forms;
@@ -38,6 +39,7 @@ describe('Forms module', function () {
   let booleanWidgets;
   let conditionalWidgets;
   let dividerWidgets;
+  let groupWidgets;
 
   it('should be a property of the apos object', async function () {
     apos = await testUtil.create({
@@ -56,7 +58,22 @@ describe('Forms module', function () {
             }
           }
         },
-        '@apostrophecms/form': {},
+        '@apostrophecms/form': {
+          options: {
+            formWidgets: {
+              '@apostrophecms/form-text-field': {},
+              '@apostrophecms/form-textarea-field': {},
+              '@apostrophecms/form-select-field': {},
+              '@apostrophecms/form-radio-field': {},
+              '@apostrophecms/form-checkboxes-field': {},
+              '@apostrophecms/form-file-field': {},
+              '@apostrophecms/form-boolean-field': {},
+              '@apostrophecms/form-conditional': {},
+              '@apostrophecms/form-divider': {},
+              '@apostrophecms/form-group': {}
+            }
+          }
+        },
         ...formWidgets
       }
     });
@@ -73,6 +90,7 @@ describe('Forms module', function () {
     booleanWidgets = apos.modules[`${aposForm}-boolean-field-widget`];
     conditionalWidgets = apos.modules[`${aposForm}-conditional-widget`];
     dividerWidgets = apos.modules[`${aposForm}-divider-widget`];
+    groupWidgets = apos.modules[`${aposForm}-group-widget`];
 
     assert(forms.__meta.name === `${aposForm}`);
     assert(widgets.__meta.name === `${aposForm}-widget`);
@@ -85,6 +103,7 @@ describe('Forms module', function () {
     assert(booleanWidgets.__meta.name === `${aposForm}-boolean-field-widget`);
     assert(conditionalWidgets.__meta.name === `${aposForm}-conditional-widget`);
     assert(dividerWidgets.__meta.name === `${aposForm}-divider-widget`);
+    assert(groupWidgets.__meta.name === `${aposForm}-group-widget`);
   });
 
   // Submissions collection exists.
@@ -204,25 +223,30 @@ describe('Forms module', function () {
     assert(form.title === 'First test form');
   });
 
-  it('should have the same widgets in conditional widget areas', function () {
-    const formWidgets = forms.schema.find(field => {
-      return field.name === 'contents';
-    }).options.widgets;
+  it('should have the same widgets in conditional widget area as the main form widgets area, execpt conditional itself', function () {
+    const formWidgets = {
+      ...forms.schema.find(field => field.name === 'contents').options.widgets
+    };
 
-    // Main form widgets has the conditional widget as an option.
-    assert(formWidgets['@apostrophecms/form-conditional']);
+    const conditionalWidgetWidgets = conditionalWidgets.schema.find(field => field.name === 'contents').options.widgets;
 
-    delete formWidgets['@apostrophecms/form-conditional'];
+    const actual = (Object.keys(formWidgets)).sort();
+    const expected = (Object.keys(conditionalWidgetWidgets).concat('@apostrophecms/form-conditional')).sort();
 
-    const condWidgets = conditionalWidgets.schema.find(field => {
-      return field.name === 'contents';
-    }).options.widgets;
+    assert.deepEqual(actual, expected);
+  });
 
-    assert(Object.keys(formWidgets).length === Object.keys(condWidgets).length);
+  it('should have the same widgets in group widget area as the main form widgets area, execpt group itself', function () {
+    const formWidgets = {
+      ...forms.schema.find(field => field.name === 'contents').options.widgets
+    };
 
-    for (const widget in condWidgets) {
-      assert(formWidgets[widget]);
-    }
+    const groupWidgetWidgets = groupWidgets.schema.find(field => field.name === 'contents').options.widgets;
+
+    const actual = (Object.keys(formWidgets)).sort();
+    const expected = (Object.keys(groupWidgetWidgets).concat('@apostrophecms/form-group')).sort();
+
+    assert.deepEqual(actual, expected);
   });
 
   // Submitting gets 200 response

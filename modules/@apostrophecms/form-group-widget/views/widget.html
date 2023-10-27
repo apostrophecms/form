@@ -1,13 +1,9 @@
+{% set widget = data.widget %}
 {% set prependIfPrefix = apos.modules['@apostrophecms/form'].prependIfPrefix %}
 
-<div data-apos-form-groups class="apos-form-groups {{ prependIfPrefix('__groups') }}">
-  {% for group in data.widget.groups %}
-    <fieldset
-      class="apos-form-group {{ prependIfPrefix('__group') }}"
-      data-index="{{ loop.index }}"
-    >
-      <legend>{{ group.label }}</legend>
-      {% area group, 'contents' %}
-    </fieldset>
-  {% endfor %}
-</div>
+<fieldset
+  class="apos-form-group {{ prependIfPrefix('__group') }}"
+>
+  <legend>{{ widget.label }}</legend>
+  {% area widget, 'contents' %}
+</fieldset>
