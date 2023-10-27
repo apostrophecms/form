@@ -245,7 +245,7 @@ describe('Forms module', function () {
 
     const actual = (Object.keys(formWidgets)).sort();
     const expected = (Object.keys(groupWidgetWidgets).concat('@apostrophecms/form-group')).sort();
- 
+
     assert.deepEqual(actual, expected);
   });
 
