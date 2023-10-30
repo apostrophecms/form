@@ -60,7 +60,7 @@ module.exports = {
           req,
           {
             ...widget,
-            allowMultiple: widget.allowMultiple ?? true,
+            allowMultiple: widget.allowMultiple ?? false,
             size: widget.size ?? 0
           },
           options,
