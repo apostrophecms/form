@@ -2,46 +2,55 @@ module.exports = {
   extend: '@apostrophecms/form-base-field-widget',
   options: {
     label: 'aposForm:select',
-    icon: 'form-select-icon'
+    icon: 'form-select-icon',
+    allowMultiple: false
   },
-  fields: {
-    add: {
-      choices: {
-        label: 'aposForm:selectChoice',
-        type: 'array',
-        titleField: 'label',
-        required: true,
-        fields: {
-          add: {
-            label: {
-              type: 'string',
-              required: true,
-              label: 'aposForm:checkboxChoicesLabel',
-              help: 'aposForm:checkboxChoicesLabelHelp'
-            },
-            value: {
-              type: 'string',
-              label: 'aposForm:checkboxChoicesValue',
-              help: 'aposForm:checkboxChoicesValueHelp'
-            }
+  fields(self) {
+    const optionalFields = self.options.allowMultiple
+      ? {
+        allowMultiple: {
+          label: 'aposForm:selectAllowMultiple',
+          type: 'boolean',
+          def: false
+        },
+        size: {
+          label: 'aposForm:selectSize',
+          type: 'integer',
+          def: 0,
+          min: 0,
+          if: {
+            allowMultiple: true
           }
         }
-      },
-      allowMultiple: {
-        label: 'aposForm:selectAllowMultiple',
-        type: 'boolean',
-        def: false
-      },
-      size: {
-        label: 'aposForm:selectSize',
-        type: 'integer',
-        def: 0,
-        min: 0,
-        if: {
-          allowMultiple: true
-        }
       }
-    }
+      : {};
+
+    return {
+      add: {
+        choices: {
+          label: 'aposForm:selectChoice',
+          type: 'array',
+          titleField: 'label',
+          required: true,
+          fields: {
+            add: {
+              label: {
+                type: 'string',
+                required: true,
+                label: 'aposForm:checkboxChoicesLabel',
+                help: 'aposForm:checkboxChoicesLabelHelp'
+              },
+              value: {
+                type: 'string',
+                label: 'aposForm:checkboxChoicesValue',
+                help: 'aposForm:checkboxChoicesValueHelp'
+              }
+            }
+          }
+        },
+        ...optionalFields
+      }
+    };
   },
   methods (self) {
     return {
@@ -60,7 +69,7 @@ module.exports = {
           req,
           {
             ...widget,
-            allowMultiple: widget.allowMultiple ?? false,
+            allowMultiple: (self.options.allowMultiple && widget.allowMultiple) ?? false,
             size: widget.size ?? 0
           },
           options,

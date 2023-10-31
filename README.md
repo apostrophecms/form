@@ -103,6 +103,25 @@ module.exports = {
 };
 ```
 
+#### select field widget option
+
+The select field widget has an option `allowMultiple` to allow multiple select options to be selected. The default value is `false`.
+
+Once set to `true`, it will add two new fields to the select field widget schema: 
+
+|  Property | Type | Description |
+|---|---|---|
+| `allowMultiple` | Boolean | Set to `true` to enable multiple values to be selected in the select widget options, default value is `false` |
+| `size` | Integer | Number of options in the list that should be visible, default value is `0` |
+
+```javascript
+// modules/@apostrophecms/form-select-field/index.js
+modules.exports = {
+  options: {
+    allowMultiple: false
+  }
+}
+```
 
 ### Supporting file field uploads safely
 
