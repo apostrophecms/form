@@ -5,6 +5,7 @@
 ### Adds
 
 * Add group widget which is a fieldset container for other form widgets.
+* Add multiple and size fields to select widget.
 
 ### Fixes
 

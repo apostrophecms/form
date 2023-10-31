@@ -17,6 +17,7 @@
   <select
     class="apos-form-input {{ prependIfPrefix('__input') }}" id="{{ id }}"
     name="{{ widget.fieldName}}" {% if widget.required %}required{% endif %}
+    {% if widget.allowMultiple %}multiple {% if widget.size %}size="{{ widget.size }}"{% endif %}{% endif %}
   >
     <option value="">{{ __t("aposForm:selectBlank") }}</option>
     {% for choice in widget.choices %}
