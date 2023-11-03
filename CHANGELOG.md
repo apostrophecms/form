@@ -1,6 +1,6 @@
 # Changelog
 
-## UNRELEASED
+## 1.3.0 (2023-11-03)
 
 ### Adds
 
