@@ -1,7 +1,19 @@
-[![CircleCI](https://circleci.com/gh/apostrophecms/form/tree/main.svg?style=svg)](https://circleci.com/gh/apostrophecms/form/tree/main)
-[![Chat on Discord](https://img.shields.io/discord/517772094482677790.svg)](https://chat.apostrophecms.org)
+<div align="center">
+  <img src="https://raw.githubusercontent.com/apostrophecms/apostrophe/main/logo.svg" alt="ApostropheCMS logo" width="80" height="80">
 
-# Form Builder for Apostrophe 3
+  <h1>Form builder for ApostropheCMS</h1>
+  <p>
+    <a aria-label="Apostrophe logo" href="https://docs.apostrophecms.org">
+      <img src="https://img.shields.io/badge/MADE%20FOR%20ApostropheCMS-000000.svg?style=for-the-badge&logo=Apostrophe&labelColor=6516dd">
+    </a>
+    <a aria-label="Join the community on Discord" href="http://chat.apostrophecms.org">
+      <img alt="" src="https://img.shields.io/discord/517772094482677790?color=5865f2&label=Join%20the%20Discord&logo=discord&logoColor=fff&labelColor=000&style=for-the-badge&logoWidth=20">
+    </a>
+    <a aria-label="License" href="https://github.com/apostrophecms/blog/blob/main/LICENSE.md">
+      <img alt="" src="https://img.shields.io/static/v1?style=for-the-badge&labelColor=000000&label=License&message=MIT&color=3DA639">
+    </a>
+  </p>
+</div>
 
 Allow ApostropheCMS editors to build their own forms. They can then place any form in one or more content areas across the website.
 
@@ -131,7 +143,7 @@ The file field widget, `@apostrophecms/form-file-field-widget`, uses a route on 
 
 ### Adding forms to pages and pieces
 
-Forms are added to pages and pieces using a widget, `@apostrophecms/form-widget`. Add this to [an area](https://v3.docs.apostrophecms.org/guide/areas-and-widgets.html) in a page or piece type field schema to let editors add a form there. It will often be best to have an area field dedicated to the form widget.
+Forms are added to pages and pieces using a widget, `@apostrophecms/form-widget`. Add this to [an area](https://docs.apostrophecms.org/guide/areas-and-widgets.html) in a page or piece type field schema to let editors add a form there. It will often be best to have an area field dedicated to the form widget.
 
 ```javascript
 // modules/contact-page/index.js
@@ -168,7 +180,7 @@ module.exports = {
 }
 ```
 
-**Form submission always triggers a `'submission'` [server-side event](https://v3.docs.apostrophecms.org/guide/server-events.html)** that you can listen for and handle in the `@apostrophecms/form` module or another module. Event handler functions are passed the following arguments:
+**Form submission always triggers a `'submission'` [server-side event](https://docs.apostrophecms.org/guide/server-events.html)** that you can listen for and handle in the `@apostrophecms/form` module or another module. Event handler functions are passed the following arguments:
 
 | Argument | Description |
 | ------- | ------- |
@@ -176,7 +188,7 @@ module.exports = {
 | `form` | The form object |
 | `submission` | The user submission |
 
-**In addition, if saving to the MongoDB collection is not disabled, form submission triggers a `'beforeSaveSubmission'` [server-side event](https://v3.docs.apostrophecms.org/guide/server-events.html)** that you can listen for and handle in the `@apostrophecms/form` module or another module. Event handler functions are passed the following arguments:
+**In addition, if saving to the MongoDB collection is not disabled, form submission triggers a `'beforeSaveSubmission'` [server-side event](https://docs.apostrophecms.org/guide/server-events.html)** that you can listen for and handle in the `@apostrophecms/form` module or another module. Event handler functions are passed the following arguments:
 
 | Argument | Description |
 | ------- | ------- |
@@ -214,7 +226,7 @@ Starter styles for user-facing forms are included in a forms.less file. These of
 
 ### Custom class prefix
 
-Need more control over your styling? You can include your own class prefix that will be in included on most of the labels, inputs, and message/error elements within the forms. The class that is created uses the [BEM](http://getbem.com/naming/) convention. You add the prefix you want in the `@apostrophecms/form` configuration.
+Need more control over your styling? You can include your own class prefix that will be included on most of the labels, inputs, and message/error elements within the forms. The class that is created uses the [BEM](http://getbem.com/naming/) convention. You add the prefix you want in the `@apostrophecms/form` configuration.
 
 ```javascript
 '@apostrophecms/form': {
@@ -227,7 +239,7 @@ This results in a class like `my-form__input` being added to input elements in t
 
 ## Using reCAPTCHA for user validation
 
-Google's reCAPTCHA is built in as an optional feature. You will first need to [set up a reCAPTCHA site up on their website](https://www.google.com/recaptcha/) using the *version three option*. Make sure your domains are configured (using `localhost` for local development).
+Google's reCAPTCHA is built in as an optional feature. You will first need to [set up reCAPTCHA on your website](https://www.google.com/recaptcha/) using the *version three option*. Make sure your domains are configured (using `localhost` for local development).
 
 Copy the **site key** and **secret key**. You will need to enter them in the site's global settings when logged in. Each form will have a checkbox to enable reCAPTCHA for that form.
 
@@ -267,7 +279,7 @@ These functions can be extended for project-level validation using the super pat
 2. Creating a new function that uses the original one, adds functionality, and returns an identically structured response.
 3. Assigning the new function to the original function property.
 
-An example for the text area field in project code might look like this:
+An example of the text area field in a project's code might look like this:
 
 ```javascript
 // modules/@apostrophecms/form-textarea-field-widget/ui/src/index.js
