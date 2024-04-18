@@ -1,6 +1,6 @@
 # Changelog
 
-## UNRELEASED
+## 1.3.1 (2024-04-18)
 
 ### Changes
 
