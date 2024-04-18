@@ -4,7 +4,10 @@
 
 ### Changes
 
- * Updates the documentation. No code changes.
+ * Updates the documentation.
+
+### Fixes
+* Changes the value collection for the `form-boolean-field-widget` to the `checked` status instead of the `value` directly.
 
 ## 1.3.0 (2023-11-03)
 
