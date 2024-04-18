@@ -37,7 +37,7 @@ export default () => {
 
       return {
         field: input.getAttribute('name'),
-        value: input.value
+        value: input.checked
       };
     }
   };
