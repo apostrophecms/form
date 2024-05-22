@@ -1,5 +1,11 @@
 # Changelog
 
+## UNRELEASED
+
+### Changes
+
+* Set keyboard shortcut to `G` then `O`.
+
 ## 1.3.1 (2024-04-18)
 
 ### Changes
