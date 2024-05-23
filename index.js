@@ -16,7 +16,8 @@ module.exports = {
     i18n: {
       ns: 'aposForm',
       browser: true
-    }
+    },
+    shortcut: 'G,O'
   },
   bundle: {
     directory: 'modules',
