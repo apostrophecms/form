@@ -1,10 +1,10 @@
 # Changelog
 
-## UNRELEASED
+## 3.2.0 (2024-06-12)
 
 ### Changes
 
-* Set keyboard shortcut to `G` then `O`.
+* To prevent a conflict "out of the box," set keyboard shortcut to `G` then `O`.
 
 ## 1.3.1 (2024-04-18)
 
