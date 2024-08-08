@@ -13,14 +13,14 @@ export default () => {
   };
 
   const sizeLimiter = (input) => {
-    if ((input.dataset.maxSize || false) === false) {
+    if (!input.dataset.maxSize) {
       return;
     }
 
     const { files } = input;
     const totalSize = Array.from(files || []).reduce((sum, { size }) => sum + size, 0);
 
-    const units = JSON.parse(input.dataset.fileSizeUnits || '') || {};
+    const units = JSON.parse(input.dataset.fileSizeUnits || '{}');
     const maxSize = input.dataset.maxSize;
     const maxSizeError = (input.dataset.maxSizeError || '').replace(
       '%2$s',
