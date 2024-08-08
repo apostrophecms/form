@@ -1,5 +1,11 @@
 # Changelog
 
+## UNRELEASED
+
+### Fixes
+
+* Fixes file upload without `limitSize`. Previously it was returning `Unknown form field error`.
+
 ## 1.4.0 (2024-06-12)
 
 ### Changes
