@@ -1,5 +1,6 @@
 {% macro optional(required) %}
-  {% if not required %}
+  {% set disable = apos.modules['@apostrophecms/form'].options.disableOptionalLabel %}
+  {% if not required and not disable %}
     <span class="apos-form-field-optional"> {{ __t('aposForm:templateOptional') }}</span>
   {% endif %}
 {% endmacro %}
