@@ -5,6 +5,13 @@
   {% endif %}
 {% endmacro %}
 
+{% macro required(required) %}
+  {% set disable = apos.modules['@apostrophecms/form'].options.disableOptionalLabel %}
+  {% if required %}
+    <span class="apos-form-field-required"> *</span>
+  {% endif %}
+{% endmacro %}
+
 {% macro checkInput(widget, choice, id) %}
   {% set prefixer = apos.modules['@apostrophecms/form'].prependIfPrefix %}
   <input
