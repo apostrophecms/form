@@ -2,8 +2,7 @@
 
 ## UNRELEASED 
 
-* Move the current widget.html code from form-widget to widgetBase.html and extend it in widget.html. Add blocks in so you can overwrite them from widget.html.
-  Thanks to [hennan929](https://github.com/hennan929) for this contribution.
+* Move the current widget.html code from form-widget to widgetBase.html and extend it in widget.html. Add blocks in so you can overwrite them from widget.html. Thanks to [hennan929](https://github.com/hennan929) for this contribution.
 
 ## 1.4.2 (2024-10-31)
 
