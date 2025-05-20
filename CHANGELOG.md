@@ -1,5 +1,11 @@
 # Changelog
 
+## UNRELEASED
+
+### Adds
+* Adds visual asterisk for required fields
+* Adds `disableOptionalLabel` flag to options for disabling the display of the "(Optional)" label for optional fields 
+
 ## 1.4.2 (2024-10-31)
 
 * Adds AI-generated and community-reviewed missing translations
