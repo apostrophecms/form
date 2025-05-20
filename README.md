@@ -65,6 +65,7 @@ There are a few options available for the Apostrophe form module.
 
 |  Property | Type | Description |
 |---|---|---|
+| `disableOptionalLabel` | Boolean | Removes the "(Optional)" text label that accompanies optional form fields. Defaults to `false` |
 | `formWidgets` | Object | A widget configuration object for form widgets to use. |
 | `saveSubmissions` | Boolean | Set to `false` to prevent Apostrophe from saving submissions in the `aposFormSubmissions` database collection. See [submission information below](#handling-submissions). |
 | `emailSubmissions` | Boolean | Set to `false` to disable the email notification fields on forms. See [email information below](#email). |
