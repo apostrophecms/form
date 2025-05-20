@@ -13,6 +13,7 @@
     {{ widget.fieldLabel}}
   </legend>
   {{ utils.optional(widget.required) }}
+  {{ utils.required(widget.required) }}
   {% for choice in widget.choices %}
     {% set choiceId = id + apos.util.slugify(choice.value) %}
     <div class="{{ prependIfPrefix('__check-wrapper') }}">

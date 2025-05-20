@@ -8,6 +8,7 @@
   <label for="{{ id }}" class="apos-form-label {{ prependIfPrefix('__label') }}">
     {{ widget.fieldLabel}}
     {{ utils.optional(widget.required) }}
+    {{ utils.required(widget.required) }}
     <span
       class="apos-form-label-message {{ prependIfPrefix('__label-message') }}"
       data-apos-input-message="{{ widget.fieldName }}" hidden></span>
