@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.2 (2024-10-31)
+
+* Adds AI-generated and community-reviewed missing translations
+
 ## 1.4.1 (2024-08-08)
 
 ### Fixes
