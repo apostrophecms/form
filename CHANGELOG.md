@@ -3,6 +3,7 @@
 # UNRELEASED
 
 ### Fixes
+
 * Updates conditional logic for conditional addition of fields to emails to correctly handle boolean values.
 
 ## 1.5.0 (2025-05-27)
