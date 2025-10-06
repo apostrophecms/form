@@ -1,5 +1,12 @@
 # Changelog
 
+## UNRELEASED
+
+### Security
+
+* Clear an npm audit warning by replacing `connect-multiparty` with `multer`.
+* To be clear, this was never an actual security vulnerability. The CVE in question is disputed, and for good reasons. However, since `connect-multiparty` is no longer maintained, it makes sense to move to `multer`.
+
 ## 1.5.1 (2025-07-09)
 
 ### Fixes
