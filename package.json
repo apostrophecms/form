@@ -36,6 +36,6 @@
     "stylelint-config-apostrophe": "^3.0.0"
   },
   "dependencies": {
-    "connect-multiparty": "^2.2.0"
+    "multer": "^2.0.2"
   }
 }

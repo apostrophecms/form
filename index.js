@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
-const connectMultiparty = require('connect-multiparty');
+const os = require('os');
+const multer = require('multer');
 const fields = require('./lib/fields');
 const recaptcha = require('./lib/recaptcha');
 const processor = require('./lib/processor');
@@ -23,7 +24,7 @@ module.exports = {
     directory: 'modules',
     modules: getBundleModuleNames()
   },
-  fields (self) {
+  fields(self) {
     let add = fields.initial(self.options);
 
     if (self.options.emailSubmissions !== false) {
@@ -71,16 +72,16 @@ module.exports = {
       group
     };
   },
-  init (self) {
+  init(self) {
     self.ensureCollection();
 
     self.cleanOptions(self.options);
   },
-  methods (self) {
+  methods(self) {
     return {
       ...recaptcha(self),
       ...processor(self),
-      async ensureCollection () {
+      async ensureCollection() {
         self.db = self.apos.db.collection('aposFormSubmissions');
         await self.db.ensureIndex({
           formId: 1,
@@ -91,7 +92,7 @@ module.exports = {
           createdAt: -1
         });
       },
-      processQueryParams (form, input, output, fieldNames) {
+      processQueryParams(form, input, output, fieldNames) {
         if (!input.queryParams ||
           (typeof input.queryParams !== 'object')) {
           output.queryParams = null;
@@ -124,7 +125,7 @@ module.exports = {
 
         return value;
       },
-      async sendEmailSubmissions (req, form, data) {
+      async sendEmailSubmissions(req, form, data) {
         if (self.options.emailSubmissions === false ||
           !form.emails || form.emails.length === 0) {
           return;
@@ -215,7 +216,7 @@ module.exports = {
         }
       },
       // Should be handled async. Options are: form, data, from, to and subject
-      async sendEmail (req, emailTemplate, options) {
+      async sendEmail(req, emailTemplate, options) {
         const form = options.form;
         const data = options.data;
         return self.email(
@@ -231,10 +232,33 @@ module.exports = {
             subject: options.subject || form.title
           }
         );
+      },
+      // Normalize Multer's `req.files` (array) to the historical multiparty shape
+      // expected by submit handlers (object keyed by field name with name/path/etc.).
+      normalizeFiles(req, _res, next) {
+        const files = Array.isArray(req.files) ? req.files : [];
+        const mapped = {};
+        const counters = {};
+
+        for (const f of files) {
+          const base = f.fieldname.replace(/-\d+$/, '');
+          counters[base] = (counters[base] || 0) + 1;
+          const key = `${base}-${counters[base]}`;
+
+          mapped[key] = {
+            path: f.path,
+            name: f.originalname,
+            type: f.mimetype,
+            size: f.size
+          };
+        }
+
+        req.files = mapped;
+        next();
       }
     };
   },
-  helpers (self) {
+  helpers(self) {
     return {
       prependIfPrefix(str) {
         if (self.options.classPrefix) {
@@ -245,16 +269,18 @@ module.exports = {
       }
     };
   },
-  apiRoutes (self) {
+  apiRoutes(self) {
     return {
       post: {
         // Route to accept the submitted form.
         submit: [
-          connectMultiparty(),
+          multer({ dest: os.tmpdir() }).any(),
+          self.normalizeFiles,
           async function (req) {
             try {
               await self.submitForm(req);
             } finally {
+              // Cleanup temp files (same behavior as before)
               for (const file of (Object.values(req.files || {}))) {
                 try {
                   fs.unlinkSync(file.path);
@@ -270,10 +296,10 @@ module.exports = {
       }
     };
   },
-  handlers (self) {
+  handlers(self) {
     return {
       submission: {
-        async saveSubmission (req, form, data) {
+        async saveSubmission(req, form, data) {
           if (self.options.saveSubmissions === false) {
             return;
           }
@@ -289,10 +315,10 @@ module.exports = {
           });
           return self.db.insertOne(submission);
         },
-        async emailSubmission (req, form, data) {
+        async emailSubmission(req, form, data) {
           await self.sendEmailSubmissions(req, form, data);
         },
-        async emailConfirmation (req, form, data) {
+        async emailConfirmation(req, form, data) {
           if (form.sendConfirmationEmail !== true || !form.emailConfirmationField) {
             return;
           }
@@ -303,7 +329,7 @@ module.exports = {
           if (
             data[form.emailConfirmationField] &&
             (typeof data[form.emailConfirmationField] !== 'string' ||
-            !re.test(data[form.emailConfirmationField]))
+              !re.test(data[form.emailConfirmationField]))
           ) {
             await self.apos.notify(req, 'aposForm:errorEmailConfirm', {
               type: 'warning',
