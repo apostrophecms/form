@@ -745,4 +745,42 @@ describe('Forms module', function () {
 
     assert(output2.booleanField === false);
   });
+
+  it('should accept multiple files for a single file field when allowMultiple is true', async function () {
+    // Update the existing form's file field to allow multiple
+    await apos.doc.db.updateOne(
+      { _id: savedForm1._id },
+      { $set: { 'contents.items.$[w].allowMultiple': true } },
+      { arrayFilters: [ { 'w._id': 'dogPhotoId' } ] }
+    );
+
+    const formData = new FormData();
+    const multi = {
+      ...submission1,
+      _id: savedForm1._id,
+      DogName: 'Cerberus'
+    };
+    formData.append('data', JSON.stringify(multi));
+
+    // Two files for the same field: DogPhoto-1 and DogPhoto-2
+    formData.append('DogPhoto-1', fs.createReadStream(path.join(__dirname, '/lib/upload_tests/upload-test.txt')));
+    formData.append('DogPhoto-2', fs.createReadStream(path.join(__dirname, '/lib/upload_tests/upload-test.txt')));
+
+    await apos.http.post(
+      '/api/v1/@apostrophecms/form/submit?apikey=skeleton_key',
+      { body: formData }
+    );
+
+    const doc = await apos.db.collection('aposFormSubmissions').findOne({
+      'data.DogName': 'Cerberus'
+    });
+
+    const uploadRegex = /^\/uploads\/attachments\/\w+-upload-test.txt$/;
+    // Expect at least two entries for DogPhoto
+    assert(Array.isArray(doc.data.DogPhoto));
+    assert(doc.data.DogPhoto.length >= 2);
+    assert(uploadRegex.test(doc.data.DogPhoto[0]));
+    assert(uploadRegex.test(doc.data.DogPhoto[1]));
+  });
+
 });
