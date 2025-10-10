@@ -20,7 +20,7 @@
 <!-- omit from toc -->
 ## Why Form Builder?
 
-- **No-Code Form Creation**: Editors build forms with drag-and-drop fields—no tickets to developers
+- **No-Code Form Creation**: Editors build forms through configurable field widgets—no tickets to developers
 - **Automatic Data Collection**: Submissions saved to MongoDB with optional email notifications
 - **🛡️ Built-in Security**: reCAPTCHA v3 integration and validation prevent spam
 - **Design Freedom**: Custom CSS classes and styling hooks for brand consistency
