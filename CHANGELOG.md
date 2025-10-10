@@ -2,6 +2,10 @@
 
 ## UNRELEASED
 
+### Changes
+
+* Updates README
+
 ### Security
 
 * Clear an npm audit warning by replacing `connect-multiparty` with `multer`.
